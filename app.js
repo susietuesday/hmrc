@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
-require('dotenv').config(); // Loads .env file variables into process.env
-
+// Core and third-party imports
+const express = require('express');
+const request = require('superagent');
 const axios = require('axios');
+const asyncHandler = require('express-async-handler');
+const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
+const { log, callApi, getApplicationRestrictedToken } = require('./utils'); // Utilities
 
-// Set Client configuration
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const OAUTH_SCOPE = process.env.SCOPE;
+// Initialise express app
+const app = express();
+app.set('view engine', 'ejs');
 
-//APIs
-const API_BASE_URL_SANDBOX = process.env.API_BASE_URL_SANDBOX;
-const API_BASE_URL_PRODUCTION = process.env.API_BASE_URL_PRODUCTION;
+// Middleware
+app.use(express.urlencoded({ extended: true }));  // Parse form data
 
-const useSandbox = process.env.USE_SANDBOX;
-const apiBaseUrl = useSandbox ? API_BASE_URL_SANDBOX : API_BASE_URL_PRODUCTION;
+// Environment variables
+const {
+  CLIENT_ID,
+  CLIENT_SECRET,
+  OAUTH_SCOPE,
+  REDIRECT_URI,
+  apiBaseUrl,
+  oauthConfig,
+} = require('./config');
 
+// Service metadata
 let serviceName = 'hello'
 let serviceVersion = '1.0'
 
@@ -39,32 +49,6 @@ const ROUTES = {
   USER_RESTRICTED: '/user'
 };
 
-const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
-const request = require('superagent');
-const express = require('express');
-const app = express();
-
-app.set('view engine', 'ejs');
-
-//Parse form data
-app.use(express.urlencoded({ extended: true }));
-
-const dateFormat = require('dateformat');
-const winston = require('winston');
-
-const REDIRECT_URI = process.env.REDIRECT_URI
-
-// Set up logging
-const log = winston.createLogger({
-  transports: [
-    new (winston.transports.Console)({
-      timestamp: () => dateFormat(Date.now(), "isoDateTime"),
-      formatter: (options) => `${options.timestamp()} ${options.level.toUpperCase()} ${options.message ? options.message : ''}
-          ${options.meta && Object.keys(options.meta).length ? JSON.stringify(options.meta) : ''}`
-    })
-  ]
-});
-
 // Set up session management
 const cookieSession = require('cookie-session');
 app.use(cookieSession({
@@ -72,19 +56,6 @@ app.use(cookieSession({
   keys: ['oauth2Token', 'caller'],
   maxAge: 10 * 60 * 60 * 1000 // 10 hours
 }));
-
-// Set up OAuth2 authentication
-const oauthConfig = {
-  client: {
-    id: CLIENT_ID,
-    secret: CLIENT_SECRET,
-  },
-  auth: {
-    tokenHost: apiBaseUrl,
-    tokenPath: '/oauth/token',
-    authorizePath: '/oauth/authorize',
-  },
-};
 
 // Set up user-authenticated access flow
 const client = new AuthorizationCode(oauthConfig);
@@ -122,44 +93,29 @@ app.get('/', (req, res) => {
 
 // Call an unrestricted endpoint
 app.get("/unrestrictedCall", (req, res) => {
-  callApi(ROUTES.UNRESTRICTED, res);
+  const accessToken = getApplicationRestrictedToken();
+  callApi({
+      res,
+      bearerToken: accessToken,
+      apiBaseUrl,
+      serviceName,
+      serviceVersion,
+      resource: ROUTES.UNRESTRICTED
+    });
 });
 
 // Call an application-restricted endpoint
-app.get("/applicationCall", async (req, res) => {
-  try {
-
+app.get("/applicationCall", asyncHandler(async (req, res) => {
     const accessToken = await getApplicationRestrictedToken();
-    callApi(ROUTES.APP_RESTRICTED, res, accessToken);
-
-  } catch (error) {
-    return res.status(500).json('Authentication failed');
-  }
-});
-
-// Get application restricted token
-async function getApplicationRestrictedToken() {
-  const config = {
-    ...oauthConfig,
-    options: {
-      authorizationMethod: 'body'
-    }
-  };
-
-  const clientCredentials = new ClientCredentials(config);
-
-  try {
-
-    const tokenResponse = await clientCredentials.getToken({ scope: OAUTH_SCOPE });
-   
-    return tokenResponse.token.access_token;
-
-  } catch (error) {
-      log.error("❌ Error fetching token:", error.message || error);
-      throw new Error('Authentication failed');
-  }
-  
-}
+    callApi({
+      res,
+      bearerToken: accessToken,
+      apiBaseUrl,
+      serviceName,
+      serviceVersion,
+      resource: ROUTES.APP_RESTRICTED
+    });
+}));
 
 // Call a user-restricted endpoint
 app.get("/userCall", (req, res) => {
@@ -179,7 +135,15 @@ app.get("/userCall", (req, res) => {
     
     log.info(`Using token from session: ${JSON.stringify(accessToken.token)}`);
 
-    callApi(ROUTES.USER_RESTRICTED, res, accessToken.token.access_token);
+    callApi({
+      res,
+      bearerToken: accessToken.token.access_token,
+      apiBaseUrl,
+      serviceName,
+      serviceVersion,
+      resource: ROUTES.USER_RESTRICTED
+    });
+
   } else {
     req.session.caller = '/userCall';
     res.redirect(authorizationUri);
@@ -206,34 +170,6 @@ app.get('/oauth20/callback', async (req, res) => {
     return res.status(500).json('Authentication failed');
   }
 });
-
-// Helper functions
-function callApi(resource, res, bearerToken) {
-  const acceptHeader = `application/vnd.hmrc.${serviceVersion}+json`;
-  const url = apiBaseUrl + serviceName + resource;
-  
-  log.info(`Calling ${url} with Accept: ${acceptHeader}`);
-  
-  const req = request
-    .get(url)
-    .accept(acceptHeader);
-
-  if (bearerToken) {
-    log.info(`Using bearer token: ${bearerToken}`);
-    req.set('Authorization', `Bearer ${bearerToken}`);
-  }
-
-  req.end((err, apiResponse) => handleResponse(res, err, apiResponse));
-}
-
-function handleResponse(res, err, apiResponse) {
-  if (err || !apiResponse.ok) {
-    log.error(`Handling error response: ${err}`);
-    res.send(err);
-  } else {
-    res.send(apiResponse.body);
-  }
-};
 
 app.listen(8080, () => {
   log.info('Started at http://localhost:8080');
@@ -294,7 +230,7 @@ async function createTestUser() {
       }
     );
 
-    log.info('✅ Test user returned with NINO: ', nino);
+    log.info('✅ Test user returned with NINO: ');
     return response.data;
 
     } catch (error) {
@@ -372,7 +308,14 @@ app.post("/business-sources", (req, res) => {
     //Log scope
     log.info(`SCOPE: ${accessToken.token.scope}`);
     
-    callApi(resource, res, accessToken.token.access_token);
+    callApi({
+      resource: ROUTES.UNRESTRICTED,
+      res,
+      bearerToken: accessToken,
+      serviceName,
+      serviceVersion,
+      apiBaseUrl
+    });
 
   } else {
     req.session.caller = '/business-sources';
@@ -464,7 +407,14 @@ app.post("/periodic-summary", (req, res) => {
     log.info(`ℹ️ Scope: ${accessToken.token.scope}`);
     log.info('ℹ️ Url: ', resource);
     
-    callApi(resource, res, accessToken.token.access_token);
+    callApi({
+      resource,
+      res,
+      bearerToken: accessToken,
+      serviceName,
+      serviceVersion,
+      apiBaseUrl
+    });
 
   } else {
     req.session.caller = '/periodic-summary';
