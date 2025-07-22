@@ -16,11 +16,14 @@
 
 // Core and third-party imports
 const express = require('express');
-const request = require('superagent');
+//const request = require('superagent');
 const axios = require('axios');
 const asyncHandler = require('express-async-handler');
 const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
-const { log, callApi, getApplicationRestrictedToken } = require('./utils'); // Utilities
+
+// App-specific functions
+const { log } = require('./utils'); // Utilities
+const { getApplicationRestrictedToken, createApiRoute, callApi } = require('./auth')
 
 // Initialise express app
 const app = express();
@@ -91,64 +94,37 @@ app.get('/', (req, res) => {
   });
 });
 
-// Call an unrestricted endpoint
-app.get("/unrestrictedCall", (req, res) => {
-  const accessToken = getApplicationRestrictedToken();
-  callApi({
-      res,
-      bearerToken: accessToken,
-      apiBaseUrl,
-      serviceName,
-      serviceVersion,
-      resource: ROUTES.UNRESTRICTED
-    });
-});
-
-// Call an application-restricted endpoint
-app.get("/applicationCall", asyncHandler(async (req, res) => {
-    const accessToken = await getApplicationRestrictedToken();
-    callApi({
-      res,
-      bearerToken: accessToken,
-      apiBaseUrl,
-      serviceName,
-      serviceVersion,
-      resource: ROUTES.APP_RESTRICTED
-    });
-}));
+app.get("/unrestrictedCall", createApiRoute(ROUTES.UNRESTRICTED));
+app.get("/applicationCall", createApiRoute(ROUTES.APP_RESTRICTED));
 
 // Call a user-restricted endpoint
-app.get("/userCall", (req, res) => {
-  if (req.session.oauth2Token) {
+app.get("/userCall", asyncHandler(async (req, res) => {
+  const tokenData = req.session.oauth2Token;
 
-    var accessToken = client.createToken(req.session.oauth2Token);
-
-    //Temporary redirect to login page
-    //return res.redirect(authorizationUri);
-
-    //Check if access token has expired
-    if (accessToken.expired()) {
-      req.session.oauth2Token = null;
-      //Redirect to login page
-      return res.redirect(authorizationUri);
-    }
-    
-    log.info(`Using token from session: ${JSON.stringify(accessToken.token)}`);
-
-    callApi({
-      res,
-      bearerToken: accessToken.token.access_token,
-      apiBaseUrl,
-      serviceName,
-      serviceVersion,
-      resource: ROUTES.USER_RESTRICTED
-    });
-
-  } else {
-    req.session.caller = '/userCall';
-    res.redirect(authorizationUri);
+  if (!tokenData) {
+    req.session.caller = "/userCall";
+    return res.redirect(authorizationUri);
   }
-});
+
+  const accessToken = client.createToken(tokenData);
+
+  if (accessToken.expired()) {
+    req.session.oauth2Token = null;
+    return res.redirect(authorizationUri);
+  }
+
+  log.info(`Using token from session: ${JSON.stringify(accessToken.token)}`);
+
+  const apiResponse = await callApi({
+    res,
+    bearerToken: accessToken.token.access_token,
+    serviceName,
+    serviceVersion,
+    resource: ROUTES.USER_RESTRICTED
+  });
+
+  res.status(apiResponse.status).json(apiResponse.body);
+}));
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth20/callback', async (req, res) => {
@@ -309,12 +285,11 @@ app.post("/business-sources", (req, res) => {
     log.info(`SCOPE: ${accessToken.token.scope}`);
     
     callApi({
-      resource: ROUTES.UNRESTRICTED,
       res,
       bearerToken: accessToken,
       serviceName,
       serviceVersion,
-      apiBaseUrl
+      resource: ROUTES.UNRESTRICTED
     });
 
   } else {
@@ -408,16 +383,28 @@ app.post("/periodic-summary", (req, res) => {
     log.info('ℹ️ Url: ', resource);
     
     callApi({
-      resource,
       res,
       bearerToken: accessToken,
       serviceName,
       serviceVersion,
-      apiBaseUrl
+      resource
     });
 
   } else {
     req.session.caller = '/periodic-summary';
     res.redirect(authorizationUri);
   }
+});
+
+app.use((err, req, res, next) => {
+  if (!err.stack) {
+    log.error(`Error: ${err.message || 'Unknown error'}`);
+  } else {
+    const stackLines = err.stack.split('\n');
+    const messageLine = stackLines[0];        // error message line
+    const locationLines = stackLines.slice(1, 3).map(line => line.trim()).join(' | ');
+    log.error(`${messageLine} — ${locationLines}`);
+  }
+
+  res.status(500).json({ error: 'Internal Server Error' });
 });

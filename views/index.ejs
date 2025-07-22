@@ -67,27 +67,27 @@
 
     <h2>Fetch Test User</h2>
 
-    <form action="/get-testuser" method="POST">
+    <form action="/test-user" method="POST">
         <button type="submit">Fetch Test User</button>
     </form>
 
     <h2>Business Income Sources</h2>
 
-    <form action="/get-businesses" method="POST">
+    <form action="/business-sources" method="POST">
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
         <button type="submit">Fetch Business Sources</button>
     </form>
 
-    <form action="/create-propertybusiness" method="POST">
+    <form action="/test/uk-property-business" method="POST">
     <label for="nino">National Insurance Number:</label>
     <input type="text" name="nino" id="nino" required>
-    <button type="submit">Create UK Property Business</button>
+    <button type="submit">Create test UK Property Business</button>
     </form>
 
     <h2>Submit Property Period Summary</h2>
 
-    <form action="/post-periodsummary" method="POST">
+    <form action="/periodic-summary" method="POST">
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
         <button type="submit">Submit Summary</button>
