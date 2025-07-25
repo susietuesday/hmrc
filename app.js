@@ -16,14 +16,18 @@
 
 // Core and third-party imports
 const express = require('express');
-//const request = require('superagent');
 const axios = require('axios');
 const asyncHandler = require('express-async-handler');
+const { servicesHandler } = require('./logic');
 const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
 
 // App-specific functions
 const { log } = require('./utils'); // Utilities
-const { getApplicationRestrictedToken, createApiRoute, callApi } = require('./auth')
+const { 
+  getApplicationRestrictedToken,
+  createApiRoute, 
+  callApi
+} = require('./auth')
 
 // Initialise express app
 const app = express();
@@ -94,40 +98,14 @@ app.get('/', (req, res) => {
   });
 });
 
+// Call authentication endpoints
 app.get("/unrestrictedCall", createApiRoute(ROUTES.UNRESTRICTED));
 app.get("/applicationCall", createApiRoute(ROUTES.APP_RESTRICTED));
-
-// Call a user-restricted endpoint
-app.get("/userCall", asyncHandler(async (req, res) => {
-  const tokenData = req.session.oauth2Token;
-
-  if (!tokenData) {
-    req.session.caller = "/userCall";
-    return res.redirect(authorizationUri);
-  }
-
-  const accessToken = client.createToken(tokenData);
-
-  if (accessToken.expired()) {
-    req.session.oauth2Token = null;
-    return res.redirect(authorizationUri);
-  }
-
-  log.info(`Using token from session: ${JSON.stringify(accessToken.token)}`);
-
-  const apiResponse = await callApi({
-    res,
-    bearerToken: accessToken.token.access_token,
-    serviceName,
-    serviceVersion,
-    resource: ROUTES.USER_RESTRICTED
-  });
-
-  res.status(apiResponse.status).json(apiResponse.body);
-}));
+app.get("/userCall", createApiRoute(ROUTES.USER_RESTRICTED));
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth20/callback', async (req, res) => {
+  console.log('OAuth callback hit:', req.originalUrl, req.query);
   const { code } = req.query;
   const options = {
     code: code,
@@ -138,10 +116,10 @@ app.get('/oauth20/callback', async (req, res) => {
 
   try {
     const accessToken = await client.getToken(options);
-
     req.session.oauth2Token = accessToken;
 
     return res.redirect(req.session.caller);
+
   } catch(error) {
     return res.status(500).json('Authentication failed');
   }
@@ -161,31 +139,7 @@ app.post('/logout', (req, res) => {
 });
 
 // Provides a list of all the available services together with which test user types can enrol to each
-app.post('/services', async (req, res) => {
-
-  try {
-    // Get application access token
-    const accessToken = await getApplicationRestrictedToken();
-
-    const response = await axios.get(
-      apiBaseUrl + 'create-test-user/services',
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.hmrc.1.0+json'
-        }
-      }
-    );
-
-    log.info('Available services:', response.data);
-    res.json(response.data);
-
-  } catch (error) {
-    log.error('Error fetching test user services:', error.response?.data || error.message);
-    throw error;
-  }
-
-});
+app.post('/services', servicesHandler);
 
 //Get test user
 async function createTestUser() {
@@ -196,7 +150,7 @@ async function createTestUser() {
     const response = await axios.post(
       apiBaseUrl + 'create-test-user/individuals',
       { 
-        services: 'mtd-income-tax'
+        services: 'self-assessment'
       },
       {
         headers: {
@@ -206,7 +160,7 @@ async function createTestUser() {
       }
     );
 
-    log.info('✅ Test user returned with NINO: ');
+    log.info('✅ Test user returned');
     return response.data;
 
     } catch (error) {
@@ -228,7 +182,7 @@ app.post('/test-user', async (req, res) => {
   const user = await createTestUser();
 
   // Log user object
-  log.info('ℹ️ Full user object:', JSON.stringify(user, null, 2));
+  log.info('ℹ️ Full user object:' + JSON.stringify(user, null, 2));
 
     /*
     // Get business list
@@ -245,7 +199,8 @@ app.post('/test-user', async (req, res) => {
       //break;
   //}
 
-  res.json({ success: true, data: foundUser });
+  //res.json({ success: true, data: foundUser });
+  res.json(user);
 });
 
 async function getBusinessList(req, res, nino) {
@@ -285,11 +240,10 @@ app.post("/business-sources", (req, res) => {
     log.info(`SCOPE: ${accessToken.token.scope}`);
     
     callApi({
-      res,
       bearerToken: accessToken,
-      serviceName,
       serviceVersion,
-      resource: ROUTES.UNRESTRICTED
+      serviceName,
+      routePath: ROUTES.UNRESTRICTED
     });
 
   } else {
@@ -376,18 +330,17 @@ app.post("/periodic-summary", (req, res) => {
 
     serviceName = 'individuals'
     serviceVersion = '6.0'
-    const resource = `/business/property/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${encodeURIComponent(taxYear)}`;
+    const routePath = `/business/property/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${encodeURIComponent(taxYear)}`;
     
     //Log scope
     log.info(`ℹ️ Scope: ${accessToken.token.scope}`);
-    log.info('ℹ️ Url: ', resource);
+    log.info('ℹ️ Url: ', routePath);
     
     callApi({
-      res,
       bearerToken: accessToken,
-      serviceName,
       serviceVersion,
-      resource
+      serviceName,
+      routePath: routePath
     });
 
   } else {
@@ -406,5 +359,6 @@ app.use((err, req, res, next) => {
     log.error(`${messageLine} — ${locationLines}`);
   }
 
-  res.status(500).json({ error: 'Internal Server Error' });
+  const status = err.status || err.response?.status || 500;
+  res.status(status).json({ error: 'Internal Server Error' });
 });

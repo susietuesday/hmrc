@@ -1,5 +1,5 @@
-const request = require('superagent');
-const { ClientCredentials } = require('simple-oauth2');
+const axios = require('axios');
+const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
 const { log } = require('./utils');
 const asyncHandler = require('express-async-handler');
 
@@ -12,6 +12,12 @@ const {
   apiBaseUrl,
   oauthConfig,
 } = require('./config');
+
+const client = new AuthorizationCode(oauthConfig);
+const authorizationUri = client.authorizeURL({
+  redirect_uri: REDIRECT_URI,
+  scope: OAUTH_SCOPE,
+});
 
 async function getApplicationRestrictedToken() {
   const config = {
@@ -27,19 +33,55 @@ async function getApplicationRestrictedToken() {
   return tokenResponse.token.access_token;
 }
 
-function createApiRoute(resource) {
-  return asyncHandler(async (req, res) => {
-    // Service metadata
-    let serviceName = 'hello'
-    let serviceVersion = '1.0'
+async function getUserRestrictedToken(req) {
+  const tokenData = req.session.oauth2Token;
 
-    const accessToken = await getApplicationRestrictedToken();
+  if (!tokenData) {
+    return null;
+  }
+
+  const accessToken = client.createToken(tokenData);
+
+  if (accessToken.expired()) {
+    req.session.oauth2Token = null;
+    return null;
+  }
+
+  return accessToken.token.access_token;
+}
+
+function createApiRoute(routePath) {
+  return asyncHandler(async (req, res) => {
+
+    // Service metadata
+    const serviceName = 'hello'
+    const serviceVersion = '1.0'
+
+    let accessToken
+
+    switch (routePath) {
+      case '/world':
+        // No access token required
+        break;
+
+      case '/application':
+        accessToken = await getApplicationRestrictedToken();
+        break;
+
+      case '/user':
+        accessToken = await getUserRestrictedToken(req);
+        if (!accessToken) {
+          req.session.caller = '/userCall';
+          return res.redirect(authorizationUri);
+        }
+        break;
+    }
+    
     const apiResponse = await callApi({
       bearerToken: accessToken,
-      apiBaseUrl,
-      serviceName,
       serviceVersion,
-      resource
+      serviceName,
+      routePath
     });
 
     res.status(apiResponse.status).json(apiResponse.body);
@@ -47,42 +89,33 @@ function createApiRoute(resource) {
 }
 
 // Call API
-function callApi({
-  res,
+async function callApi({
   bearerToken = null,
-  serviceName = 'hello',
   serviceVersion = '1.0',
-  resource
+  serviceName = 'hello',
+  routePath
 }) {
   
-  return new Promise((resolve, reject) => {
+  const acceptHeader = `application/vnd.hmrc.${serviceVersion}+json`;
+  const url = apiBaseUrl + serviceName + routePath;
+  
+  log.info(`Calling ${url} with Accept: ${acceptHeader}`);
+  
+  const headers = {
+    Accept: acceptHeader
+  };
 
-    const acceptHeader = `application/vnd.hmrc.${serviceVersion}+json`;
-    const url = apiBaseUrl + serviceName + resource;
-    
-    log.info(`Calling ${url} with Accept: ${acceptHeader}`);
-    
-    const req = request
-      .get(url)
-      .accept(acceptHeader);
+  if (bearerToken) {
+    log.info(`Using bearer token: ${bearerToken}`);
+    headers.Authorization = `Bearer ${bearerToken}`;
+  }
 
-    if (bearerToken) {
-      log.info(`Using bearer token: ${bearerToken}`);
-      req.set('Authorization', `Bearer ${bearerToken}`);
-    }
+  const response = await axios.get(url, { headers });
 
-    //req.end((err, apiResponse) => handleResponse(res, err, apiResponse));
-    req.end((err, apiResponse) => {
-      if (err || !apiResponse.ok) {
-        const error = err || new Error(`API responded with status ${apiResponse.status}`);
-        return reject(error);
-      }
-      resolve({
-        status: apiResponse.status,
-        body: apiResponse.body
-      });
-    });
-  });
+  return {
+    status: response.status,
+    body: response.data
+  };
 }
 
 module.exports = {
