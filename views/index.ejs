@@ -61,19 +61,19 @@
 
     <h2>Get Services</h2>
 
-    <form action="/services" method="POST">
+    <form action="/services" method="GET">
         <button type="submit">Get Services</button>
     </form>
 
-    <h2>Fetch Test User</h2>
+    <h2>Create Test User</h2>
 
-    <form action="/test-user" method="POST">
-        <button type="submit">Fetch Test User</button>
+    <form action="/test-users" method="POST">
+        <button type="submit">Create Test User</button>
     </form>
 
     <h2>Business Income Sources</h2>
 
-    <form action="/business-sources" method="POST">
+    <form action="/business-sources" method="GET">
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
         <button type="submit">Fetch Business Sources</button>

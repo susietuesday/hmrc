@@ -17,15 +17,14 @@
 // Core and third-party imports
 const express = require('express');
 const axios = require('axios');
-const asyncHandler = require('express-async-handler');
-const { servicesHandler } = require('./logic');
+const { services, createTestUser, fetchServices, fetchBusinessList } = require('./logic');
 const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
 
 // App-specific functions
 const { log } = require('./utils'); // Utilities
 const { 
   getApplicationRestrictedToken,
-  createApiRoute, 
+  createHelloHandler, 
   callApi
 } = require('./auth')
 
@@ -99,9 +98,9 @@ app.get('/', (req, res) => {
 });
 
 // Call authentication endpoints
-app.get("/unrestrictedCall", createApiRoute(ROUTES.UNRESTRICTED));
-app.get("/applicationCall", createApiRoute(ROUTES.APP_RESTRICTED));
-app.get("/userCall", createApiRoute(ROUTES.USER_RESTRICTED));
+app.get("/unrestrictedCall", createHelloHandler(ROUTES.UNRESTRICTED));
+app.get("/applicationCall", createHelloHandler(ROUTES.APP_RESTRICTED));
+app.get("/userCall", createHelloHandler(ROUTES.USER_RESTRICTED));
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth20/callback', async (req, res) => {
@@ -139,118 +138,11 @@ app.post('/logout', (req, res) => {
 });
 
 // Provides a list of all the available services together with which test user types can enrol to each
-app.post('/services', servicesHandler);
+app.get('/services', fetchServices);
 
-//Get test user
-async function createTestUser() {
+app.post('/test-users', createTestUser);
 
-  try {
-    const accessToken = await getApplicationRestrictedToken();
-
-    const response = await axios.post(
-      apiBaseUrl + 'create-test-user/individuals',
-      { 
-        services: 'self-assessment'
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          Accept: 'application/vnd.hmrc.1.0+json'
-        }
-      }
-    );
-
-    log.info('✅ Test user returned');
-    return response.data;
-
-    } catch (error) {
-      if (error.response && error.response.data) {
-        log.error('❌ HMRC Response Error Body:', JSON.stringify(error.response.data, null, 2));
-      } else if (error.data && error.data.payload) {
-        log.error('❌ HMRC Payload:', JSON.stringify(error.data.payload, null, 2));
-      } else {
-        log.error('❌ Unexpected Error:', error.message || error);
-      }
-      throw error;
-    }
-}
-
-app.post('/test-user', async (req, res) => {
-
-  let foundUser = null;
-
-  const user = await createTestUser();
-
-  // Log user object
-  log.info('ℹ️ Full user object:' + JSON.stringify(user, null, 2));
-
-    /*
-    // Get business list
-    const businesses = await getBusinessList(req, res, nino);
-    const propertyBusiness = businesses.find(b => b.typeOfBusiness === 'uk-property');
-
-    if (propertyBusiness) {
-      foundUser = {
-        nino: nino,
-        businessId: propertyBusiness.businessId,
-        accessToken: user.accessToken // optional
-      };
-      */
-      //break;
-  //}
-
-  //res.json({ success: true, data: foundUser });
-  res.json(user);
-});
-
-async function getBusinessList(req, res, nino) {
-  const url = `https://test-api.service.hmrc.gov.uk/individuals/business/details/${nino}/list`;
-  try {
-    const response = await axios.get(url, {
-      headers: {
-        Accept: 'application/vnd.hmrc.2.0+json',
-        Authorization: `Bearer ${accessToken}`
-      }
-    });
-
-    return response.data.listOfBusinesses || [];
-
-  } catch (error) {
-    log.error('Error fetching business list:', error.response?.data || error.message);
-    return [];
-  }
-}
-
-//Get businesses
-app.post("/business-sources", (req, res) => {
-  if (req.session.oauth2Token) {
- 
-    const accessToken = client.createToken(req.session.oauth2Token);
-    const nino = req.body.nino;
-
-    if (!nino) {
-      return res.status(400).send('NINO is required');
-    }
-
-    serviceName = 'individuals'
-    serviceVersion = '2.0'
-    const resource = `/business/details/${encodeURIComponent(nino)}/list`;
-
-    //Log scope
-    log.info(`SCOPE: ${accessToken.token.scope}`);
-    
-    callApi({
-      bearerToken: accessToken,
-      serviceVersion,
-      serviceName,
-      routePath: ROUTES.UNRESTRICTED
-    });
-
-  } else {
-    req.session.caller = '/business-sources';
-    res.redirect(authorizationUri);
-  }
-});
+app.get("/business-sources", fetchBusinessList);
 
 app.post("/test/uk-property-business", (req, res) => {
     if (req.session.oauth2Token) {

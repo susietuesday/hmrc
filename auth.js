@@ -50,7 +50,7 @@ async function getUserRestrictedToken(req) {
   return accessToken.token.access_token;
 }
 
-function createApiRoute(routePath) {
+function createHelloHandler(routePath) {
   return asyncHandler(async (req, res) => {
 
     // Service metadata
@@ -120,6 +120,7 @@ async function callApi({
 
 module.exports = {
   getApplicationRestrictedToken,
-  createApiRoute,
+  getUserRestrictedToken,
+  createHelloHandler,
   callApi
 };
