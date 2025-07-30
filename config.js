@@ -28,30 +28,6 @@ const oauthConfig = {
 const getAcceptHeader = (serviceVersion) =>
   `${ACCEPT_HEADER_PREFIX}${serviceVersion}${ACCEPT_HEADER_SUFFIX}`;
 
-const hmrcServices = {
-  selfAssessmentIndividualDetails: {
-    name: 'individuals/person',
-    version: '2.0',
-    routes: {
-      itsaStatus: (nino, taxYear) => `/itsa-status/${encodeURIComponent(nino)}/${encodeURIComponent(taxYear)}`
-    }
-  },
-  businessDetails: {
-    name: 'individuals/business/details',
-    version: '1.0',
-    routes: {
-      listByNino: (nino) => `/${encodeURIComponent(nino)}/list`
-    }
-  },
-  propertyBusiness: {
-    name: 'individuals/business/property',
-    version: '6.0',
-    routes: {
-      createUkPropertyPeriodSummary: (nino, businessId, taxYear) => `/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${taxYear}`
-    }
-  }
-};
-
 module.exports = {
   CLIENT_ID,
   CLIENT_SECRET,
@@ -59,6 +35,5 @@ module.exports = {
   REDIRECT_URI,
   apiBaseUrl,
   oauthConfig,
-  hmrcServices,
   getAcceptHeader
 };

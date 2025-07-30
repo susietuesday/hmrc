@@ -8,7 +8,6 @@ const {
   OAUTH_SCOPE,
   REDIRECT_URI,
   oauthConfig,
-  hmrcServices,
   apiBaseUrl,
   getAcceptHeader
 } = require('./config');
@@ -107,10 +106,12 @@ const callApi = async ({
   body = null
 }) => {
   
+  /*
   // Set defaults
   serviceName = serviceName || hmrcServices.hello.name;
   serviceVersion = serviceVersion || hmrcServices.hello.version;
-
+  */
+ 
   const acceptHeader = getAcceptHeader(serviceVersion);
   const url = apiBaseUrl + serviceName + routePath;
   

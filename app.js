@@ -4,18 +4,27 @@ const { AuthorizationCode } = require('simple-oauth2');
 
 // Utility and business logic functions
 const { log, requireUser } = require('./utils'); // Utilities
+
+// Test APIs
 const { 
   testServices,
   createHelloHandler,
   createTestUser,
-  fetchServices
-} = require('./routes/test')
-const { 
-  fetchItsaStatus,
-  fetchBusinessList, 
-  createTestUkPropertyBusiness, 
+  fetchServices, 
+  createTestUkPropertyBusiness
+} = require('./routes/test');
+
+const {
+  fetchItsaStatus
+} = require('./routes/selfAssessmentIndividualDetails');
+
+const {
+  fetchBusinessList  
+} = require('./routes/businessDetails');
+
+const {  
   createUkPropertyPeriodSummary 
-} = require('./logic');
+} = require('./routes/propertyBusiness');
 
 // Initialise express app
 const app = express();
@@ -29,8 +38,7 @@ const {
   CLIENT_ID,
   CLIENT_SECRET,
   REDIRECT_URI,
-  oauthConfig,
-  hmrcServices
+  oauthConfig
 } = require('./config');
 
 // Set up session management

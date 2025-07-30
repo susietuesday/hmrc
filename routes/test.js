@@ -1,20 +1,5 @@
-const { log, callApi, getApplicationRestrictedToken, getUserRestrictedToken } = require('../utils');
 const asyncHandler = require('express-async-handler');
-const { AuthorizationCode } = require('simple-oauth2');
-
-// Environment variables
-const {
-  OAUTH_SCOPE,
-  REDIRECT_URI,
-  oauthConfig,
-  hmrcServices,
-} = require('../config');
-
-const client = new AuthorizationCode(oauthConfig);
-const authorizationUri = client.authorizeURL({
-  redirect_uri: REDIRECT_URI,
-  scope: OAUTH_SCOPE,
-});
+const { log, callApi, getApplicationRestrictedToken, getUserRestrictedToken } = require('../utils');
 
 const testServices = {
   hello: {
@@ -48,7 +33,6 @@ const testServices = {
 function createHelloHandler(routePath) {
   return asyncHandler(async (req, res) => {
 
-    
     // Service metadata
     const serviceName = testServices.hello.name
     const serviceVersion = testServices.hello.version
@@ -124,9 +108,63 @@ const createTestUser = asyncHandler(async (req, res) => {
 
 });
 
+const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
+
+  const nino = req.body.nino;
+
+  if (!nino) {
+    return res.status(400).send('NINO is required');
+  }
+
+  const url = apiBaseUrl + `individuals/self-assessment-test-support/business/${nino}`;
+  const accessToken = await getUserRestrictedToken(req);
+      
+  const data = {
+    typeOfBusiness: "uk-property",
+    firstAccountingPeriodStartDate: "2021-04-06",
+    firstAccountingPeriodEndDate: "2022-04-05",
+    latencyDetails: {
+      latencyEndDate: "2023-04-06",
+      taxYear1: "2021-22",
+      latencyIndicator1: "A",
+      taxYear2: "2022-23",
+      latencyIndicator2: "Q"
+    },
+    quarterlyTypeChoice: {
+      quarterlyPeriodType: "standard",
+      taxYearOfChoice: "2022-23"
+    },
+    accountingType: "CASH",
+    commencementDate: "2020-04-06"
+    //cessationDate: "2025-04-06"
+  };
+
+  try {
+
+    log.info('ℹ️ Url:' + url)
+    log.info('ℹ️ Data:' + JSON.stringify(data, null, 2))
+    log.info('ℹ️ Access Token:' + accessToken)
+
+    const response = await axios.post(url, data, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Accept': 'application/vnd.hmrc.1.0+json',
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log('Business created:', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating test business:', error.response?.data || error.message);
+    throw error;
+  }
+});
+
+
 module.exports = {
     testServices,
     fetchServices, 
     createTestUser, 
-    createHelloHandler
+    createHelloHandler,
+    createTestUkPropertyBusiness
 };
