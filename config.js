@@ -29,32 +29,6 @@ const getAcceptHeader = (serviceVersion) =>
   `${ACCEPT_HEADER_PREFIX}${serviceVersion}${ACCEPT_HEADER_SUFFIX}`;
 
 const hmrcServices = {
-  hello: {
-    name: 'hello',
-    version: '1.0',
-    routes: {
-      world: '/world',
-      application: '/application',
-      user: '/user'
-    }
-  },    
-  createTestUser: {
-    name: 'create-test-user',
-    version: '1.0',
-    routes: {
-      individuals: '/individuals',
-      organisations: '/organisations',
-      agents: '/agents',
-      services: '/services'
-    }
-  },
-  selfAssessmentTestSupport: {
-    name: 'individuals/self-assessment-test-support',
-    version: '1.0',
-    routes: {
-      business: (nino) => `/business/${encodeURIComponent(nino)}` // Create test business
-    }
-  },
   selfAssessmentIndividualDetails: {
     name: 'individuals/person',
     version: '2.0',

@@ -4,10 +4,13 @@ const { AuthorizationCode } = require('simple-oauth2');
 
 // Utility and business logic functions
 const { log, requireUser } = require('./utils'); // Utilities
-const { createHelloHandler } = require('./routes/test')
 const { 
-  createTestUser, 
-  fetchServices, 
+  testServices,
+  createHelloHandler,
+  createTestUser,
+  fetchServices
+} = require('./routes/test')
+const { 
   fetchItsaStatus,
   fetchBusinessList, 
   createTestUkPropertyBusiness, 
@@ -61,17 +64,17 @@ app.get('/', (req, res) => {
   }
 
   res.render('index', {
-    service: `${hmrcServices.hello.name} (v${hmrcServices.hello.version})`,
-    unRestrictedEndpoint: hmrcServices.hello.routes.world,
-    appRestrictedEndpoint: hmrcServices.hello.routes.application,
-    userRestrictedEndpoint: hmrcServices.hello.routes.user
+    service: `${testServices.hello.name} (v${testServices.hello.version})`,
+    unRestrictedEndpoint: testServices.hello.routes.world,
+    appRestrictedEndpoint: testServices.hello.routes.application,
+    userRestrictedEndpoint: testServices.hello.routes.user
   });
 });
 
 // Call hello endpoints
-app.get("/unrestrictedCall", createHelloHandler(hmrcServices.hello.routes.world));
-app.get("/applicationCall", createHelloHandler(hmrcServices.hello.routes.application));
-app.get("/userCall", requireUser, createHelloHandler(hmrcServices.hello.routes.user));
+app.get("/unrestrictedCall", createHelloHandler(testServices.hello.routes.world));
+app.get("/applicationCall", createHelloHandler(testServices.hello.routes.application));
+app.get("/userCall", requireUser, createHelloHandler(testServices.hello.routes.user));
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth20/callback', async (req, res) => {
