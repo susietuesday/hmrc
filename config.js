@@ -10,6 +10,8 @@ const API_BASE_URL_SANDBOX = process.env.API_BASE_URL_SANDBOX;
 const API_BASE_URL_PRODUCTION = process.env.API_BASE_URL_PRODUCTION;
 const useSandbox = process.env.USE_SANDBOX;
 const apiBaseUrl = useSandbox ? API_BASE_URL_SANDBOX : API_BASE_URL_PRODUCTION;
+const ACCEPT_HEADER_PREFIX = process.env.ACCEPT_HEADER_PREFIX
+const ACCEPT_HEADER_SUFFIX = process.env.ACCEPT_HEADER_SUFFIX
 
 const oauthConfig = {
   client: {
@@ -23,6 +25,59 @@ const oauthConfig = {
   },
 };
 
+const getAcceptHeader = (serviceVersion) =>
+  `${ACCEPT_HEADER_PREFIX}${serviceVersion}${ACCEPT_HEADER_SUFFIX}`;
+
+const hmrcServices = {
+  hello: {
+    name: 'hello',
+    version: '1.0',
+    routes: {
+      world: '/world',
+      application: '/application',
+      user: '/user'
+    }
+  },    
+  createTestUser: {
+    name: 'create-test-user',
+    version: '1.0',
+    routes: {
+      individuals: '/individuals',
+      organisations: '/organisations',
+      agents: '/agents',
+      services: '/services'
+    }
+  },
+  selfAssessmentTestSupport: {
+    name: 'individuals/self-assessment-test-support',
+    version: '1.0',
+    routes: {
+      business: (nino) => `/business/${encodeURIComponent(nino)}` // Create test business
+    }
+  },
+  selfAssessmentIndividualDetails: {
+    name: 'individuals/person',
+    version: '2.0',
+    routes: {
+      itsaStatus: (nino, taxYear) => `/itsa-status/${encodeURIComponent(nino)}/${encodeURIComponent(taxYear)}`
+    }
+  },
+  businessDetails: {
+    name: 'individuals/business/details',
+    version: '1.0',
+    routes: {
+      listByNino: (nino) => `/${encodeURIComponent(nino)}/list`
+    }
+  },
+  propertyBusiness: {
+    name: 'individuals/business/property',
+    version: '6.0',
+    routes: {
+      createUkPropertyPeriodSummary: (nino, businessId, taxYear) => `/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${taxYear}`
+    }
+  }
+};
+
 module.exports = {
   CLIENT_ID,
   CLIENT_SECRET,
@@ -30,4 +85,6 @@ module.exports = {
   REDIRECT_URI,
   apiBaseUrl,
   oauthConfig,
+  hmrcServices,
+  getAcceptHeader
 };

@@ -71,6 +71,16 @@
         <button type="submit">Create Test User</button>
     </form>
 
+    <h2>Retrieve ITSA Status</h2>
+
+    <form action="/itsa-status" method="GET">
+        <label for="nino">National Insurance Number:</label>
+        <input type="text" name="nino" id="nino" required>
+        <label for="nino">Tax Year:</label>
+        <input type="text" name="taxYear" id="taxYear" required>
+        <button type="submit">Retrieve ITSA Status</button>
+    </form>
+
     <h2>Business Income Sources</h2>
 
     <form action="/business-sources" method="GET">

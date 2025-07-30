@@ -1,32 +1,18 @@
-/*
- * Copyright 2017 HM Revenue & Customs
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 // Core and third-party imports
 const express = require('express');
-const axios = require('axios');
-const { services, createTestUser, fetchServices, fetchBusinessList } = require('./logic');
-const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
+const { AuthorizationCode } = require('simple-oauth2');
 
-// App-specific functions
-const { log } = require('./utils'); // Utilities
+// Utility and business logic functions
+const { log, requireUser } = require('./utils'); // Utilities
+const { createHelloHandler } = require('./routes/test')
 const { 
-  getApplicationRestrictedToken,
-  createHelloHandler, 
-  callApi
-} = require('./auth')
+  createTestUser, 
+  fetchServices, 
+  fetchItsaStatus,
+  fetchBusinessList, 
+  createTestUkPropertyBusiness, 
+  createUkPropertyPeriodSummary 
+} = require('./logic');
 
 // Initialise express app
 const app = express();
@@ -39,21 +25,10 @@ app.use(express.urlencoded({ extended: true }));  // Parse form data
 const {
   CLIENT_ID,
   CLIENT_SECRET,
-  OAUTH_SCOPE,
   REDIRECT_URI,
-  apiBaseUrl,
   oauthConfig,
+  hmrcServices
 } = require('./config');
-
-// Service metadata
-let serviceName = 'hello'
-let serviceVersion = '1.0'
-
-const ROUTES = {
-  UNRESTRICTED: '/world',
-  APP_RESTRICTED: '/application',
-  USER_RESTRICTED: '/user'
-};
 
 // Set up session management
 const cookieSession = require('cookie-session');
@@ -65,10 +40,6 @@ app.use(cookieSession({
 
 // Set up user-authenticated access flow
 const client = new AuthorizationCode(oauthConfig);
-const authorizationUri = client.authorizeURL({
-  redirect_uri: REDIRECT_URI,
-  scope: OAUTH_SCOPE,
-});
 
 // home-page route
 app.get('/', (req, res) => {
@@ -90,17 +61,17 @@ app.get('/', (req, res) => {
   }
 
   res.render('index', {
-    service: `${serviceName} (v${serviceVersion})`,
-    unRestrictedEndpoint: ROUTES.UNRESTRICTED,
-    appRestrictedEndpoint: ROUTES.APP_RESTRICTED,
-    userRestrictedEndpoint: ROUTES.USER_RESTRICTED
+    service: `${hmrcServices.hello.name} (v${hmrcServices.hello.version})`,
+    unRestrictedEndpoint: hmrcServices.hello.routes.world,
+    appRestrictedEndpoint: hmrcServices.hello.routes.application,
+    userRestrictedEndpoint: hmrcServices.hello.routes.user
   });
 });
 
-// Call authentication endpoints
-app.get("/unrestrictedCall", createHelloHandler(ROUTES.UNRESTRICTED));
-app.get("/applicationCall", createHelloHandler(ROUTES.APP_RESTRICTED));
-app.get("/userCall", createHelloHandler(ROUTES.USER_RESTRICTED));
+// Call hello endpoints
+app.get("/unrestrictedCall", createHelloHandler(hmrcServices.hello.routes.world));
+app.get("/applicationCall", createHelloHandler(hmrcServices.hello.routes.application));
+app.get("/userCall", requireUser, createHelloHandler(hmrcServices.hello.routes.user));
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth20/callback', async (req, res) => {
@@ -137,109 +108,12 @@ app.post('/logout', (req, res) => {
   res.redirect('/');
 });
 
-// Provides a list of all the available services together with which test user types can enrol to each
 app.get('/services', fetchServices);
-
 app.post('/test-users', createTestUser);
-
-app.get("/business-sources", fetchBusinessList);
-
-app.post("/test/uk-property-business", (req, res) => {
-    if (req.session.oauth2Token) {
-
-      const nino = req.body.nino;
-
-      if (!nino) {
-        return res.status(400).send('NINO is required');
-      }
-
-      createTestUkPropertyBusiness(nino)
-
-      //https://test-api.service.hmrc.gov.uk/individuals/self-assessment-test-support/business/{nino}
-
-    } else {
-      req.session.caller = '/test/uk-property-business';
-      res.redirect(authorizationUri);
-    }
-})
-
-async function createTestUkPropertyBusiness(nino){
-  const url = apiBaseUrl + `individuals/self-assessment-test-support/business/${nino}`;
-  const accessToken = await getApplicationRestrictedToken();
-      
-  const data = {
-    typeOfBusiness: "uk-property",
-    firstAccountingPeriodStartDate: "2021-04-06",
-    firstAccountingPeriodEndDate: "2022-04-05",
-    latencyDetails: {
-      latencyEndDate: "2023-04-06",
-      taxYear1: "2021-22",
-      latencyIndicator1: "A",
-      taxYear2: "2022-23",
-      latencyIndicator2: "Q"
-    },
-    quarterlyTypeChoice: {
-      quarterlyPeriodType: "standard",
-      taxYearOfChoice: "2022-23"
-    },
-    accountingType: "CASH",
-    commencementDate: "2020-04-06"
-    //cessationDate: "2025-04-06"
-  };
-
-  try {
-
-    log.info('ℹ️ Url:' + url)
-    log.info('ℹ️ Data:' + JSON.stringify(data, null, 2))
-    log.info('ℹ️ Access Token:' + accessToken)
-
-    const response = await axios.post(url, data, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/vnd.hmrc.1.0+json',
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('Business created:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating test business:', error.response?.data || error.message);
-    throw error;
-  }
-}
-
-app.post("/periodic-summary", (req, res) => {
-  if (req.session.oauth2Token) {
- 
-    const accessToken = client.createToken(req.session.oauth2Token);
-    const nino = req.body.nino;
-    const businessId = 'XBIS12345678901'
-    const taxYear = '2024-25'
-
-    if (!nino) {
-      return res.status(400).send('NINO is required');
-    }
-
-    serviceName = 'individuals'
-    serviceVersion = '6.0'
-    const routePath = `/business/property/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${encodeURIComponent(taxYear)}`;
-    
-    //Log scope
-    log.info(`ℹ️ Scope: ${accessToken.token.scope}`);
-    log.info('ℹ️ Url: ', routePath);
-    
-    callApi({
-      bearerToken: accessToken,
-      serviceVersion,
-      serviceName,
-      routePath: routePath
-    });
-
-  } else {
-    req.session.caller = '/periodic-summary';
-    res.redirect(authorizationUri);
-  }
-});
+app.get('/itsa-status', requireUser, fetchItsaStatus);
+app.get("/business-sources", requireUser, fetchBusinessList);
+app.post("/test/uk-property-business", requireUser, createTestUkPropertyBusiness);
+app.post("/periodic-summary", requireUser, createUkPropertyPeriodSummary);
 
 app.use((err, req, res, next) => {
   if (!err.stack) {
