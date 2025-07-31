@@ -30,8 +30,7 @@ const testServices = {
   },
 };
 
-function createHelloHandler(routePath) {
-  return asyncHandler(async (req, res) => {
+function fetchHello(routePath) {return asyncHandler(async (req, res) => {
 
     // Service metadata
     const serviceName = testServices.hello.name
@@ -56,15 +55,14 @@ function createHelloHandler(routePath) {
     const apiResponse = await callApi({
       method: 'GET',
       serviceName: serviceName,
-      routePath: routePath,
       serviceVersion: serviceVersion,
+      routePath: routePath,
       bearerToken: accessToken
     });
 
     res.status(apiResponse.status).json(apiResponse.body);
   });
 }
-
 const fetchServices = asyncHandler(async (_req, res) => {
 
   // Service metadata
@@ -77,8 +75,8 @@ const fetchServices = asyncHandler(async (_req, res) => {
   const apiResponse = await callApi({
     method: 'GET',
     serviceName: serviceName,
-    routePath: routePath,
     serviceVersion: serviceVersion,
+    routePath: routePath,
     bearerToken: accessToken
   });
 
@@ -93,15 +91,27 @@ const createTestUser = asyncHandler(async (req, res) => {
   const serviceVersion = testServices.createTestUser.version
   const routePath = testServices.createTestUser.routes.individuals
 
+  const serviceNames = [
+    "national-insurance",
+    "self-assessment",
+    "mtd-income-tax"
+    //"customs-services",
+    //"goods-vehicle-movements",
+    //"import-control-system",
+    //"mtd-vat",
+    //"common-transit-convention-traders",
+    //"common-transit-convention-traders-legacy"
+  ];
+
   const accessToken = await getApplicationRestrictedToken();
 
   const apiResponse = await callApi({
     method: 'POST',
     serviceName: serviceName,
-    routePath: routePath,
     serviceVersion: serviceVersion,
+    routePath: routePath,
     bearerToken: accessToken,
-    body: { services: ['self-assessment'] }
+    body: { serviceNames: serviceNames }
   });
 
   res.status(apiResponse.status).json(apiResponse.body);
@@ -116,13 +126,16 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
     return res.status(400).send('NINO is required');
   }
 
-  const url = apiBaseUrl + `individuals/self-assessment-test-support/business/${nino}`;
+  const serviceName = testServices.selfAssessmentTestSupport.name
+  const serviceVersion = testServices.selfAssessmentTestSupport.version
+  const routePath = testServices.selfAssessmentTestSupport.routes.business(nino)
   const accessToken = await getUserRestrictedToken(req);
-      
+  
   const data = {
     typeOfBusiness: "uk-property",
     firstAccountingPeriodStartDate: "2021-04-06",
     firstAccountingPeriodEndDate: "2022-04-05",
+    /*
     latencyDetails: {
       latencyEndDate: "2023-04-06",
       taxYear1: "2021-22",
@@ -134,37 +147,34 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
       quarterlyPeriodType: "standard",
       taxYearOfChoice: "2022-23"
     },
+    */
     accountingType: "CASH",
     commencementDate: "2020-04-06"
     //cessationDate: "2025-04-06"
   };
+  log.info('ℹ️ Data:' + JSON.stringify(data, null, 2))
 
-  try {
+  
+  const apiResponse = await callApi({
+    method: 'POST',
+    serviceName: serviceName,
+    serviceVersion: serviceVersion,
+    routePath: routePath,
+    bearerToken: accessToken,
+    body: data
+  });
 
-    log.info('ℹ️ Url:' + url)
-    log.info('ℹ️ Data:' + JSON.stringify(data, null, 2))
-    log.info('ℹ️ Access Token:' + accessToken)
-
-    const response = await axios.post(url, data, {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Accept': 'application/vnd.hmrc.1.0+json',
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log('Business created:', response.data);
-    return response.data;
-  } catch (error) {
-    console.error('Error creating test business:', error.response?.data || error.message);
-    throw error;
-  }
+  res.status(apiResponse.status).json(apiResponse.body);
+  
+  console.log('Business created:', response.data);
+  return response.data;
+  
 });
-
 
 module.exports = {
     testServices,
+    fetchHello,
     fetchServices, 
     createTestUser, 
-    createHelloHandler,
     createTestUkPropertyBusiness
 };

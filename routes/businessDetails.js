@@ -21,9 +21,9 @@ const fetchBusinessList = asyncHandler(async (req, res) => {
 
   const accessToken = await getUserRestrictedToken(req, res);
 
-  const serviceName = hmrcServices.businessDetails.name;
-  const routePath = hmrcServices.businessDetails.routes.listByNino(nino);
-  const serviceVersion = hmrcServices.businessDetails.version;
+  const serviceName = businessDetailsServices.businessDetails.name;
+  const routePath = businessDetailsServices.businessDetails.routes.listByNino(nino);
+  const serviceVersion = businessDetailsServices.businessDetails.version;
 
   const apiResponse = await callApi({
     method: 'GET',

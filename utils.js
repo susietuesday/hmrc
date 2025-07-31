@@ -105,13 +105,7 @@ const callApi = async ({
   extraHeaders = {},
   body = null
 }) => {
-  
-  /*
-  // Set defaults
-  serviceName = serviceName || hmrcServices.hello.name;
-  serviceVersion = serviceVersion || hmrcServices.hello.version;
-  */
- 
+
   const acceptHeader = getAcceptHeader(serviceVersion);
   const url = apiBaseUrl + serviceName + routePath;
   
@@ -127,6 +121,10 @@ const callApi = async ({
     headers.Authorization = `Bearer ${bearerToken}`;
   }
 
+  if (body && method !== 'GET') {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const axiosConfig = { headers };
 
   let response;
@@ -135,12 +133,23 @@ const callApi = async ({
     response = await axios.get(url, axiosConfig);
 
   } else {
-    response = await axios.request({
-      method,
-      url,
-      data: body,
-      ...axiosConfig
-    });
+    log.info('Request body:', body);
+    log.info('Request headers:', headers);
+    log.info('Bearer token being sent:' + headers.Authorization);
+
+    try {
+      const response = await axios.request({
+        method: 'POST',
+        url,
+        data: body,
+        headers
+      });
+      console.log('✅ Success:', response.data);
+    } catch (error) {
+      console.error('❌ ERROR STATUS:', error.response?.status);
+      console.error('❌ HMRC ERROR BODY:', JSON.stringify(error.response?.data, null, 2));
+    }
+
   }
 
   log.info('API call succeeded', {

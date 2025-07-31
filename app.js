@@ -8,7 +8,7 @@ const { log, requireUser } = require('./utils'); // Utilities
 // Test APIs
 const { 
   testServices,
-  createHelloHandler,
+  fetchHello,
   createTestUser,
   fetchServices, 
   createTestUkPropertyBusiness
@@ -80,9 +80,9 @@ app.get('/', (req, res) => {
 });
 
 // Call hello endpoints
-app.get("/unrestrictedCall", createHelloHandler(testServices.hello.routes.world));
-app.get("/applicationCall", createHelloHandler(testServices.hello.routes.application));
-app.get("/userCall", requireUser, createHelloHandler(testServices.hello.routes.user));
+app.get("/unrestrictedCall", fetchHello(testServices.hello.routes.world));
+app.get("/applicationCall", fetchHello(testServices.hello.routes.application));
+app.get("/userCall", requireUser, fetchHello(testServices.hello.routes.user));
 
 // Callback service parsing the authorization token and asking for the access token
 app.get('/oauth20/callback', async (req, res) => {
