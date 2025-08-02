@@ -71,14 +71,30 @@
         <button type="submit">Create Test User</button>
     </form>
 
+    <form action="/itsa-status" method="POST">
+        <label for="nino">National Insurance Number:</label>
+        <input type="text" name="nino" id="nino" required>
+        <label for="taxYear">Tax Year:</label>
+        <input type="text" name="taxYear" id="taxYear" required>
+        <button type="submit">Create Test ITSA Status</button>
+    </form>
+
     <h2>Retrieve ITSA Status</h2>
 
     <form action="/itsa-status" method="GET">
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
-        <label for="nino">Tax Year:</label>
+        <label for="taxYear">Tax Year:</label>
         <input type="text" name="taxYear" id="taxYear" required>
         <button type="submit">Retrieve ITSA Status</button>
+    </form>
+
+    <h2>Retrieve Income and Expenditure Obligations</h2>
+
+    <form action="/obligations" method="GET">
+        <label for="nino">National Insurance Number:</label>
+        <input type="text" name="nino" id="nino" required>
+        <button type="submit">Retrieve Obligations</button>
     </form>
 
     <h2>Business Income Sources</h2>
@@ -90,9 +106,9 @@
     </form>
 
     <form action="/test/uk-property-business" method="POST">
-    <label for="nino">National Insurance Number:</label>
-    <input type="text" name="nino" id="nino" required>
-    <button type="submit">Create test UK Property Business</button>
+        <label for="nino">National Insurance Number:</label>
+        <input type="text" name="nino" id="nino" required>
+        <button type="submit">Create test UK Property Business</button>
     </form>
 
     <h2>Submit Property Period Summary</h2>

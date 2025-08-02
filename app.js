@@ -10,6 +10,7 @@ const {
   testServices,
   fetchHello,
   createTestUser,
+  createTestItsaStatus,
   fetchServices, 
   createTestUkPropertyBusiness
 } = require('./routes/test');
@@ -17,6 +18,10 @@ const {
 const {
   fetchItsaStatus
 } = require('./routes/selfAssessmentIndividualDetails');
+
+const {
+  fetchIncomeAndExpenditureObligations
+} = require('./routes/Obligations')
 
 const {
   fetchBusinessList  
@@ -42,12 +47,26 @@ const {
 } = require('./config');
 
 // Set up session management
-const cookieSession = require('cookie-session');
-app.use(cookieSession({
-  name: 'session',
-  keys: ['oauth2Token', 'caller'],
-  maxAge: 10 * 60 * 60 * 1000 // 10 hours
+const session = require('express-session');
+app.use(session({
+  name: 'session-id',
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    maxAge: 10 * 60 * 60 * 1000, // 10 hours
+    secure: false,               // true if using HTTPS in prod
+    httpOnly: true              // protect against client JS access
+  }
 }));
+
+// Middleware to ensure req.session.user exists
+app.use((req, res, next) => {
+  if (!req.session.user) {
+    req.session.user = {};
+  }
+  next();
+});
 
 // Set up user-authenticated access flow
 const client = new AuthorizationCode(oauthConfig);
@@ -121,7 +140,9 @@ app.post('/logout', (req, res) => {
 
 app.get('/services', fetchServices);
 app.post('/test-users', createTestUser);
+app.post('/itsa-status', requireUser, createTestItsaStatus);
 app.get('/itsa-status', requireUser, fetchItsaStatus);
+app.get('/obligations', requireUser, fetchIncomeAndExpenditureObligations);
 app.get("/business-sources", requireUser, fetchBusinessList);
 app.post("/test/uk-property-business", requireUser, createTestUkPropertyBusiness);
 app.post("/periodic-summary", requireUser, createUkPropertyPeriodSummary);
