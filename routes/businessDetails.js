@@ -33,9 +33,8 @@ const fetchBusinessList = asyncHandler(async (req, res) => {
     bearerToken: accessToken,
     extraHeaders: {'Gov-Test-Scenario': 'PROPERTY'}
   });
-
-  res.status(apiResponse.status).json(apiResponse.body);
-
+  
+  return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 module.exports = {
