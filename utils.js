@@ -105,64 +105,59 @@ const callApi = async ({
   extraHeaders = {},
   body = null
 }) => {
-
   const acceptHeader = getAcceptHeader(serviceVersion);
   const url = apiBaseUrl + serviceName + routePath;
-  
-  log.info(`Calling ${url} with Accept: ${acceptHeader}`);
-  
+
+  log.info(`Calling: ${url}`);
+
   const headers = {
     Accept: acceptHeader,
     ...extraHeaders
   };
 
   if (bearerToken) {
-    log.info(`Using bearer token: ${bearerToken}`);
     headers.Authorization = `Bearer ${bearerToken}`;
   }
 
   if (body && method !== 'GET') {
     headers['Content-Type'] = 'application/json';
   }
-
-  const axiosConfig = { headers };
+  
+  log.info('Request headers:', headers);
 
   let response;
 
-  if (method === 'GET') {
-    response = await axios.get(url, axiosConfig);
+  try {
+    if (method === 'GET') {
+      response = await axios.get(url, { headers });
+    } else {
+      log.info('Request body:', body);
 
-  } else {
-    log.info('Request body:', body);
-    log.info('Request headers:', headers);
-    log.info('Bearer token being sent:' + headers.Authorization);
-
-    try {
-      const response = await axios.request({
-        method: 'POST',
+      response = await axios.request({
+        method,
         url,
         data: body,
         headers
       });
-      console.log('✅ Success:', response.data);
-    } catch (error) {
-      console.error('❌ ERROR STATUS:', error.response?.status);
-      console.error('❌ HMRC ERROR BODY:', JSON.stringify(error.response?.data, null, 2));
     }
 
+    log.info('✅ Success:', response.data);
+
+    return {
+      status: response.status,
+      body: response.data
+    };
+
+  } catch (error) {
+    console.error('❌ ERROR STATUS:', error.response?.status);
+    console.error('❌ HMRC ERROR BODY:', JSON.stringify(error.response?.data, null, 2));
+
+    return {
+      status: error.response?.status || 500,
+      body: error.response?.data || { error: 'Unexpected error' }
+    };
   }
-
-  log.info('API call succeeded', {
-    status: response.status,
-    body: response.data
-  });
-
-  return {
-    status: response.status,
-    body: response.data
-  };
-  
-}
+};
 
 module.exports = { 
   log,
