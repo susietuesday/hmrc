@@ -122,10 +122,24 @@ const fetchItsaStatus = asyncHandler(async(req, res) => {
 	// Set session data
 	req.session.user.nino = nino;
 	req.session.user.itsaStatus = status;
-	req.session.user.itsaStatusReason = statusReason;
+	//req.session.user.itsaStatusReason = statusReason;
 	
+	const mtdEligible = getMtdEligible(status)
+	const userMessage = getItsaUserMessage(status, statusReason);
+
+	if (
+		apiResponse.body?.itsaStatuses?.[0]?.itsaStatusDetails?.[0]
+	) {
+		apiResponse.body.itsaStatuses[0].itsaStatusDetails[0].mtdEligible = mtdEligible;
+		apiResponse.body.itsaStatuses[0].itsaStatusDetails[0].userMessage = userMessage;
+	}
+
   return res.status(apiResponse.status).json(apiResponse.body);
 })
+
+function getMtdEligible(itsaStatus) {
+  return itsaStatus === 'MTD Mandated' || itsaStatus === 'MTD Voluntary';
+}
 
 function getItsaUserMessage(status, reason) {
   const messagesByReason = itsaStatusMessages[status];
@@ -134,6 +148,5 @@ function getItsaUserMessage(status, reason) {
 }
 
 module.exports = { 
-  fetchItsaStatus,
-  getItsaUserMessage
+  fetchItsaStatus
 };
