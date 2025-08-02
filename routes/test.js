@@ -25,7 +25,8 @@ const testServices = {
     name: 'individuals/self-assessment-test-support',
     version: '1.0',
     routes: {
-      business: (nino) => `/business/${encodeURIComponent(nino)}` // Create test business
+      business: (nino) => `/business/${encodeURIComponent(nino)}`, // Create test business
+      itsaStatus: (nino, taxYear) => `/itsa-status/${encodeURIComponent(nino)}/${encodeURIComponent(taxYear)}`  // Create/amend test ITSA status
     }
   },
 };
@@ -60,7 +61,7 @@ function fetchHello(routePath) {return asyncHandler(async (req, res) => {
       bearerToken: accessToken
     });
 
-    res.status(apiResponse.status).json(apiResponse.body);
+    return res.status(apiResponse.status).json(apiResponse.body);
   });
 }
 const fetchServices = asyncHandler(async (_req, res) => {
@@ -80,7 +81,7 @@ const fetchServices = asyncHandler(async (_req, res) => {
     bearerToken: accessToken
   });
 
-  res.status(apiResponse.status).json(apiResponse.body);
+return res.status(apiResponse.status).json(apiResponse.body);
 
 });
 
@@ -118,6 +119,38 @@ const createTestUser = asyncHandler(async (req, res) => {
 
 });
 
+const createTestItsaStatus = asyncHandler(async (req, res) => {
+  const nino = req.body.nino;
+  const taxYear = req.body.taxYear;
+
+  const serviceName = testServices.selfAssessmentTestSupport.name
+  const serviceVersion = testServices.selfAssessmentTestSupport.version
+  const routePath = testServices.selfAssessmentTestSupport.routes.itsaStatus(nino, taxYear)
+  const accessToken = await getUserRestrictedToken(req);
+
+  const data = {
+    "itsaStatusDetails": [
+      {
+        "submittedOn": "2025-07-01T10:00:00.000Z",
+        "status": "MTD Mandated",
+        "statusReason": "MTD ITSA Opt-In",
+        "businessIncome2YearsPrior": 60000.00
+      }
+    ]
+  }
+
+  const apiResponse = await callApi({
+    method: 'POST',
+    serviceName: serviceName,
+    serviceVersion: serviceVersion,
+    routePath: routePath,
+    bearerToken: accessToken,
+    body: data
+  });
+
+  return res.status(apiResponse.status).json(apiResponse.body);
+});
+
 const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
 
   const nino = req.body.nino;
@@ -135,7 +168,6 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
     typeOfBusiness: "uk-property",
     firstAccountingPeriodStartDate: "2021-04-06",
     firstAccountingPeriodEndDate: "2022-04-05",
-    /*
     latencyDetails: {
       latencyEndDate: "2023-04-06",
       taxYear1: "2021-22",
@@ -147,7 +179,6 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
       quarterlyPeriodType: "standard",
       taxYearOfChoice: "2022-23"
     },
-    */
     accountingType: "CASH",
     commencementDate: "2020-04-06"
     //cessationDate: "2025-04-06"
@@ -164,10 +195,7 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
     body: data
   });
 
-  res.status(apiResponse.status).json(apiResponse.body);
-  
-  console.log('Business created:', response.data);
-  return response.data;
+  return res.status(apiResponse.status).json(apiResponse.body);
   
 });
 
@@ -176,5 +204,6 @@ module.exports = {
     fetchHello,
     fetchServices, 
     createTestUser, 
+    createTestItsaStatus,
     createTestUkPropertyBusiness
 };
