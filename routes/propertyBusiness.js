@@ -42,6 +42,8 @@ const createUkPropertyPeriodSummary = asyncHandler(async (req, res) => {
       routePath: routePath
     });
 
+    return res.status(apiResponse.status).json(apiResponse.body);
+
   } else {
     req.session.caller = '/periodic-summary';
     res.redirect(authorizationUri);
