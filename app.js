@@ -1,42 +1,27 @@
 // Core and third-party imports
 const express = require('express');
+const session = require('express-session');
+const Redis = require('ioredis');
+const connectRedis = require('connect-redis');
 const { AuthorizationCode } = require('simple-oauth2');
 
 // Utility and business logic functions
-const { log, requireUser } = require('./utils'); // Utilities
+const { log, requireUser } = require('./utils');
 
-// Test APIs
-const { 
+// Route handlers
+const {
   testServices,
   fetchHello,
   createTestUser,
   createTestItsaStatus,
-  fetchServices, 
+  fetchServices,
   createTestUkPropertyBusiness
 } = require('./routes/test');
 
-const {
-  fetchItsaStatus
-} = require('./routes/selfAssessmentIndividualDetails');
-
-const {
-  fetchIncomeAndExpenditureObligations
-} = require('./routes/Obligations')
-
-const {
-  fetchBusinessList  
-} = require('./routes/businessDetails');
-
-const {  
-  createUkPropertyPeriodSummary 
-} = require('./routes/propertyBusiness');
-
-// Initialise express app
-const app = express();
-app.set('view engine', 'ejs');
-
-// Middleware
-app.use(express.urlencoded({ extended: true }));  // Parse form data
+const { fetchItsaStatus } = require('./routes/selfAssessmentIndividualDetails');
+const { fetchIncomeAndExpenditureObligations } = require('./routes/Obligations');
+const { fetchBusinessList } = require('./routes/businessDetails');
+const { createUkPropertyPeriodSummary } = require('./routes/propertyBusiness');
 
 // Environment variables
 const {
@@ -46,21 +31,49 @@ const {
   oauthConfig
 } = require('./config');
 
-// Set up session management
-const session = require('express-session');
+// Create Redis client and session store
+const RedisStore = connectRedis(session);
+const redisClient = new Redis();  // auto-connect
+
+redisClient.on('error', (err) => {
+  console.error('Redis Client Error', err);
+});
+
+// Initialize Express app
+const app = express();
+app.set('view engine', 'ejs');
+app.use(express.urlencoded({ extended: true }));
+
+/*
+// Session middleware (must come before any req.session usage)
 app.use(session({
   name: 'session-id',
-  secret: process.env.SESSION_SECRET,
+  store: new RedisStore({ client: redisClient }),
+  secret: process.env.SESSION_SECRET || 'default_secret',
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
-    maxAge: 10 * 60 * 60 * 1000, // 10 hours
-    secure: false,               // true if using HTTPS in prod
-    httpOnly: true              // protect against client JS access
+    maxAge: 10 * 60 * 60 * 1000,
+    secure: false,
+    httpOnly: true
   }
 }));
+*/
 
-// Middleware to ensure req.session.user exists
+app.use(session({
+  store: new RedisStore({ client: redisClient }),
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }  // set to true if using HTTPS
+}));
+
+app.use((req, res, next) => {
+  log.info(`[${req.method}] ${req.url}`);
+  next();
+});
+
+// Ensure req.session.user is always defined
 app.use((req, res, next) => {
   if (!req.session.user) {
     req.session.user = {};
@@ -68,12 +81,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// Set up user-authenticated access flow
+// OAuth client
 const client = new AuthorizationCode(oauthConfig);
 
-// home-page route
+// Home page route
 app.get('/', (req, res) => {
-
   const userToken = req.session.oauth2Token;
 
   const userInfo = userToken ? {
@@ -98,17 +110,18 @@ app.get('/', (req, res) => {
   });
 });
 
-// Call hello endpoints
+// Hello world routes
 app.get("/unrestrictedCall", fetchHello(testServices.hello.routes.world));
 app.get("/applicationCall", fetchHello(testServices.hello.routes.application));
 app.get("/userCall", requireUser, fetchHello(testServices.hello.routes.user));
 
-// Callback service parsing the authorization token and asking for the access token
+// OAuth callback
 app.get('/oauth20/callback', async (req, res) => {
-  console.log('OAuth callback hit:', req.originalUrl, req.query);
+  log.info('OAuth callback hit:', req.originalUrl, req.query);
   const { code } = req.query;
+
   const options = {
-    code: code,
+    code,
     redirect_uri: REDIRECT_URI,
     client_id: CLIENT_ID,
     client_secret: CLIENT_SECRET,
@@ -117,24 +130,15 @@ app.get('/oauth20/callback', async (req, res) => {
   try {
     const accessToken = await client.getToken(options);
     req.session.oauth2Token = accessToken;
-
-    return res.redirect(req.session.caller);
-
-  } catch(error) {
-    return res.status(500).json('Authentication failed');
+    res.redirect(req.session.caller || '/');
+  } catch (error) {
+    res.status(500).json('Authentication failed');
   }
 });
 
-app.listen(8080, () => {
-  log.info('Started at http://localhost:8080');
-});
-
-// Log out
+// Other routes
 app.post('/logout', (req, res) => {
-  // Clear all session data by setting the session object to null or empty
   req.session = null;
-
-  // Redirect to login or homepage
   res.redirect('/');
 });
 
@@ -147,16 +151,21 @@ app.get("/business-sources", requireUser, fetchBusinessList);
 app.post("/test/uk-property-business", requireUser, createTestUkPropertyBusiness);
 app.post("/periodic-summary", requireUser, createUkPropertyPeriodSummary);
 
+// Global error handler
 app.use((err, req, res, next) => {
   if (!err.stack) {
     log.error(`Error: ${err.message || 'Unknown error'}`);
   } else {
     const stackLines = err.stack.split('\n');
-    const messageLine = stackLines[0];        // error message line
+    const messageLine = stackLines[0];
     const locationLines = stackLines.slice(1, 3).map(line => line.trim()).join(' | ');
     log.error(`${messageLine} — ${locationLines}`);
   }
-
   const status = err.status || err.response?.status || 500;
   res.status(status).json({ error: 'Internal Server Error' });
+});
+
+// Start the server
+app.listen(8080, () => {
+  log.info('🚀 Server started at http://localhost:8080');
 });
