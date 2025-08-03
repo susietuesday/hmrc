@@ -1,0 +1,12 @@
+
+node_modules/
+.idea/
+*.iml
+*.log
+.env
+.DS_Store
+LICENSE
+README.md
+repository.yaml
+self-assessment-individual-details.yaml
+self-assessment-test-support.yaml
