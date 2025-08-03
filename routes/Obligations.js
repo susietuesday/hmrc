@@ -7,8 +7,8 @@ const services = {
     version: '3.0',
     routes: {
       incomeAndExpenditure: (nino) => `/details/${encodeURIComponent(nino)}/income-and-expenditure`,
-      crystallisation: (nino) => `/details/${encodeURIComponent(nino)}/crystallisation`,
-      endOfPeriodStatement: (nino) => `/details/${encodeURIComponent(nino)}/end-of-period-statement`
+      endOfPeriodStatement: (nino) => `/details/${encodeURIComponent(nino)}/end-of-period-statement`,
+      crystallisation: (nino) => `/details/${encodeURIComponent(nino)}/crystallisation`
     }
   }
 };
