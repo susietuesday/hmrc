@@ -18,29 +18,6 @@ const authorizationUri = client.authorizeURL({
   scope: OAUTH_SCOPE,
 });
 
-function requireUser(req, res, next) {
-
-  // Check for OAuth token
-  const tokenData = req.session.oauth2Token;
-  if (!tokenData) {
-    req.session.caller = req.originalUrl;
-    return res.redirect(authorizationUri);  // Redirect to HMRC login
-  }
-
-  // Create access token
-  const accessToken = client.createToken(tokenData);
-
-  // Check for expired token
-  if (accessToken.expired()) {
-    req.session.oauth2Token = null;
-    return res.redirect(authorizationUri);  // Redirect to HMRC login
-  }
-
-  // Set access token
-  req.accessToken = accessToken.token.access_token; // Attach it to req for later use
-  next();
-}
-
 async function getApplicationRestrictedToken() {
   const config = {
     ...oauthConfig,
@@ -163,10 +140,22 @@ const callApi = async ({
   }
 };
 
+function getFraudPreventionHeaders(req) {
+  return {
+    'Gov-Client-Connection-Method': config.GOV_CLIENT_CONNECTION_METHOD,
+    'Gov-Client-Browser-JS-User-Agent': req.session.jsUserAgent || 'Unknown',
+    'Gov-Client-Device-ID': req.session.deviceId || 'Unknown'//,
+    //'Gov-Client-Timezone': req.session.timezone || 'UTC',
+    //'Gov-Client-Screens': req.session.screenResolution || 'Unknown',
+    //'Gov-Vendor-Version': config.GOV_VENDOR_VERSION,  // e.g., app-name=1.0.0
+    //'Gov-Vendor-License-IDs': config.GOV_VENDOR_LICENSE_IDS || 'None'
+  };
+}
+
 module.exports = { 
   log,
   callApi,
-  requireUser,
   getApplicationRestrictedToken,
-  getUserRestrictedToken
+  getUserRestrictedToken,
+  getFraudPreventionHeaders
 };

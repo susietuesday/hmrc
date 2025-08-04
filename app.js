@@ -5,8 +5,9 @@ const Redis = require('ioredis');
 const connectRedis = require('connect-redis');
 const { AuthorizationCode } = require('simple-oauth2');
 
-// Utility and business logic functions
-const { log, requireUser } = require('./utils');
+// Middleware and utility and functions
+const { setSessionUser, requireUser } = require('./middleware.js');
+const { log } = require('./utils');
 
 // Route handlers
 const {
@@ -42,6 +43,7 @@ redisClient.on('error', (err) => {
 // Initialize Express app
 const app = express();
 app.set('view engine', 'ejs');
+app.set('trust proxy', true); // Enabled to get Client IP for fraud prevention headers
 app.use(express.urlencoded({ extended: true }));
 
 // Session middleware (must come before any req.session usage)
@@ -53,18 +55,8 @@ app.use(session({
   cookie: { secure: false }  // set to true if using HTTPS
 }));
 
-app.use((req, res, next) => {
-  log.info(`[${req.method}] ${req.url}`);
-  next();
-});
-
 // Ensure req.session.user is always defined
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    req.session.user = {};
-  }
-  next();
-});
+app.use(setSessionUser);
 
 // OAuth client
 const client = new AuthorizationCode(oauthConfig);
@@ -93,6 +85,22 @@ app.get('/', (req, res) => {
     appRestrictedEndpoint: testServices.hello.routes.application,
     userRestrictedEndpoint: testServices.hello.routes.user
   });
+});
+
+// Store fraud prevention header info
+app.post('/session-data', express.json(), (req, res) => {
+  const userAgent = req.headers['x-user-agent'];
+  const deviceId = req.headers['x-device-id'];
+
+  // Store it in the session so you can use it in later HMRC API calls
+
+  req.session.jsUserAgent = userAgent;
+  req.session.deviceId = deviceId;
+
+  log.info('JS User Agent: ' + userAgent);
+  log.info('Device ID: ' + deviceId);
+
+  res.sendStatus(200);
 });
 
 // MTD sandbox routes
