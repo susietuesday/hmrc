@@ -44,22 +44,7 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
 
-/*
 // Session middleware (must come before any req.session usage)
-app.use(session({
-  name: 'session-id',
-  store: new RedisStore({ client: redisClient }),
-  secret: process.env.SESSION_SECRET || 'default_secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 10 * 60 * 60 * 1000,
-    secure: false,
-    httpOnly: true
-  }
-}));
-*/
-
 app.use(session({
   store: new RedisStore({ client: redisClient }),
   secret: process.env.SESSION_SECRET,
@@ -110,10 +95,20 @@ app.get('/', (req, res) => {
   });
 });
 
-// Hello world routes
+// MTD sandbox routes
 app.get("/unrestrictedCall", fetchHello(testServices.hello.routes.world));
 app.get("/applicationCall", fetchHello(testServices.hello.routes.application));
 app.get("/userCall", requireUser, fetchHello(testServices.hello.routes.user));
+app.post('/test-users', createTestUser);
+app.post('/itsa-status', requireUser, createTestItsaStatus);
+app.post("/test/uk-property-business", requireUser, createTestUkPropertyBusiness);
+
+// MTD production routes
+app.get('/services', fetchServices);
+app.get('/itsa-status', requireUser, fetchItsaStatus);
+app.get('/obligations', requireUser, fetchIncomeAndExpenditureObligations);
+app.get("/business-sources", requireUser, fetchBusinessList);
+app.post("/periodic-summary", requireUser, createUkPropertyPeriodSummary);
 
 // OAuth callback
 app.get('/oauth20/callback', async (req, res) => {
@@ -136,20 +131,11 @@ app.get('/oauth20/callback', async (req, res) => {
   }
 });
 
-// Other routes
+// Log out
 app.post('/logout', (req, res) => {
   req.session = null;
   res.redirect('/');
 });
-
-app.get('/services', fetchServices);
-app.post('/test-users', createTestUser);
-app.post('/itsa-status', requireUser, createTestItsaStatus);
-app.get('/itsa-status', requireUser, fetchItsaStatus);
-app.get('/obligations', requireUser, fetchIncomeAndExpenditureObligations);
-app.get("/business-sources", requireUser, fetchBusinessList);
-app.post("/test/uk-property-business", requireUser, createTestUkPropertyBusiness);
-app.post("/periodic-summary", requireUser, createUkPropertyPeriodSummary);
 
 // Global error handler
 app.use((err, req, res, next) => {
