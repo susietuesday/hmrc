@@ -16,7 +16,26 @@ function setClientIp (req, res, next) {
 
   if (!req.session.clientIp && ip && !isLoopback) {
     req.session.clientIp = ip;
+    req.session.clientIpTimestamp = new Date().toISOString();
   }
+  next();
+}
+
+function setClientPort(req, res, next) {
+  const port = req.socket?.remotePort;
+
+  // Check it's a valid, non-standard port (not 80 or 443)
+  if (
+    port &&
+    typeof port === 'number' &&
+    port >= 1 &&
+    port <= 65535 &&
+    port !== 80 &&
+    port !== 443
+  ) {
+    req.session.clientPort = port;
+  }
+
   next();
 }
 
