@@ -5,13 +5,14 @@ require('dotenv').config();
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const OAUTH_SCOPE = process.env.SCOPE;
-const REDIRECT_URI = process.env.REDIRECT_URI
+const REDIRECT_URI = process.env.REDIRECT_URI;
 const API_BASE_URL_SANDBOX = process.env.API_BASE_URL_SANDBOX;
 const API_BASE_URL_PRODUCTION = process.env.API_BASE_URL_PRODUCTION;
 const useSandbox = process.env.USE_SANDBOX;
 const apiBaseUrl = useSandbox ? API_BASE_URL_SANDBOX : API_BASE_URL_PRODUCTION;
-const ACCEPT_HEADER_PREFIX = process.env.ACCEPT_HEADER_PREFIX
-const ACCEPT_HEADER_SUFFIX = process.env.ACCEPT_HEADER_SUFFIX
+const ACCEPT_HEADER_PREFIX = process.env.ACCEPT_HEADER_PREFIX;
+const ACCEPT_HEADER_SUFFIX = process.env.ACCEPT_HEADER_SUFFIX;
+const GOV_CLIENT_CONNECTION_METHOD=process.env.GOV_CLIENT_CONNECTION_METHOD;
 
 const oauthConfig = {
   client: {
