@@ -19,20 +19,24 @@ const authorizationUri = client.authorizeURL({
 });
 
 function requireUser(req, res, next) {
-  const tokenData = req.session.oauth2Token;
 
+  // Check for OAuth token
+  const tokenData = req.session.oauth2Token;
   if (!tokenData) {
     req.session.caller = req.originalUrl;
     return res.redirect(authorizationUri);  // Redirect to HMRC login
   }
 
+  // Create access token
   const accessToken = client.createToken(tokenData);
 
+  // Check for expired token
   if (accessToken.expired()) {
     req.session.oauth2Token = null;
-    return res.redirect(authorizationUri);
+    return res.redirect(authorizationUri);  // Redirect to HMRC login
   }
 
+  // Set access token
   req.accessToken = accessToken.token.access_token; // Attach it to req for later use
   next();
 }
