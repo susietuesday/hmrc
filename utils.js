@@ -145,16 +145,13 @@ function getFraudPreventionHeaders(req) {
     'Gov-Client-Connection-Method': config.GOV_CLIENT_CONNECTION_METHOD,
     'Gov-Client-Browser-JS-User-Agent': req.session.jsUserAgent || 'Unknown',
     'Gov-Client-Device-ID': req.session.deviceId || 'Unknown',
+    'Gov-Client-Public-IP': req.session.clientIp || '',
+    'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp || ''
     // 'Gov-Client-Timezone': req.session.timezone || 'UTC',
     // 'Gov-Client-Screens': req.session.screenResolution || 'Unknown',
     // 'Gov-Vendor-Version': config.GOV_VENDOR_VERSION,
     // 'Gov-Vendor-License-IDs': config.GOV_VENDOR_LICENSE_IDS || 'None'
   };
-
-  // Only include Public IP if available
-  if (req.session.clientIp) {
-    headers['Gov-Client-Public-IP'] = req.session.clientIp;
-  }
 
   return headers;
 }
