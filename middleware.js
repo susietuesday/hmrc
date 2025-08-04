@@ -1,6 +1,21 @@
+const { log } = require('./utils');
+
 function setSessionUser(req, res, next) {
   if (!req.session.user) {
     req.session.user = {};
+  }
+  next();
+}
+
+function setClientIp (req, res, next) {
+  const ip = req.ip;
+
+  // Filter out local and private IPs
+  const isLoopback = ip === '::1' || ip.startsWith('::ffff:127.') || ip.startsWith('127.');
+  log.info('Client IP: ' + req.sess.clientIp);
+
+  if (!req.session.clientIp && ip && !isLoopback) {
+    req.session.clientIp = ip;
   }
   next();
 }
@@ -44,6 +59,7 @@ function errorHandler(err, req, res, next) {
 
 module.exports = {
   setSessionUser,
+  setClientIp,
   requireUser,
   errorHandler
 };
