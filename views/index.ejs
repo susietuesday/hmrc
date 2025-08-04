@@ -2,46 +2,7 @@
 
 <html lang="en">
 
-<script>
-  function getOrCreateDeviceId() {
-    const match = document.cookie.match(/(^|;) ?deviceId=([^;]*)(;|$)/);
-    if (match) return match[2];
-
-    const newId = crypto.randomUUID();
-    document.cookie = `deviceId=${newId}; path=/; max-age=31536000`; // 1 year
-    return newId;
-  }
-
-  const deviceId = getOrCreateDeviceId();
-
-  function getUtcOffset() {
-    const offsetMinutes = new Date().getTimezoneOffset(); // minutes behind UTC (e.g. 60 means UTC-1)
-    const sign = offsetMinutes <= 0 ? '+' : '-';
-    const absMinutes = Math.abs(offsetMinutes);
-    const hours = String(Math.floor(absMinutes / 60)).padStart(2, '0');
-    const minutes = String(absMinutes % 60).padStart(2, '0');
-    return `UTC${sign}${hours}:${minutes}`;
-  }
-
-  fetch('/session-data', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-User-Agent': navigator.userAgent,
-      'X-Device-Id': deviceId
-    },
-    body: JSON.stringify({
-      screenInfo: {
-        width: window.screen.width,
-        height: window.screen.height,
-        scalingFactor: window.devicePixelRatio || 1,
-        colourDepth: window.screen.colorDepth
-      },
-      timezone: getUtcOffset()
-    })
-  });
-</script>
-
+<script src="main.js"></script>
 
 <head>
   <meta charset="UTF-8">
@@ -56,6 +17,8 @@
 
 <body>
 <div class="container">
+    <h1>Welcome to Making Tax Digital for Property Income</h1>
+    
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">

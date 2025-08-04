@@ -61,6 +61,12 @@ app.use(session({
   cookie: { secure: false }  // set to true if using HTTPS
 }));
 
+// Serve static files from front end
+app.use(express.static('public'));
+
+// Serve index.ejs
+app.set('view engine', 'ejs');
+
 // Ensure req.session.user is always defined
 app.use(initSessionUser);
 
@@ -102,22 +108,20 @@ app.post('/session-data', express.json(), (req, res) => {
   //log.info('Headers: ' + JSON.stringify(req.headers));
   //log.info('Request body:' + JSON.stringify(req.body));
 
-  const userAgent = req.headers['x-user-agent'];
-  const deviceId = req.headers['x-device-id'];
-  const screenInfo = req.body.screenInfo;
-  const timezone = req.body.timezone;
+  const { screenInfo, windowSize, timezone } = req.body;
 
-  // Store it in the session so you can use it in later HMRC API calls
-  req.session.jsUserAgent = userAgent;
-  req.session.deviceId = deviceId;
+  req.session.jsUserAgent = req.headers['x-user-agent'];
+  req.session.deviceId = req.headers['x-device-id'];
   req.session.screenInfo = screenInfo;
+  req.session.windowSize = windowSize;
   req.session.timezone = timezone;
 
-  log.info('JS User Agent: ' + userAgent);
-  log.info('Device ID: ' + deviceId);
+  log.info('JS User Agent: ' + req.session.jsUserAgent);
+  log.info('Device ID: ' + req.session.deviceId);
   log.info('Screen Info:' + JSON.stringify(screenInfo));
+  log.info('Window Size: ' + JSON.stringify(windowSize));
   log.info('Timezone: ' + JSON.stringify(timezone));
-  
+
   res.sendStatus(200);
 });
 
