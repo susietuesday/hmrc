@@ -146,12 +146,20 @@ function getFraudPreventionHeaders(req) {
     'Gov-Client-Browser-JS-User-Agent': req.session.jsUserAgent || 'Unknown',
     'Gov-Client-Device-ID': req.session.deviceId || 'Unknown',
     'Gov-Client-Public-IP': req.session.clientIp || '',
-    'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp || ''
+    'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp || '',
+    'Gov-Client-Public-Port': req.session.clientPort?.toString() || ''
     // 'Gov-Client-Timezone': req.session.timezone || 'UTC',
     // 'Gov-Client-Screens': req.session.screenResolution || 'Unknown',
     // 'Gov-Vendor-Version': config.GOV_VENDOR_VERSION,
     // 'Gov-Vendor-License-IDs': config.GOV_VENDOR_LICENSE_IDS || 'None'
   };
+
+  if (req.session.screenInfo) {
+    const s = req.session.screenInfo;
+    headers['Gov-Client-Screens'] = `width=${s.width}&height=${s.height}&scaling-factor=${s.scalingFactor}&colour-depth=${s.colourDepth}`;
+  } else {
+    headers['Gov-Client-Screens'] = '';
+  }
 
   return headers;
 }

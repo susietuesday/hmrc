@@ -5,8 +5,14 @@ const Redis = require('ioredis');
 const connectRedis = require('connect-redis');
 const { AuthorizationCode } = require('simple-oauth2');
 
-// Middleware and utility and functions
-const { initSessionUser, setClientIp, requireUser, errorHandler } = require('./middleware.js');
+// Middleware and utility functions
+const { 
+  initSessionUser, 
+  captureClientIp, 
+  captureClientPort, 
+  requireUser, 
+  errorHandler 
+} = require('./middleware.js');
 const { log } = require('./utils');
 
 // Route handlers
@@ -58,9 +64,6 @@ app.use(session({
 // Ensure req.session.user is always defined
 app.use(initSessionUser);
 
-// Set Client IP for fraud prevention headers
-app.use(setClientIp);
-
 // OAuth client
 const client = new AuthorizationCode(oauthConfig);
 
@@ -90,19 +93,28 @@ app.get('/', (req, res) => {
   });
 });
 
+// Capture fraud prevention headers info
+app.use(captureClientIp);
+app.use(captureClientPort);
+
 // Store fraud prevention header info
 app.post('/session-data', express.json(), (req, res) => {
+  //log.info('Headers: ' + JSON.stringify(req.headers));
+  //log.info('Request body:' + JSON.stringify(req.body));
+
   const userAgent = req.headers['x-user-agent'];
   const deviceId = req.headers['x-device-id'];
-
+  const screenInfo = req.body.screenInfo;
+  
   // Store it in the session so you can use it in later HMRC API calls
-
   req.session.jsUserAgent = userAgent;
   req.session.deviceId = deviceId;
+  req.session.screenInfo = screenInfo;
 
   log.info('JS User Agent: ' + userAgent);
   log.info('Device ID: ' + deviceId);
-
+  log.info('Screen Info:' + JSON.stringify(screenInfo));
+  
   res.sendStatus(200);
 });
 

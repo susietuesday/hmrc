@@ -7,13 +7,12 @@ function initSessionUser(req, res, next) {
   next();
 }
 
-function setClientIp (req, res, next) {
+function captureClientIp (req, res, next) {
   const ip = req.ip;
 
   // Filter out local and private IPs
   const isLoopback = ip === '::1' || ip.startsWith('::ffff:127.') || ip.startsWith('127.');
-  log.info('Client IP: ' + req.sess.clientIp);
-
+  
   if (!req.session.clientIp && ip && !isLoopback) {
     req.session.clientIp = ip;
     req.session.clientIpTimestamp = new Date().toISOString();
@@ -21,7 +20,7 @@ function setClientIp (req, res, next) {
   next();
 }
 
-function setClientPort(req, res, next) {
+function captureClientPort(req, res, next) {
   const port = req.socket?.remotePort;
 
   // Check it's a valid, non-standard port (not 80 or 443)
@@ -34,6 +33,7 @@ function setClientPort(req, res, next) {
     port !== 443
   ) {
     req.session.clientPort = port;
+    log.info('Cient Port: ' + port);
   }
 
   next();
@@ -78,7 +78,8 @@ function errorHandler(err, req, res, next) {
 
 module.exports = {
   initSessionUser,
-  setClientIp,
+  captureClientIp,
+  captureClientPort,
   requireUser,
   errorHandler
 };
