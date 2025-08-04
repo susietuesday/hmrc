@@ -4,29 +4,34 @@
 
 <script>
   function getOrCreateDeviceId() {
-    // Try to get from cookie
     const match = document.cookie.match(/(^|;) ?deviceId=([^;]*)(;|$)/);
     if (match) return match[2];
 
-    // Not found — generate a new UUID
     const newId = crypto.randomUUID();
     document.cookie = `deviceId=${newId}; path=/; max-age=31536000`; // 1 year
     return newId;
   }
 
-  // Send to backend
   const deviceId = getOrCreateDeviceId();
 
-  // Send user agent to your backend via fetch
   fetch('/session-data', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'X-User-Agent': navigator.userAgent,
       'X-Device-Id': deviceId
-    }
+    },
+    body: JSON.stringify({
+      screenInfo: {
+        width: window.screen.width,
+        height: window.screen.height,
+        scalingFactor: window.devicePixelRatio || 1,
+        colourDepth: window.screen.colorDepth
+      }
+    })
   });
 </script>
+
 
 <head>
   <meta charset="UTF-8">
