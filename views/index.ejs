@@ -14,6 +14,15 @@
 
   const deviceId = getOrCreateDeviceId();
 
+  function getUtcOffset() {
+    const offsetMinutes = new Date().getTimezoneOffset(); // minutes behind UTC (e.g. 60 means UTC-1)
+    const sign = offsetMinutes <= 0 ? '+' : '-';
+    const absMinutes = Math.abs(offsetMinutes);
+    const hours = String(Math.floor(absMinutes / 60)).padStart(2, '0');
+    const minutes = String(absMinutes % 60).padStart(2, '0');
+    return `UTC${sign}${hours}:${minutes}`;
+  }
+
   fetch('/session-data', {
     method: 'POST',
     headers: {
@@ -27,7 +36,8 @@
         height: window.screen.height,
         scalingFactor: window.devicePixelRatio || 1,
         colourDepth: window.screen.colorDepth
-      }
+      },
+      timezone: getUtcOffset()
     })
   });
 </script>

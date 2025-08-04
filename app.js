@@ -105,15 +105,18 @@ app.post('/session-data', express.json(), (req, res) => {
   const userAgent = req.headers['x-user-agent'];
   const deviceId = req.headers['x-device-id'];
   const screenInfo = req.body.screenInfo;
-  
+  const timezone = req.body.timezone;
+
   // Store it in the session so you can use it in later HMRC API calls
   req.session.jsUserAgent = userAgent;
   req.session.deviceId = deviceId;
   req.session.screenInfo = screenInfo;
+  req.session.timezone = timezone;
 
   log.info('JS User Agent: ' + userAgent);
   log.info('Device ID: ' + deviceId);
   log.info('Screen Info:' + JSON.stringify(screenInfo));
+  log.info('Timezone: ' + JSON.stringify(timezone));
   
   res.sendStatus(200);
 });
