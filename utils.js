@@ -141,15 +141,22 @@ const callApi = async ({
 };
 
 function getFraudPreventionHeaders(req) {
-  return {
+  const headers = {
     'Gov-Client-Connection-Method': config.GOV_CLIENT_CONNECTION_METHOD,
     'Gov-Client-Browser-JS-User-Agent': req.session.jsUserAgent || 'Unknown',
-    'Gov-Client-Device-ID': req.session.deviceId || 'Unknown'//,
-    //'Gov-Client-Timezone': req.session.timezone || 'UTC',
-    //'Gov-Client-Screens': req.session.screenResolution || 'Unknown',
-    //'Gov-Vendor-Version': config.GOV_VENDOR_VERSION,  // e.g., app-name=1.0.0
-    //'Gov-Vendor-License-IDs': config.GOV_VENDOR_LICENSE_IDS || 'None'
+    'Gov-Client-Device-ID': req.session.deviceId || 'Unknown',
+    // 'Gov-Client-Timezone': req.session.timezone || 'UTC',
+    // 'Gov-Client-Screens': req.session.screenResolution || 'Unknown',
+    // 'Gov-Vendor-Version': config.GOV_VENDOR_VERSION,
+    // 'Gov-Vendor-License-IDs': config.GOV_VENDOR_LICENSE_IDS || 'None'
   };
+
+  // Only include Public IP if available
+  if (req.session.clientIp) {
+    headers['Gov-Client-Public-IP'] = req.session.clientIp;
+  }
+
+  return headers;
 }
 
 module.exports = { 
