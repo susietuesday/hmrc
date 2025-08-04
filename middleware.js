@@ -1,6 +1,6 @@
 const { log } = require('./utils');
 
-function setSessionUser(req, res, next) {
+function initSessionUser(req, res, next) {
   if (!req.session.user) {
     req.session.user = {};
   }
@@ -77,7 +77,7 @@ function errorHandler(err, req, res, next) {
 }
 
 module.exports = {
-  setSessionUser,
+  initSessionUser,
   setClientIp,
   requireUser,
   errorHandler

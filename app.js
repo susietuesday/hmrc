@@ -6,7 +6,7 @@ const connectRedis = require('connect-redis');
 const { AuthorizationCode } = require('simple-oauth2');
 
 // Middleware and utility and functions
-const { setSessionUser, setClientIp, requireUser, errorHandler } = require('./middleware.js');
+const { initSessionUser, setClientIp, requireUser, errorHandler } = require('./middleware.js');
 const { log } = require('./utils');
 
 // Route handlers
@@ -56,7 +56,7 @@ app.use(session({
 }));
 
 // Ensure req.session.user is always defined
-app.use(setSessionUser);
+app.use(initSessionUser);
 
 // Set Client IP for fraud prevention headers
 app.use(setClientIp);
