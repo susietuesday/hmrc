@@ -6,7 +6,7 @@ const connectRedis = require('connect-redis');
 const { AuthorizationCode } = require('simple-oauth2');
 
 // Middleware and utility and functions
-const { setSessionUser, requireUser } = require('./middleware.js');
+const { setSessionUser, requireUser, errorHandler } = require('./middleware.js');
 const { log } = require('./utils');
 
 // Route handlers
@@ -146,18 +146,7 @@ app.post('/logout', (req, res) => {
 });
 
 // Global error handler
-app.use((err, req, res, next) => {
-  if (!err.stack) {
-    log.error(`Error: ${err.message || 'Unknown error'}`);
-  } else {
-    const stackLines = err.stack.split('\n');
-    const messageLine = stackLines[0];
-    const locationLines = stackLines.slice(1, 3).map(line => line.trim()).join(' | ');
-    log.error(`${messageLine} — ${locationLines}`);
-  }
-  const status = err.status || err.response?.status || 500;
-  res.status(status).json({ error: 'Internal Server Error' });
-});
+app.use(errorHandler);
 
 // Start the server
 app.listen(8080, () => {
