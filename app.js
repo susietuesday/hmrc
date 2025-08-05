@@ -10,26 +10,11 @@ const {
   initSessionUser, 
   captureClientIp, 
   captureClientPort, 
-  requireUser, 
   errorHandler 
 } = require('./middleware.js');
 const { log } = require('./utils');
 
-// Route handlers
-const {
-  testServices,
-  fetchHello,
-  validateFraudPreventionHeaders,
-  createTestUser,
-  createTestItsaStatus,
-  fetchServices,
-  createTestUkPropertyBusiness
-} = require('./routes/test');
-
-const { fetchItsaStatus } = require('./routes/selfAssessmentIndividualDetails');
-const { fetchIncomeAndExpenditureObligations } = require('./routes/Obligations');
-const { fetchBusinessList } = require('./routes/businessDetails');
-const { createUkPropertyPeriodSummary } = require('./routes/propertyBusiness');
+const { testServices } = require('./routes/test.js');
 
 // Environment variables
 const {
@@ -61,6 +46,10 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false }  // set to true if using HTTPS
 }));
+
+// Set up route handling
+const routes = require('./routes.js');
+app.use('/', routes);
 
 // Serve static files from front end
 app.use(express.static('public'));
@@ -126,22 +115,6 @@ app.post('/session-data', express.json(), (req, res) => {
 
   res.sendStatus(200);
 });
-
-// MTD sandbox routes
-app.get('/unrestrictedCall', fetchHello(testServices.hello.routes.world));
-app.get('/applicationCall', fetchHello(testServices.hello.routes.application));
-app.get('/userCall', requireUser, fetchHello(testServices.hello.routes.user));
-app.get('/fraud-headers', validateFraudPreventionHeaders);
-app.post('/test-users', createTestUser);
-app.post('/itsa-status', requireUser, createTestItsaStatus);
-app.post('/test/uk-property-business', requireUser, createTestUkPropertyBusiness);
-
-// MTD production routes
-app.get('/services', fetchServices);
-app.get('/itsa-status', requireUser, fetchItsaStatus);
-app.get('/obligations', requireUser, fetchIncomeAndExpenditureObligations);
-app.get('/business-sources', requireUser, fetchBusinessList);
-app.post('/periodic-summary', requireUser, createUkPropertyPeriodSummary);
 
 // OAuth callback
 app.get('/oauth20/callback', async (req, res) => {
