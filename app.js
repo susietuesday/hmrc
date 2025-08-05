@@ -92,6 +92,8 @@ app.get('/', (req, res) => {
     log.info('ℹ️ No user is currently logged in.');
   }
 
+  log.info('ℹ️ NINO: ' + req.session.user.nino);
+
   res.render('index', {
     service: `${testServices.hello.name} (v${testServices.hello.version})`,
     unRestrictedEndpoint: testServices.hello.routes.world,
