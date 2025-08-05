@@ -37,5 +37,7 @@ module.exports = {
   REDIRECT_URI,
   apiBaseUrl,
   oauthConfig,
-  getAcceptHeader
+  getAcceptHeader,
+  GOV_CLIENT_CONNECTION_METHOD,
+  GOV_VENDOR_PUBLIC_IP
 };
