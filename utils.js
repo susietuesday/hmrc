@@ -11,7 +11,7 @@ const {
   apiBaseUrl,
   getAcceptHeader,
   GOV_CLIENT_CONNECTION_METHOD,
-  GOV_VENDOR_PUBLIC_IP,
+  DEV_VENDOR_PUBLIC_IP,
   GOV_VENDOR_PRODUCT_NAME,
   GOV_VENDOR_PRODUCT_VERSION
 } = require('./config');
@@ -156,19 +156,22 @@ function getFraudPreventionHeaders(req) {
     ...(req.session.clientIpTimestamp ? { 'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp } : {}),
     ...(req.session.clientPort ? { 'Gov-Client-Public-Port': req.session.clientPort.toString() } : {}),
     'Gov-Client-Timezone': req.session.timezone || 'UTC',
+    'Gov-Client-User-IDs': 'nino=' + req.session.nino,
     ...(s.width && s.height && s.scalingFactor && s.colourDepth
       ? {
-          'Gov-Client-Screens': `width=${s.width}&
-                                height=${s.height}&
-                                scaling-factor=${s.scalingFactor}&
-                                colour-depth=${s.colourDepth}`
+          'Gov-Client-Screens': `width=${s.width}&height=${s.height}&scaling-factor=${s.scalingFactor}&colour-depth=${s.colourDepth}`
+        } 
+      : {}),
+    ...(req.session.windowSize && req.session.windowSize.width && req.session.windowSize.height
+      ? {
+          'Gov-Client-Window-Size': `width=${req.session.windowSize.width}&height=${req.session.windowSize.height}`
         }
       : {}),
-    ...(req.session.windowSize ? { 'Gov-Client-Window-Size': req.session.windowSize } : {}),
-    ...(req ? { 'Gov-Vendor-Forwarded': getVendorForwardedHeader(req) } : {}),
     ...(getVendorForwardedHeader(req) ? { 'Gov-Vendor-Forwarded': getVendorForwardedHeader(req) } : {}),
-    ...(GOV_VENDOR_PUBLIC_IP ? { 'Gov-Vendor-Public-IP': GOV_VENDOR_PUBLIC_IP } : {}),
-    'Gov-Vendor-Version': `${encode(GOV_VENDOR_PRODUCT_NAME)}=${encode(GOV_VENDOR_VERSION)}`
+    ...(DEV_VENDOR_PUBLIC_IP ? { 'Gov-Vendor-Public-IP': DEV_VENDOR_PUBLIC_IP } : {}),
+    'Gov-Vendor-Product-Name': `${encode(GOV_VENDOR_PRODUCT_NAME)}`,
+    'Gov-Vendor-Public-IP': DEV_VENDOR_PUBLIC_IP,
+    'Gov-Vendor-Version': `${encode(GOV_VENDOR_PRODUCT_NAME)}=${encode(GOV_VENDOR_PRODUCT_VERSION)}`
   };
 
   return headers;
@@ -178,7 +181,7 @@ function getVendorForwardedHeader(req) {
   const encode = encodeURIComponent;
 
   const clientIp = req.session.clientIp;
-  const serverIp = GOV_VENDOR_PUBLIC_IP;
+  const serverIp = DEV_VENDOR_PUBLIC_IP;
 
   if (!clientIp || !serverIp) return undefined;
 

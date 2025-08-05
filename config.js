@@ -15,9 +15,10 @@ const ACCEPT_HEADER_SUFFIX = process.env.ACCEPT_HEADER_SUFFIX;
 
 // Fraud prevention headers info
 const GOV_CLIENT_CONNECTION_METHOD=process.env.GOV_CLIENT_CONNECTION_METHOD;
-const GOV_VENDOR_PUBLIC_IP=process.env.GOV_VENDOR_PUBLIC_IP || null; // Using test IP for development
 const GOV_VENDOR_PRODUCT_NAME=process.env.GOV_VENDOR_PRODUCT_NAME;
 const GOV_VENDOR_PRODUCT_VERSION=process.env.GOV_VENDOR_PRODUCT_VERSION;
+const DEV_CLIENT_PUBLIC_IP=process.env.DEV_CLIENT_PUBLIC_IP || null; // Using test IP for development
+const DEV_VENDOR_PUBLIC_IP=process.env.DEV_VENDOR_PUBLIC_IP || null; // Using test IP for development
 
 
 const oauthConfig = {
@@ -44,7 +45,8 @@ module.exports = {
   oauthConfig,
   getAcceptHeader,
   GOV_CLIENT_CONNECTION_METHOD,
-  GOV_VENDOR_PUBLIC_IP,
   GOV_VENDOR_PRODUCT_NAME,
-  GOV_VENDOR_PRODUCT_VERSION
+  GOV_VENDOR_PRODUCT_VERSION,
+  DEV_CLIENT_PUBLIC_IP,
+  DEV_VENDOR_PUBLIC_IP
 };
