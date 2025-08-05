@@ -156,7 +156,7 @@ function getFraudPreventionHeaders(req) {
     ...(req.session.clientIpTimestamp ? { 'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp } : {}),
     ...(req.session.clientPort ? { 'Gov-Client-Public-Port': req.session.clientPort.toString() } : {}),
     'Gov-Client-Timezone': req.session.timezone || 'UTC',
-    'Gov-Client-User-IDs': 'nino=' + req.session.nino,
+    'Gov-Client-User-IDs': 'nino=' + req.session.user.nino,
     ...(s.width && s.height && s.scalingFactor && s.colourDepth
       ? {
           'Gov-Client-Screens': `width=${s.width}&height=${s.height}&scaling-factor=${s.scalingFactor}&colour-depth=${s.colourDepth}`
