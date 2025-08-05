@@ -31,7 +31,7 @@ const fetchBusinessList = asyncHandler(async (req, res) => {
     routePath: routePath,
     serviceVersion: serviceVersion,
     bearerToken: accessToken,
-    extraHeaders: {'Gov-Test-Scenario': 'PROPERTY'}
+    extraHeaders: {'Gov-Test-Scenario': 'STATEFUL'}
   });
   
   return res.status(apiResponse.status).json(apiResponse.body);
