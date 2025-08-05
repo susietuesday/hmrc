@@ -14,8 +14,14 @@ const services = {
 };
 
 const fetchIncomeAndExpenditureObligations = asyncHandler(async(req, res) => {
+  // Get query parameters
   const nino = req.query.nino;
+
+   // Set fraud headers and access token
+  const fraudHeaders = getFraudPreventionHeaders(req);
   const accessToken = await getUserRestrictedToken(req);
+
+  // Set service details
   const serviceName = services.obligations.name;
   const serviceVersion = services.obligations.version;
   const routePath = services.obligations.routes.incomeAndExpenditure(nino);
@@ -25,7 +31,8 @@ const fetchIncomeAndExpenditureObligations = asyncHandler(async(req, res) => {
     serviceName: serviceName,
     serviceVersion: serviceVersion,
     routePath: routePath,
-    bearerToken: accessToken
+    bearerToken: accessToken,
+    extraHeaders: fraudHeaders
   });
   
   return res.status(apiResponse.status).json(apiResponse.body);
