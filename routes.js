@@ -13,12 +13,12 @@ const {
   createTestItsaStatus,
   fetchServices,
   createTestUkPropertyBusiness
-} = require('./routes/test');
+} = require('./controllers/test.js');
 
-const { fetchItsaStatus } = require('./routes/selfAssessmentIndividualDetails');
-const { fetchIncomeAndExpenditureObligations } = require('./routes/obligations.js');
-const { fetchBusinessList } = require('./routes/businessDetails');
-const { createUkPropertyPeriodSummary } = require('./routes/propertyBusiness');
+const { fetchItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
+const { fetchIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
+const { fetchBusinessList } = require('./controllers/businessDetails.js');
+const { createUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
 
 // MTD sandbox routes
 router.get('/unrestrictedCall', fetchHello(testServices.hello.routes.world));
