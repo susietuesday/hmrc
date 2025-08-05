@@ -3,7 +3,8 @@ const asyncHandler = require('express-async-handler');
 const { 
   log, 
   callApi,
-  getUserRestrictedToken
+  getUserRestrictedToken,
+  getFraudPreventionHeaders
 } = require('../utils');
 
 const services = {
@@ -98,20 +99,32 @@ const itsaStatusMessages = {
 };
 
 const fetchItsaStatus = asyncHandler(async(req, res) => {
+  // Get query parameters
   const nino = req.query.nino;
   const taxYear = req.query.taxYear;
+
+  // Set fraud headers and access token
+  const fraudHeaders = getFraudPreventionHeaders(req);
   const accessToken = await getUserRestrictedToken(req);
+
+  // Set service details
   const serviceName = services.selfAssessmentIndividualDetails.name;
   const serviceVersion = services.selfAssessmentIndividualDetails.version;
   const routePath = services.selfAssessmentIndividualDetails.routes.itsaStatus(nino, taxYear);
   
+  // Combine test scenario + fraud prevention headers
+  const extraHeaders = {
+    'Gov-Test-Scenario': 'STATEFUL',
+    ...fraudHeaders
+  };
+
   const apiResponse = await callApi({
     method: 'GET',
     serviceName: serviceName,
     serviceVersion: serviceVersion,
     routePath: routePath,
     bearerToken: accessToken,
-    extraHeaders: {'Gov-Test-Scenario': 'STATEFUL'}
+    extraHeaders: extraHeaders
   });
 
 	// Extract status and statusReason
