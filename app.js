@@ -19,6 +19,7 @@ const { log } = require('./utils');
 const {
   testServices,
   fetchHello,
+  validateFraudPreventionHeaders,
   createTestUser,
   createTestItsaStatus,
   fetchServices,
@@ -103,7 +104,6 @@ app.get('/', (req, res) => {
 app.use(captureClientIp);
 app.use(captureClientPort);
 
-// Store fraud prevention header info
 app.post('/session-data', express.json(), (req, res) => {
   //log.info('Headers: ' + JSON.stringify(req.headers));
   //log.info('Request body:' + JSON.stringify(req.body));
@@ -126,19 +126,20 @@ app.post('/session-data', express.json(), (req, res) => {
 });
 
 // MTD sandbox routes
-app.get("/unrestrictedCall", fetchHello(testServices.hello.routes.world));
-app.get("/applicationCall", fetchHello(testServices.hello.routes.application));
-app.get("/userCall", requireUser, fetchHello(testServices.hello.routes.user));
+app.get('/unrestrictedCall', fetchHello(testServices.hello.routes.world));
+app.get('/applicationCall', fetchHello(testServices.hello.routes.application));
+app.get('/userCall', requireUser, fetchHello(testServices.hello.routes.user));
+app.get('/fraud-headers', validateFraudPreventionHeaders);
 app.post('/test-users', createTestUser);
 app.post('/itsa-status', requireUser, createTestItsaStatus);
-app.post("/test/uk-property-business", requireUser, createTestUkPropertyBusiness);
+app.post('/test/uk-property-business', requireUser, createTestUkPropertyBusiness);
 
 // MTD production routes
 app.get('/services', fetchServices);
 app.get('/itsa-status', requireUser, fetchItsaStatus);
 app.get('/obligations', requireUser, fetchIncomeAndExpenditureObligations);
-app.get("/business-sources", requireUser, fetchBusinessList);
-app.post("/periodic-summary", requireUser, createUkPropertyPeriodSummary);
+app.get('/business-sources', requireUser, fetchBusinessList);
+app.post('/periodic-summary', requireUser, createUkPropertyPeriodSummary);
 
 // OAuth callback
 app.get('/oauth20/callback', async (req, res) => {
