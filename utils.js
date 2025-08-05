@@ -9,7 +9,11 @@ const {
   REDIRECT_URI,
   oauthConfig,
   apiBaseUrl,
-  getAcceptHeader
+  getAcceptHeader,
+  GOV_CLIENT_CONNECTION_METHOD,
+  GOV_VENDOR_PUBLIC_IP,
+  GOV_VENDOR_PRODUCT_NAME,
+  GOV_VENDOR_PRODUCT_VERSION
 } = require('./config');
 
 const client = new AuthorizationCode(oauthConfig);
@@ -141,27 +145,44 @@ const callApi = async ({
 };
 
 function getFraudPreventionHeaders(req) {
+  const encode = encodeURIComponent;
+  const s = req.session.screenInfo || {};
+
   const headers = {
-    'Gov-Client-Connection-Method': config.GOV_CLIENT_CONNECTION_METHOD,
+    'Gov-Client-Connection-Method': GOV_CLIENT_CONNECTION_METHOD,
     'Gov-Client-Browser-JS-User-Agent': req.session.jsUserAgent || 'Unknown',
     'Gov-Client-Device-ID': req.session.deviceId || 'Unknown',
-    'Gov-Client-Public-IP': req.session.clientIp || '',
-    'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp || '',
-    'Gov-Client-Public-Port': req.session.clientPort?.toString() || '',
+    ...(req.session.clientIp ? { 'Gov-Client-Public-IP': req.session.clientIp } : {}),
+    ...(req.session.clientIpTimestamp ? { 'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp } : {}),
+    ...(req.session.clientPort ? { 'Gov-Client-Public-Port': req.session.clientPort.toString() } : {}),
     'Gov-Client-Timezone': req.session.timezone || 'UTC',
-    // 'Gov-Client-Screens': req.session.screenResolution || 'Unknown',
-    // 'Gov-Vendor-Version': config.GOV_VENDOR_VERSION,
-    // 'Gov-Vendor-License-IDs': config.GOV_VENDOR_LICENSE_IDS || 'None'
+    ...(s.width && s.height && s.scalingFactor && s.colourDepth
+      ? {
+          'Gov-Client-Screens': `width=${s.width}&
+                                height=${s.height}&
+                                scaling-factor=${s.scalingFactor}&
+                                colour-depth=${s.colourDepth}`
+        }
+      : {}),
+    ...(req.session.windowSize ? { 'Gov-Client-Window-Size': req.session.windowSize } : {}),
+    ...(req ? { 'Gov-Vendor-Forwarded': getVendorForwardedHeader(req) } : {}),
+    ...(getVendorForwardedHeader(req) ? { 'Gov-Vendor-Forwarded': getVendorForwardedHeader(req) } : {}),
+    ...(GOV_VENDOR_PUBLIC_IP ? { 'Gov-Vendor-Public-IP': GOV_VENDOR_PUBLIC_IP } : {}),
+    'Gov-Vendor-Version': `${encode(GOV_VENDOR_PRODUCT_NAME)}=${encode(GOV_VENDOR_VERSION)}`
   };
 
-  if (req.session.screenInfo) {
-    const s = req.session.screenInfo;
-    headers['Gov-Client-Screens'] = `width=${s.width}&height=${s.height}&scaling-factor=${s.scalingFactor}&colour-depth=${s.colourDepth}`;
-  } else {
-    headers['Gov-Client-Screens'] = '';
-  }
-
   return headers;
+}
+
+function getVendorForwardedHeader(req) {
+  const encode = encodeURIComponent;
+
+  const clientIp = req.session.clientIp;
+  const serverIp = GOV_VENDOR_PUBLIC_IP;
+
+  if (!clientIp || !serverIp) return undefined;
+
+  return `by=${encode(serverIp)}&for=${encode(clientIp)}`;
 }
 
 module.exports = { 
