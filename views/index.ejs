@@ -69,25 +69,27 @@
       }
     </style>
 
-    <h2>Log Out</h2>
+    <h3>Log Out</h3>
 
     <form action="/logout" method="POST">
         <button type="submit">Log Out</button>
     </form>
 
-    <h2>Validate Fraud Prevention Headers</h2>
+    <h2>Sandbox Functionality</h2>
+
+    <h3>Validate Fraud Prevention Headers</h3>
 
     <form action="/fraud-headers" method="GET">
         <button type="submit">Validate</button>
     </form>
 
-    <h2>Get Services</h2>
+    <h3>Get Services</h3>
 
     <form action="/services" method="GET">
         <button type="submit">Get Services</button>
     </form>
 
-    <h2>Generate Test Data</h2>
+    <h3>Generate Test Data</h3>
 
     <form action="/test-users" method="POST">
         <button type="submit">Create Test User</button>
@@ -107,7 +109,9 @@
         <button type="submit">Create test UK Property Business</button>
     </form>
 
-    <h2>Retrieve ITSA Status</h2>
+    <h2>Production Functionality</h2>
+
+    <h3>Retrieve ITSA Status</h3>
 
     <form action="/itsa-status" method="GET">
         <label for="nino">National Insurance Number:</label>
@@ -116,16 +120,8 @@
         <input type="text" name="taxYear" id="taxYear" required>
         <button type="submit">Retrieve ITSA Status</button>
     </form>
-
-    <h2>Retrieve Income and Expenditure Obligations</h2>
-
-    <form action="/obligations" method="GET">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <button type="submit">Retrieve Obligations</button>
-    </form>
-
-    <h2>Business Income Sources</h2>
+    
+    <h3>Business Income Sources</h3>
 
     <form action="/business-sources" method="GET">
         <label for="nino">National Insurance Number:</label>
@@ -133,7 +129,15 @@
         <button type="submit">Fetch Business Sources</button>
     </form>
 
-    <h2>Submit Property Period Summary</h2>
+    <h3>Retrieve Income and Expenditure Obligations</h3>
+
+    <form action="/obligations" method="GET">
+        <label for="nino">National Insurance Number:</label>
+        <input type="text" name="nino" id="nino" required>
+        <button type="submit">Retrieve Obligations</button>
+    </form>
+
+    <h3>Submit Property Period Summary</h3>
 
     <form action="/periodic-summary" method="POST">
         <label for="nino">National Insurance Number:</label>
