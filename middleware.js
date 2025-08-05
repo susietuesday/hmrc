@@ -1,4 +1,18 @@
 const { log } = require('./utils');
+const { AuthorizationCode } = require('simple-oauth2');
+
+const { 
+  OAUTH_SCOPE, 
+  REDIRECT_URI, 
+  oauthConfig, 
+  DEV_CLIENT_PUBLIC_IP 
+} = require('./config');
+
+const client = new AuthorizationCode(oauthConfig);
+const authorizationUri = client.authorizeURL({
+  redirect_uri: REDIRECT_URI,
+  scope: OAUTH_SCOPE,
+});
 
 function initSessionUser(req, res, next) {
   if (!req.session.user) {
@@ -15,8 +29,13 @@ function captureClientIp (req, res, next) {
   
   if (!req.session.clientIp && ip && !isLoopback) {
     req.session.clientIp = ip;
-    req.session.clientIpTimestamp = new Date().toISOString();
+  } else {
+    req.session.clientIp = DEV_CLIENT_PUBLIC_IP;
   }
+
+  // Set timestamp
+  req.session.clientIpTimestamp = new Date().toISOString();
+
   next();
 }
 
