@@ -18,7 +18,7 @@
 <body>
 <div class="container">
     <h1>Welcome to Making Tax Digital for Property Income</h1>
-    
+
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -63,10 +63,22 @@
         </table>
     </div>
 
+    <style>
+      form {
+        margin-bottom: 20px; /* space between each form */
+      }
+    </style>
+
     <h2>Log Out</h2>
 
     <form action="/logout" method="POST">
         <button type="submit">Log Out</button>
+    </form>
+
+    <h2>Validate Fraud Prevention Headers</h2>
+
+    <form action="/fraud-headers" method="GET">
+        <button type="submit">Validate</button>
     </form>
 
     <h2>Get Services</h2>
@@ -75,7 +87,7 @@
         <button type="submit">Get Services</button>
     </form>
 
-    <h2>Create Test User</h2>
+    <h2>Generate Test Data</h2>
 
     <form action="/test-users" method="POST">
         <button type="submit">Create Test User</button>
@@ -87,6 +99,12 @@
         <label for="taxYear">Tax Year:</label>
         <input type="text" name="taxYear" id="taxYear" required>
         <button type="submit">Create Test ITSA Status</button>
+    </form>
+
+    <form action="/test/uk-property-business" method="POST">
+        <label for="nino">National Insurance Number:</label>
+        <input type="text" name="nino" id="nino" required>
+        <button type="submit">Create test UK Property Business</button>
     </form>
 
     <h2>Retrieve ITSA Status</h2>
@@ -113,12 +131,6 @@
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
         <button type="submit">Fetch Business Sources</button>
-    </form>
-
-    <form action="/test/uk-property-business" method="POST">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <button type="submit">Create test UK Property Business</button>
     </form>
 
     <h2>Submit Property Period Summary</h2>
