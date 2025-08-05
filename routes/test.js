@@ -1,5 +1,11 @@
 const asyncHandler = require('express-async-handler');
-const { log, callApi, getApplicationRestrictedToken, getUserRestrictedToken } = require('../utils');
+const { 
+  log, 
+  callApi, 
+  getApplicationRestrictedToken, 
+  getUserRestrictedToken, 
+  getFraudPreventionHeaders 
+} = require('../utils');
 
 const testServices = {
   hello: {
@@ -11,6 +17,14 @@ const testServices = {
       user: '/user'
     }
   },    
+  testFraudPreventionHeaders: {
+    name: 'test/fraud-prevention-headers',
+    version: '1.0',
+    routes: {
+      validate: '/validate'//,
+      //feedback: `/${encodeURIComponent(api)}/validation-feedback`
+    }
+  },
   createTestUser: {
     name: 'create-test-user',
     version: '1.0',
@@ -199,9 +213,30 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
   
 });
 
+const validateFraudPreventionHeaders = asyncHandler(async (req, res) => {
+  const serviceName = testServices.testFraudPreventionHeaders.name
+  const serviceVersion = testServices.testFraudPreventionHeaders.version
+  const routePath = testServices.testFraudPreventionHeaders.routes.validate
+  const accessToken = await getApplicationRestrictedToken();
+
+  const fraudHeaders = getFraudPreventionHeaders(req);
+
+  const apiResponse = await callApi({
+    method: 'GET',
+    serviceName: serviceName,
+    serviceVersion: serviceVersion,
+    routePath: routePath,
+    bearerToken: accessToken,
+    extraHeaders: fraudHeaders
+  });
+
+  return res.status(apiResponse.status).json(apiResponse.body);
+});
+
 module.exports = {
     testServices,
     fetchHello,
+    validateFraudPreventionHeaders,
     fetchServices, 
     createTestUser, 
     createTestItsaStatus,
