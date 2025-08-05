@@ -13,6 +13,7 @@ const apiBaseUrl = useSandbox ? API_BASE_URL_SANDBOX : API_BASE_URL_PRODUCTION;
 const ACCEPT_HEADER_PREFIX = process.env.ACCEPT_HEADER_PREFIX;
 const ACCEPT_HEADER_SUFFIX = process.env.ACCEPT_HEADER_SUFFIX;
 const GOV_CLIENT_CONNECTION_METHOD=process.env.GOV_CLIENT_CONNECTION_METHOD;
+const GOV_VENDOR_PUBLIC_IP=process.env.GOV_VENDOR_PUBLIC_IP || null; // Using test IP for development
 
 const oauthConfig = {
   client: {
