@@ -13,7 +13,7 @@ const businessDetailsServices = {
   }
 };
 
-async function getBusinessListByNino({ req, nino }) {
+async function fetchBusinessListByNino({ req, nino }) {
   const accessToken = await getUserRestrictedToken(req);
   const routePath = businessDetailsServices.businessDetails.routes.listByNino(nino);
 
@@ -29,4 +29,4 @@ async function getBusinessListByNino({ req, nino }) {
   return response;
 }
 
-module.exports = { getBusinessListByNino }
+module.exports = { fetchBusinessListByNino }
