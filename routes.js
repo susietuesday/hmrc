@@ -13,7 +13,7 @@ const {
   createTestItsaStatus,
   fetchServices,
   createTestUkPropertyBusiness
-} = require('./controllers/test.js');
+} = require('./controllers/testSupport.js');
 
 const { fetchItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
 const { fetchIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
