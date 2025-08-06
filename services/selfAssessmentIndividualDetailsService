@@ -1,6 +1,8 @@
-const { getFraudPreventionHeaders } = require('../utils');
-const { getUserRestrictedToken } = require('../utils');
-const { callApi } = require('../utils');
+const { 
+    getFraudPreventionHeaders,
+    getUserRestrictedToken,
+    callApi 
+} = require('../utils');
 
 const services = {
   selfAssessmentIndividualDetails: {
