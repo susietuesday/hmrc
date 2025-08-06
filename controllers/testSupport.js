@@ -1,5 +1,7 @@
 const asyncHandler = require('express-async-handler');
 
+const { getFraudPreventionHeaders } = require('../utils')
+
 const { 
   fetchHelloWorld, 
   fetchHelloApplication, 
@@ -21,7 +23,7 @@ const getHelloApplication = asyncHandler(async (_req, res) => {
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const getHelloUser = asyncHandler(async (_req, res) => {
+const getHelloUser = asyncHandler(async (req, res) => {
   const apiResponse = await fetchHelloUser(req);
   return res.status(apiResponse.status).json(apiResponse.body);
 });
