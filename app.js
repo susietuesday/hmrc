@@ -14,7 +14,7 @@ const {
 } = require('./middleware.js');
 const { log } = require('./utils');
 
-const { testServices } = require('./controllers/test.js');
+const { testServices } = require('./services/testSupportService.js');
 
 // Environment variables
 const {

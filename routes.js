@@ -6,8 +6,9 @@ const { requireUser } = require('./middleware.js');
 
 // Route handlers
 const {
-  testServices,
-  fetchHello,
+  fetchHelloWorld,
+  fetchHelloApplication,
+  fetchHelloUser,
   validateFraudPreventionHeaders,
   createTestUser,
   createTestItsaStatus,
@@ -21,9 +22,9 @@ const { fetchBusinessList } = require('./controllers/businessDetails.js');
 const { createUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
 
 // MTD sandbox routes
-router.get('/unrestrictedCall', fetchHello(testServices.hello.routes.world));
-router.get('/applicationCall', fetchHello(testServices.hello.routes.application));
-router.get('/userCall', requireUser, fetchHello(testServices.hello.routes.user));
+router.get('/unrestrictedCall', fetchHelloWorld);
+router.get('/applicationCall', fetchHelloApplication);
+router.get('/userCall', requireUser, fetchHelloUser);
 router.get('/fraud-headers', validateFraudPreventionHeaders);
 router.get('/services', fetchServices);
 router.post('/test-users', createTestUser);

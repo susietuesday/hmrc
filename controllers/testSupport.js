@@ -1,4 +1,11 @@
 const asyncHandler = require('express-async-handler');
+
+const { 
+  getHelloWorld, 
+  getHelloApplication, 
+  getHelloUser 
+} = require('../services/testSupportService');
+
 const { 
   log, 
   callApi, 
@@ -8,15 +15,6 @@ const {
 } = require('../utils');
 
 const testServices = {
-  hello: {
-    name: 'hello',
-    version: '1.0',
-    routes: {
-      world: '/world',
-      application: '/application',
-      user: '/user'
-    }
-  },    
   testFraudPreventionHeaders: {
     name: 'test/fraud-prevention-headers',
     version: '1.0',
@@ -45,39 +43,21 @@ const testServices = {
   },
 };
 
-function fetchHello(routePath) {return asyncHandler(async (req, res) => {
+const fetchHelloWorld = asyncHandler(async (_req, res) => {
+  const apiResponse = await getHelloWorld();
+  return res.status(apiResponse.status).json(apiResponse.body);
+});
 
-    // Service metadata
-    const serviceName = testServices.hello.name
-    const serviceVersion = testServices.hello.version
+const fetchHelloApplication = asyncHandler(async (_req, res) => {
+  const apiResponse = await getHelloApplication();
+  return res.status(apiResponse.status).json(apiResponse.body);
+});
 
-    let accessToken
+const fetchHelloUser = asyncHandler(async (_req, res) => {
+  const apiResponse = await getHelloUser(req);
+  return res.status(apiResponse.status).json(apiResponse.body);
+});
 
-    switch (routePath) {
-      case '/world':
-        // No access token required
-        break;
-
-      case '/application':
-        accessToken = await getApplicationRestrictedToken();
-        break;
-
-      case '/user':
-        accessToken = await getUserRestrictedToken(req);
-        break;
-    }
-    
-    const apiResponse = await callApi({
-      method: 'GET',
-      serviceName: serviceName,
-      serviceVersion: serviceVersion,
-      routePath: routePath,
-      bearerToken: accessToken
-    });
-
-    return res.status(apiResponse.status).json(apiResponse.body);
-  });
-}
 const fetchServices = asyncHandler(async (_req, res) => {
 
   // Service metadata
@@ -235,7 +215,9 @@ const validateFraudPreventionHeaders = asyncHandler(async (req, res) => {
 
 module.exports = {
     testServices,
-    fetchHello,
+    fetchHelloWorld,
+    fetchHelloApplication,
+    fetchHelloUser,
     validateFraudPreventionHeaders,
     fetchServices, 
     createTestUser, 
