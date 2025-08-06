@@ -14,7 +14,7 @@ const services = {
   }
 };
 
-async function getItsaStatus(nino, taxYear, req) {
+async function fetchItsaStatus(nino, taxYear, req) {
   const fraudHeaders = getFraudPreventionHeaders(req);
   const accessToken = await getUserRestrictedToken(req);
 
@@ -37,4 +37,4 @@ async function getItsaStatus(nino, taxYear, req) {
   return response;
 }
 
-module.exports = { getItsaStatus };
+module.exports = { fetchItsaStatus };

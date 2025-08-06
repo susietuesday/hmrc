@@ -16,7 +16,7 @@ const {
   postTestUkPropertyBusiness
 } = require('./controllers/testSupport.js');
 
-const { fetchItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
+const { getItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
 const { fetchIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
 const { fetchBusinessList } = require('./controllers/businessDetails.js');
 const { createUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
@@ -32,7 +32,7 @@ router.post('/itsa-status', requireUser, postTestItsaStatus);
 router.post('/test/uk-property-business', requireUser, postTestUkPropertyBusiness);
 
 // MTD production routes
-router.get('/itsa-status', requireUser, fetchItsaStatus);
+router.get('/itsa-status', requireUser, getItsaStatus);
 router.get('/obligations', requireUser, fetchIncomeAndExpenditureObligations);
 router.get('/business-sources', requireUser, fetchBusinessList);
 router.post('/periodic-summary', requireUser, createUkPropertyPeriodSummary);

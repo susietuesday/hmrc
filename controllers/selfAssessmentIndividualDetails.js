@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { getItsaStatus } = require('../services/selfAssessmentIndividualDetailsService');
+const { fetchItsaStatus } = require('../services/selfAssessmentIndividualDetailsService');
 
 /*
 Statuses
@@ -82,12 +82,12 @@ const itsaStatusMessages = {
   }
 };
 
-const fetchItsaStatus = asyncHandler(async(req, res) => {
+const getItsaStatus = asyncHandler(async(req, res) => {
   // Get query parameters
   const { nino, taxYear } = req.query;
 
   // Get ITSA status
-  const apiResponse = await getItsaStatus(nino, taxYear, req);
+  const apiResponse = await fetchItsaStatus(nino, taxYear, req);
 
 	// Extract status and statusReason
 	const statusDetails = apiResponse.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
@@ -123,5 +123,5 @@ function getItsaUserMessage(status, reason) {
 }
 
 module.exports = { 
-  fetchItsaStatus
+  getItsaStatus
 };
