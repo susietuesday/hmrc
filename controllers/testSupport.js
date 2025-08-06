@@ -1,37 +1,37 @@
 const asyncHandler = require('express-async-handler');
 
 const { 
-  getHelloWorld, 
-  getHelloApplication, 
-  getHelloUser, 
-  getServices,
-  postTestUser,
-  postTestItsaStatus,
-  postTestUkPropertyBusiness,
+  fetchHelloWorld, 
+  fetchHelloApplication, 
+  fetchHelloUser, 
+  fetchServices,
+  createTestUser,
+  createTestItsaStatus,
+  createTestUkPropertyBusiness,
   validateFraudHeaders
 } = require('../services/testSupportService');
 
-const fetchHelloWorld = asyncHandler(async (_req, res) => {
-  const apiResponse = await getHelloWorld();
+const getHelloWorld = asyncHandler(async (_req, res) => {
+  const apiResponse = await fetchHelloWorld();
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const fetchHelloApplication = asyncHandler(async (_req, res) => {
-  const apiResponse = await getHelloApplication();
+const getHelloApplication = asyncHandler(async (_req, res) => {
+  const apiResponse = await fetchHelloApplication();
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const fetchHelloUser = asyncHandler(async (_req, res) => {
-  const apiResponse = await getHelloUser(req);
+const getHelloUser = asyncHandler(async (_req, res) => {
+  const apiResponse = await fetchHelloUser(req);
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const fetchServices = asyncHandler(async (_req, res) => {
-  const apiResponse = await getServices();
+const getServices = asyncHandler(async (_req, res) => {
+  const apiResponse = await fetchServices();
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const createTestUser = asyncHandler(async (req, res) => {
+const postTestUser = asyncHandler(async (req, res) => {
   const serviceNames = [
     "national-insurance",
     "self-assessment",
@@ -44,11 +44,11 @@ const createTestUser = asyncHandler(async (req, res) => {
     //"common-transit-convention-traders-legacy"
   ];
 
-  const apiResponse = await postTestUser({ body: { serviceNames } });
+  const apiResponse = await createTestUser({ body: { serviceNames } });
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const createTestItsaStatus = asyncHandler(async (req, res) => {
+const postTestItsaStatus = asyncHandler(async (req, res) => {
   const { nino, taxYear } = req.body;
 
   const body = {
@@ -62,11 +62,11 @@ const createTestItsaStatus = asyncHandler(async (req, res) => {
     ]
   };
 
-  const apiResponse = await postTestItsaStatus({ req, nino, taxYear, body });
+  const apiResponse = await createTestItsaStatus({ req, nino, taxYear, body });
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
-const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
+const postTestUkPropertyBusiness = asyncHandler(async (req, res) => {
   const { nino } = req.body;
 
   if (!nino) {
@@ -93,7 +93,7 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
     //cessationDate: "2025-04-06"
   };
 
-  const apiResponse = await postTestUkPropertyBusiness({ req, nino, body });
+  const apiResponse = await createTestUkPropertyBusiness({ req, nino, body });
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
@@ -104,12 +104,12 @@ const validateFraudPreventionHeaders = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-    fetchHelloWorld,
-    fetchHelloApplication,
-    fetchHelloUser,
-    validateFraudPreventionHeaders,
-    fetchServices, 
-    createTestUser, 
-    createTestItsaStatus,
-    createTestUkPropertyBusiness
+    getHelloWorld,
+    getHelloApplication,
+    getHelloUser,
+    getServices, 
+    postTestUser, 
+    postTestItsaStatus,
+    postTestUkPropertyBusiness,
+    validateFraudPreventionHeaders
 };

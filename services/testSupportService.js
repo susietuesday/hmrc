@@ -42,7 +42,7 @@ const testServices = {
   },
 };
 
-async function getHelloWorld(){
+async function fetchHelloWorld(){
   const response = await callApi({
     method: 'GET',
     serviceName: testServices.hello.name,
@@ -53,7 +53,7 @@ async function getHelloWorld(){
   return response;
 };
 
-async function getHelloApplication(){
+async function fetchHelloApplication(){
   const accessToken = await getApplicationRestrictedToken();
 
   const response = await callApi({
@@ -67,7 +67,7 @@ async function getHelloApplication(){
   return response;
 };
 
-async function getHelloUser(req){
+async function fetchHelloUser(req){
   const accessToken = await getUserRestrictedToken(req);
 
   const response = await callApi({
@@ -81,7 +81,7 @@ async function getHelloUser(req){
   return response;
 };
 
-async function getServices(){
+async function fetchServices(){
   const accessToken = await getApplicationRestrictedToken();
 
   const response = await callApi({
@@ -95,7 +95,7 @@ async function getServices(){
   return response;
 };
 
-async function postTestUser({ body }){
+async function createTestUser({ body }){
   const accessToken = await getApplicationRestrictedToken();
 
   const response = await callApi({
@@ -110,7 +110,7 @@ async function postTestUser({ body }){
   return response;
 };
 
-async function postTestItsaStatus({ req, nino, taxYear, body }) {
+async function createTestItsaStatus({ req, nino, taxYear, body }) {
   const accessToken = await getUserRestrictedToken(req);
 
   const response = await callApi({
@@ -125,7 +125,7 @@ async function postTestItsaStatus({ req, nino, taxYear, body }) {
   return response;
 }
 
-async function postTestUkPropertyBusiness({ req, nino, body }) {
+async function createTestUkPropertyBusiness({ req, nino, body }) {
   const accessToken = await getUserRestrictedToken(req);
 
   const response = await callApi({
@@ -157,12 +157,12 @@ async function validateFraudHeaders(extraHeaders) {
 
 module.exports = { 
   testServices,
-  getHelloWorld,
-  getHelloApplication,
-  getHelloUser,
-  getServices,
-  postTestUser,
-  postTestItsaStatus,
-  postTestUkPropertyBusiness,
+  fetchHelloWorld,
+  fetchHelloApplication,
+  fetchHelloUser,
+  fetchServices,
+  createTestUser,
+  createTestItsaStatus,
+  createTestUkPropertyBusiness,
   validateFraudHeaders
 };

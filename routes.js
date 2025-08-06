@@ -6,14 +6,14 @@ const { requireUser } = require('./middleware.js');
 
 // Route handlers
 const {
-  fetchHelloWorld,
-  fetchHelloApplication,
-  fetchHelloUser,
+  getHelloWorld,
+  getHelloApplication,
+  getHelloUser,
   validateFraudPreventionHeaders,
-  createTestUser,
-  createTestItsaStatus,
-  fetchServices,
-  createTestUkPropertyBusiness
+  postTestUser,
+  postTestItsaStatus,
+  getServices,
+  postTestUkPropertyBusiness
 } = require('./controllers/testSupport.js');
 
 const { fetchItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
@@ -22,14 +22,14 @@ const { fetchBusinessList } = require('./controllers/businessDetails.js');
 const { createUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
 
 // MTD sandbox routes
-router.get('/unrestrictedCall', fetchHelloWorld);
-router.get('/applicationCall', fetchHelloApplication);
-router.get('/userCall', requireUser, fetchHelloUser);
+router.get('/unrestrictedCall', getHelloWorld);
+router.get('/applicationCall', getHelloApplication);
+router.get('/userCall', requireUser, getHelloUser);
 router.get('/fraud-headers', validateFraudPreventionHeaders);
-router.get('/services', fetchServices);
-router.post('/test-users', createTestUser);
-router.post('/itsa-status', requireUser, createTestItsaStatus);
-router.post('/test/uk-property-business', requireUser, createTestUkPropertyBusiness);
+router.get('/services', getServices);
+router.post('/test-users', postTestUser);
+router.post('/itsa-status', requireUser, postTestItsaStatus);
+router.post('/test/uk-property-business', requireUser, postTestUkPropertyBusiness);
 
 // MTD production routes
 router.get('/itsa-status', requireUser, fetchItsaStatus);
