@@ -1,21 +1,5 @@
 const asyncHandler = require('express-async-handler');
-
-const { 
-  log, 
-  callApi,
-  getUserRestrictedToken,
-  getFraudPreventionHeaders
-} = require('../utils');
-
-const services = {
-  selfAssessmentIndividualDetails: {
-    name: 'individuals/person',
-    version: '2.0',
-    routes: {
-      itsaStatus: (nino, taxYear) => `/itsa-status/${encodeURIComponent(nino)}/${encodeURIComponent(taxYear)}`
-    }
-  }
-};
+const { getItsaStatus } = require('../services/selfAssessmentIndividualDetailsService');
 
 /*
 Statuses
@@ -100,32 +84,10 @@ const itsaStatusMessages = {
 
 const fetchItsaStatus = asyncHandler(async(req, res) => {
   // Get query parameters
-  const nino = req.query.nino;
-  const taxYear = req.query.taxYear;
+  const { nino, taxYear } = req.query;
 
-  // Set fraud headers and access token
-  const fraudHeaders = getFraudPreventionHeaders(req);
-  const accessToken = await getUserRestrictedToken(req);
-
-  // Set service details
-  const serviceName = services.selfAssessmentIndividualDetails.name;
-  const serviceVersion = services.selfAssessmentIndividualDetails.version;
-  const routePath = services.selfAssessmentIndividualDetails.routes.itsaStatus(nino, taxYear);
-  
-  // Combine test scenario + fraud prevention headers
-  const extraHeaders = {
-    'Gov-Test-Scenario': 'STATEFUL',
-    ...fraudHeaders
-  };
-
-  const apiResponse = await callApi({
-    method: 'GET',
-    serviceName: serviceName,
-    serviceVersion: serviceVersion,
-    routePath: routePath,
-    bearerToken: accessToken,
-    extraHeaders: extraHeaders
-  });
+  // Get ITSA status
+  const apiResponse = await getItsaStatus(nino, taxYear, req);
 
 	// Extract status and statusReason
 	const statusDetails = apiResponse.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
