@@ -1,9 +1,7 @@
 const { 
-  log, 
   callApi, 
   getApplicationRestrictedToken, 
-  getUserRestrictedToken, 
-  getFraudPreventionHeaders 
+  getUserRestrictedToken 
 } = require('../utils');
 
 const testServices = {
@@ -45,13 +43,11 @@ const testServices = {
 };
 
 async function getHelloWorld(){
-  const routePath = testServices.hello.routes.world
-
   const response = await callApi({
     method: 'GET',
     serviceName: testServices.hello.name,
     serviceVersion: testServices.hello.version,
-    routePath
+    routePath: testServices.hello.routes.world
   });
 
   return response;
@@ -60,13 +56,11 @@ async function getHelloWorld(){
 async function getHelloApplication(){
   const accessToken = await getApplicationRestrictedToken();
 
-  const routePath = testServices.hello.routes.application
-
   const response = await callApi({
     method: 'GET',
     serviceName: testServices.hello.name,
     serviceVersion: testServices.hello.version,
-    routePath,
+    routePath: testServices.hello.routes.application,
     bearerToken: accessToken
   });
 
@@ -76,13 +70,11 @@ async function getHelloApplication(){
 async function getHelloUser(req){
   const accessToken = await getUserRestrictedToken(req);
 
-  const routePath = testServices.hello.routes.user
-
   const response = await callApi({
     method: 'GET',
     serviceName: testServices.hello.name,
     serviceVersion: testServices.hello.version,
-    routePath,
+    routePath: testServices.hello.routes.user,
     bearerToken: accessToken
   });
 
@@ -96,17 +88,81 @@ async function getServices(){
     method: 'GET',
     serviceName: testServices.createTestUser.name,
     serviceVersion: testServices.createTestUser.version,
-    routePath: testServices.createTestUser.routes.individuals,
+    routePath: testServices.createTestUser.routes.services,
     bearerToken: accessToken
   });
 
   return response;
 };
 
+async function postTestUser({ body }){
+  const accessToken = await getApplicationRestrictedToken();
+
+  const response = await callApi({
+    method: 'POST',
+    serviceName: testServices.createTestUser.name,
+    serviceVersion: testServices.createTestUser.version,
+    routePath: testServices.createTestUser.routes.individuals,
+    bearerToken: accessToken,
+    body: body
+  });
+
+  return response;
+};
+
+async function postTestItsaStatus({ req, nino, taxYear, body }) {
+  const accessToken = await getUserRestrictedToken(req);
+
+  const response = await callApi({
+    method: 'POST',
+    serviceName: testServices.selfAssessmentTestSupport.name,
+    serviceVersion: testServices.selfAssessmentTestSupport.version,
+    routePath: testServices.selfAssessmentTestSupport.routes.itsaStatus(nino, taxYear),
+    bearerToken: accessToken,
+    body: body
+  });
+
+  return response;
+}
+
+async function postTestUkPropertyBusiness({ req, nino, body }) {
+  const accessToken = await getUserRestrictedToken(req);
+
+  const response = await callApi({
+    method: 'POST',
+    serviceName: testServices.selfAssessmentTestSupport.name,
+    serviceVersion: testServices.selfAssessmentTestSupport.version,
+    routePath: testServices.selfAssessmentTestSupport.routes.business(nino),
+    bearerToken: accessToken,
+    body
+  });
+
+  return response;
+}
+
+async function validateFraudHeaders(extraHeaders) {
+  const accessToken = await getApplicationRestrictedToken();
+  
+  const response = await callApi({
+    method: 'GET',
+    serviceName: testServices.testFraudPreventionHeaders.name,
+    serviceVersion: testServices.testFraudPreventionHeaders.version,
+    routePath: testServices.testFraudPreventionHeaders.routes.validate,
+    bearerToken: accessToken,
+    extraHeaders
+  });
+
+  return response;
+}
+
 module.exports = { 
   testServices,
   getHelloWorld,
   getHelloApplication,
   getHelloUser,
-  getServices
+  getServices,
+  postTestUser,
+  postTestItsaStatus,
+  postTestUkPropertyBusiness,
+  validateFraudHeaders
 };

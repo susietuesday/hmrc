@@ -4,45 +4,12 @@ const {
   getHelloWorld, 
   getHelloApplication, 
   getHelloUser, 
-  getServices
+  getServices,
+  postTestUser,
+  postTestItsaStatus,
+  postTestUkPropertyBusiness,
+  validateFraudHeaders
 } = require('../services/testSupportService');
-
-const { 
-  log, 
-  callApi, 
-  getApplicationRestrictedToken, 
-  getUserRestrictedToken, 
-  getFraudPreventionHeaders 
-} = require('../utils');
-
-const testServices = {
-  testFraudPreventionHeaders: {
-    name: 'test/fraud-prevention-headers',
-    version: '1.0',
-    routes: {
-      validate: '/validate'//,
-      //feedback: `/${encodeURIComponent(api)}/validation-feedback`
-    }
-  },
-  createTestUser: {
-    name: 'create-test-user',
-    version: '1.0',
-    routes: {
-      individuals: '/individuals',
-      organisations: '/organisations',
-      agents: '/agents',
-      services: '/services'
-    }
-  },
-  selfAssessmentTestSupport: {
-    name: 'individuals/self-assessment-test-support',
-    version: '1.0',
-    routes: {
-      business: (nino) => `/business/${encodeURIComponent(nino)}`, // Create test business
-      itsaStatus: (nino, taxYear) => `/itsa-status/${encodeURIComponent(nino)}/${encodeURIComponent(taxYear)}`  // Create/amend test ITSA status
-    }
-  },
-};
 
 const fetchHelloWorld = asyncHandler(async (_req, res) => {
   const apiResponse = await getHelloWorld();
@@ -65,12 +32,6 @@ const fetchServices = asyncHandler(async (_req, res) => {
 });
 
 const createTestUser = asyncHandler(async (req, res) => {
-
-  // Service metadata
-  const serviceName = testServices.createTestUser.name
-  const serviceVersion = testServices.createTestUser.version
-  const routePath = testServices.createTestUser.routes.individuals
-
   const serviceNames = [
     "national-insurance",
     "self-assessment",
@@ -83,67 +44,36 @@ const createTestUser = asyncHandler(async (req, res) => {
     //"common-transit-convention-traders-legacy"
   ];
 
-  const accessToken = await getApplicationRestrictedToken();
-
-  const apiResponse = await callApi({
-    method: 'POST',
-    serviceName: serviceName,
-    serviceVersion: serviceVersion,
-    routePath: routePath,
-    bearerToken: accessToken,
-    body: { serviceNames: serviceNames }
-  });
-
-  res.status(apiResponse.status).json(apiResponse.body);
-
+  const apiResponse = await postTestUser({ body: { serviceNames } });
+  return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 const createTestItsaStatus = asyncHandler(async (req, res) => {
-  const nino = req.body.nino;
-  const taxYear = req.body.taxYear;
+  const { nino, taxYear } = req.body;
 
-  const serviceName = testServices.selfAssessmentTestSupport.name
-  const serviceVersion = testServices.selfAssessmentTestSupport.version
-  const routePath = testServices.selfAssessmentTestSupport.routes.itsaStatus(nino, taxYear)
-  const accessToken = await getUserRestrictedToken(req);
-
-  const data = {
-    "itsaStatusDetails": [
+  const body = {
+    itsaStatusDetails: [
       {
-        "submittedOn": "2025-07-01T10:00:00.000Z",
-        "status": "MTD Mandated",
-        "statusReason": "MTD ITSA Opt-In",
-        "businessIncome2YearsPrior": 60000.00
+        submittedOn: "2025-07-01T10:00:00.000Z",
+        status: "MTD Mandated",
+        statusReason: "MTD ITSA Opt-In",
+        businessIncome2YearsPrior: 60000.00
       }
     ]
-  }
+  };
 
-  const apiResponse = await callApi({
-    method: 'POST',
-    serviceName: serviceName,
-    serviceVersion: serviceVersion,
-    routePath: routePath,
-    bearerToken: accessToken,
-    body: data
-  });
-
+  const apiResponse = await postTestItsaStatus({ req, nino, taxYear, body });
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
-
-  const nino = req.body.nino;
+  const { nino } = req.body;
 
   if (!nino) {
     return res.status(400).send('NINO is required');
   }
 
-  const serviceName = testServices.selfAssessmentTestSupport.name
-  const serviceVersion = testServices.selfAssessmentTestSupport.version
-  const routePath = testServices.selfAssessmentTestSupport.routes.business(nino)
-  const accessToken = await getUserRestrictedToken(req);
-  
-  const data = {
+  const body = {
     typeOfBusiness: "uk-property",
     firstAccountingPeriodStartDate: "2021-04-06",
     firstAccountingPeriodEndDate: "2022-04-05",
@@ -162,44 +92,18 @@ const createTestUkPropertyBusiness = asyncHandler(async (req, res) => {
     commencementDate: "2020-04-06"
     //cessationDate: "2025-04-06"
   };
-  log.info('ℹ️ Data:' + JSON.stringify(data, null, 2))
 
-  
-  const apiResponse = await callApi({
-    method: 'POST',
-    serviceName: serviceName,
-    serviceVersion: serviceVersion,
-    routePath: routePath,
-    bearerToken: accessToken,
-    body: data
-  });
-
+  const apiResponse = await postTestUkPropertyBusiness({ req, nino, body });
   return res.status(apiResponse.status).json(apiResponse.body);
-  
 });
 
 const validateFraudPreventionHeaders = asyncHandler(async (req, res) => {
-  const serviceName = testServices.testFraudPreventionHeaders.name
-  const serviceVersion = testServices.testFraudPreventionHeaders.version
-  const routePath = testServices.testFraudPreventionHeaders.routes.validate
-  const accessToken = await getApplicationRestrictedToken();
-
   const fraudHeaders = getFraudPreventionHeaders(req);
-
-  const apiResponse = await callApi({
-    method: 'GET',
-    serviceName: serviceName,
-    serviceVersion: serviceVersion,
-    routePath: routePath,
-    bearerToken: accessToken,
-    extraHeaders: fraudHeaders
-  });
-
+  const apiResponse = await validateFraudHeaders(fraudHeaders);
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 module.exports = {
-    testServices,
     fetchHelloWorld,
     fetchHelloApplication,
     fetchHelloUser,
