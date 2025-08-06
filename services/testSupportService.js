@@ -89,9 +89,24 @@ async function getHelloUser(req){
   return response;
 };
 
+async function getServices(){
+  const accessToken = await getApplicationRestrictedToken();
+
+  const response = await callApi({
+    method: 'GET',
+    serviceName: testServices.createTestUser.name,
+    serviceVersion: testServices.createTestUser.version,
+    routePath: testServices.createTestUser.routes.individuals,
+    bearerToken: accessToken
+  });
+
+  return response;
+};
+
 module.exports = { 
   testServices,
   getHelloWorld,
   getHelloApplication,
-  getHelloUser
+  getHelloUser,
+  getServices
 };

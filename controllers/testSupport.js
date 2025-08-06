@@ -3,7 +3,8 @@ const asyncHandler = require('express-async-handler');
 const { 
   getHelloWorld, 
   getHelloApplication, 
-  getHelloUser 
+  getHelloUser, 
+  getServices
 } = require('../services/testSupportService');
 
 const { 
@@ -59,24 +60,8 @@ const fetchHelloUser = asyncHandler(async (_req, res) => {
 });
 
 const fetchServices = asyncHandler(async (_req, res) => {
-
-  // Service metadata
-  const serviceName = testServices.createTestUser.name
-  const serviceVersion = testServices.createTestUser.version
-  const routePath = testServices.createTestUser.routes.services
-
-  const accessToken = await getApplicationRestrictedToken();
-
-  const apiResponse = await callApi({
-    method: 'GET',
-    serviceName: serviceName,
-    serviceVersion: serviceVersion,
-    routePath: routePath,
-    bearerToken: accessToken
-  });
-
-return res.status(apiResponse.status).json(apiResponse.body);
-
+  const apiResponse = await getServices();
+  return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 const createTestUser = asyncHandler(async (req, res) => {
