@@ -19,7 +19,7 @@ const {
 const { getItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
 const { getIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
 const { getBusinessList } = require('./controllers/businessDetails.js');
-const { createUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
+const { postUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
 
 // MTD sandbox routes
 router.get('/unrestrictedCall', getHelloWorld);
@@ -35,6 +35,6 @@ router.post('/test/uk-property-business', requireUser, postTestUkPropertyBusines
 router.get('/itsa-status', requireUser, getItsaStatus);
 router.get('/obligations', requireUser, getIncomeAndExpenditureObligations);
 router.get('/business-sources', requireUser, getBusinessList);
-router.post('/periodic-summary', requireUser, createUkPropertyPeriodSummary);
+router.post('/periodic-summary', requireUser, postUkPropertyPeriodSummary);
 
 module.exports = router;
