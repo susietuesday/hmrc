@@ -1,6 +1,7 @@
 const {
     getUserRestrictedToken,
-    callApi 
+    callApi,
+    getFraudPreventionHeaders
 } = require('../utils');
 
 const services = {
@@ -15,7 +16,7 @@ const services = {
   }
 };
 
-async function fetchIncomeAndExpenditureObligations(req, nino) {
+async function fetchIncomeAndExpenditureObligations(nino, req) {
   const fraudHeaders = getFraudPreventionHeaders(req);
   const accessToken = await getUserRestrictedToken(req);
 
