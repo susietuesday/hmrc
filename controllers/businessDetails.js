@@ -17,8 +17,6 @@ const getBusinessList = asyncHandler(async (req, res) => {
 });
 
 function getUkPropertyBusinessId(data) {
-  console.log('Received data:', data);
-
   if (!data || !Array.isArray(data.listOfBusinesses)) return null;
 
   const ukProperty = data.listOfBusinesses.find(
