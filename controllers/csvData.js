@@ -56,7 +56,8 @@ function summariseByQuarter(dataRows) {
     const amountStr = row['Amount'];
 
     const date = new Date(dateStr);
-    const amount = parseFloat(amountStr);
+    const cleanAmountStr = amountStr.replace(/[^0-9.-]+/g, ''); // removes everything except digits, dot, minus sign
+    const amount = parseFloat(cleanAmountStr);
 
     if (isNaN(date.getTime()) || isNaN(amount)) continue; // Skip bad rows
 
