@@ -88,10 +88,17 @@ const callApi = async ({
   routePath,
   bearerToken = null,
   extraHeaders = {},
+  params = null,
   body = null
 }) => {
   const acceptHeader = getAcceptHeader(serviceVersion);
-  const url = apiBaseUrl + serviceName + routePath;
+  let url = apiBaseUrl + serviceName + routePath;
+
+  // Append query params if provided
+  if (params && typeof params === 'object') {
+    const queryString = new URLSearchParams(params).toString();
+    url += `?${queryString}`;
+  }
 
   log.info(`Calling: ${url}`);
 
