@@ -16,11 +16,16 @@ const services = {
   }
 };
 
-async function fetchIncomeAndExpenditureObligations(nino, req) {
+async function fetchIncomeAndExpenditureObligations(nino, params, req) {
   const fraudHeaders = getFraudPreventionHeaders(req);
   const accessToken = await getUserRestrictedToken(req);
 
   const routePath = services.obligations.routes.incomeAndExpenditure(nino);
+
+  const extraHeaders = {
+    'Gov-Test-Scenario': 'OPEN',
+    ...fraudHeaders,
+  };
 
   const response = await callApi({
     method: 'GET',
@@ -28,7 +33,8 @@ async function fetchIncomeAndExpenditureObligations(nino, req) {
     serviceVersion: services.obligations.version,
     routePath,
     bearerToken: accessToken,
-    extraHeaders: fraudHeaders
+    extraHeaders,
+    params
   });
 
   return response;
