@@ -1,3 +1,5 @@
+//const { render } = require("ejs");
+
 function getOrCreateDeviceId() {
   const match = document.cookie.match(/(^|;) ?deviceId=([^;]*)(;|$)/);
   if (match) return match[2];
@@ -72,46 +74,47 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const result = await res.json();
+      console.log('Response:', result);
 
-      if (result.data && result.data.length) {
-        renderTable(result.data);
-      } else {
-        statusDiv.textContent = result.message || 'No data to display';
+      if (result.data?.results?.length) {
+        renderTable(result.data.results, document.getElementById('resultsTable'));
       }
+
+      if (result.data?.quarterlyTotals?.length) {
+        renderTable(result.data.quarterlyTotals, document.getElementById('quarterlyTotalsTable'));
+      }
+
     } catch (err) {
       statusDiv.textContent = 'Upload failed.';
       console.error(err);
     }
   });
-
-  function renderTable(data) {
-    statusDiv.innerHTML = ''; // Clear previous content
-
-    const table = document.createElement('table');
-    table.border = 1;
-
-    // Create table header
-    const headerRow = document.createElement('tr');
-    Object.keys(data[0]).forEach((key) => {
-      const th = document.createElement('th');
-      th.textContent = key;
-      headerRow.appendChild(th);
-    });
-    table.appendChild(headerRow);
-
-    // Create rows
-    data.forEach((row) => {
-      const tr = document.createElement('tr');
-      Object.values(row).forEach((val) => {
-        const td = document.createElement('td');
-        td.textContent = val;
-        tr.appendChild(td);
-      });
-      table.appendChild(tr);
-    });
-
-    statusDiv.appendChild(table);
-  }
 });
+
+function renderTable(data, tableElement) {
+  if (!tableElement) {
+    console.error('Table element not found');
+    return;
+  }
+
+  tableElement.innerHTML = ''; // clear old content
+
+  // header
+  const header = tableElement.insertRow();
+  Object.keys(data[0]).forEach(key => {
+    const th = document.createElement('th');
+    th.textContent = key;
+    header.appendChild(th);
+  });
+
+  // rows
+  data.forEach(row => {
+    const tr = tableElement.insertRow();
+    Object.values(row).forEach(value => {
+      const td = tr.insertCell();
+      td.textContent = value;
+    });
+  });
+};  
 
 window.addEventListener('load', sendFraudPreventionData);

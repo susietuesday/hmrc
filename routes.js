@@ -3,6 +3,8 @@ const router = express.Router();
 
 // Middleware and utility functions
 const { requireUser } = require('./middleware.js');
+const { uploadCsvFile } = require('./controllers/csvData.js');
+
 
 const multer = require('multer');
 const path = require('path');
@@ -46,19 +48,6 @@ router.get('/business-sources', requireUser, getBusinessList);
 router.post('/periodic-summary', requireUser, postUkPropertyPeriodSummary);
 
 // POST /upload
-router.post('/upload', upload.single('csvFile'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ message: 'No file uploaded' });
-  }
-
-  const results = [];
-  streamifier.createReadStream(req.file.buffer)
-    .pipe(csv())
-    .on('data', (data) => results.push(data))
-    .on('end', () => {
-      console.log('Parsed CSV data:', results);
-      res.json({ message: 'CSV parsed successfully', data: results });
-    });
-});
+router.post('/upload', upload.single('csvFile'), uploadCsvFile);
 
 module.exports = router;
