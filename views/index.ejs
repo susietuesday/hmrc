@@ -139,6 +139,14 @@
 
     <h3>Submit Property Period Summary</h3>
 
+    <form id="uploadForm" enctype="multipart/form-data">
+        <label for="csvFile">Upload CSV:</label>
+        <input type="file" id="csvFile" name="csvFile" accept=".csv" required />
+        <button type="submit">Upload</button>
+    </form>
+
+    <div id="uploadStatus"></div>
+
     <form action="/periodic-summary" method="POST">
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
