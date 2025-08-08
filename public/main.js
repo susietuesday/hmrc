@@ -48,4 +48,70 @@ function sendFraudPreventionData() {
   }).catch(console.error);
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('uploadForm');
+  const statusDiv = document.getElementById('uploadStatus');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const fileInput = document.getElementById('csvFile');
+    const file = fileInput.files[0];
+    if (!file) {
+      statusDiv.textContent = 'Please choose a file.';
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('csvFile', file);
+
+    try {
+      const res = await fetch('/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const result = await res.json();
+
+      if (result.data && result.data.length) {
+        renderTable(result.data);
+      } else {
+        statusDiv.textContent = result.message || 'No data to display';
+      }
+    } catch (err) {
+      statusDiv.textContent = 'Upload failed.';
+      console.error(err);
+    }
+  });
+
+  function renderTable(data) {
+    statusDiv.innerHTML = ''; // Clear previous content
+
+    const table = document.createElement('table');
+    table.border = 1;
+
+    // Create table header
+    const headerRow = document.createElement('tr');
+    Object.keys(data[0]).forEach((key) => {
+      const th = document.createElement('th');
+      th.textContent = key;
+      headerRow.appendChild(th);
+    });
+    table.appendChild(headerRow);
+
+    // Create rows
+    data.forEach((row) => {
+      const tr = document.createElement('tr');
+      Object.values(row).forEach((val) => {
+        const td = document.createElement('td');
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+      table.appendChild(tr);
+    });
+
+    statusDiv.appendChild(table);
+  }
+});
+
 window.addEventListener('load', sendFraudPreventionData);
