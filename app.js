@@ -91,6 +91,16 @@ app.get('/', (req, res) => {
   });
 });
 
+// Dev tools route
+app.get('/dev-tools', (req, res) => {
+  res.render('dev-tools', {
+    service: `${testServices.hello.name} (v${testServices.hello.version})`,
+    unRestrictedEndpoint: testServices.hello.routes.world,
+    appRestrictedEndpoint: testServices.hello.routes.application,
+    userRestrictedEndpoint: testServices.hello.routes.user
+  });
+});
+
 // Capture fraud prevention headers info
 app.use(captureClientIp);
 app.use(captureClientPort);
