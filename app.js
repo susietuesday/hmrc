@@ -83,12 +83,7 @@ app.get('/', (req, res) => {
 
   log.info('ℹ️ NINO: ' + req.session.user.nino);
 
-  res.render('index', {
-    service: `${testServices.hello.name} (v${testServices.hello.version})`,
-    unRestrictedEndpoint: testServices.hello.routes.world,
-    appRestrictedEndpoint: testServices.hello.routes.application,
-    userRestrictedEndpoint: testServices.hello.routes.user
-  });
+  res.render('index');
 });
 
 // Dev tools route
