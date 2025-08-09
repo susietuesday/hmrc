@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const { getCurrentTaxYear } = require('../utils');
 const { fetchItsaStatus } = require('../services/selfAssessmentIndividualDetailsService');
 
 /*
@@ -84,7 +85,11 @@ const itsaStatusMessages = {
 
 const getItsaStatus = asyncHandler(async(req, res) => {
   // Get query parameters
-  const { nino, taxYear } = req.query;
+  const nino = req.query.nino;
+  let taxYear = req.query.taxYear;
+
+  // Default to current tax year
+  if (!taxYear) { taxYear = getCurrentTaxYear()};
 
   // Get ITSA status
   const apiResponse = await fetchItsaStatus(nino, taxYear, req);

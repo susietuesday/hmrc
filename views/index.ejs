@@ -31,7 +31,7 @@
   <!-- Navbar -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/">MTD Property Income</a>
+      <a class="navbar-brand" href="/">Making Tax Digital Property Income</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
               aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -51,7 +51,12 @@
   </nav>
 
 <div class="container">
-    <h1>Welcome to Making Tax Digital for Property Income: Home</h1>
+    
+    <h1>Making Tax Digital for UK Property Income</h1>
+
+    <p class="fs-4 text-secondary mb-4">
+        Submit your quarterly UK property income and expenses to HMRC in minutes.
+    </p>
 
     <style>
       form {
@@ -59,14 +64,12 @@
       }
     </style>
 
-    <h2>Retrieve ITSA Status</h2>
+    <h2>Check your eligibility</h2>
 
     <form action="/itsa-status" method="GET">
         <label for="nino">National Insurance Number:</label>
         <input type="text" name="nino" id="nino" required>
-        <label for="taxYear">Tax Year:</label>
-        <input type="text" name="taxYear" id="taxYear" required>
-        <button type="submit">Retrieve ITSA Status</button>
+        <button type="submit">Continue</button>
     </form>
 </div>
 </body>

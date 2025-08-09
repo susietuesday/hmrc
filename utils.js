@@ -195,10 +195,26 @@ function getVendorForwardedHeader(req) {
   return `by=${encode(serverIp)}&for=${encode(clientIp)}`;
 }
 
+function getCurrentTaxYear() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1; // Months are zero-based
+
+    // UK tax year starts on 6 April
+    if (month < 4 || (month === 4 && today.getDate() < 6)) {
+        // Before 6 April → tax year started last year
+        return `${year - 1}-${String(year).slice(2)}`;
+    } else {
+        // On or after 6 April → tax year starts this year
+        return `${year}-${String(year + 1).slice(2)}`;
+    }
+}
+
 module.exports = { 
   log,
   callApi,
   getApplicationRestrictedToken,
   getUserRestrictedToken,
-  getFraudPreventionHeaders
+  getFraudPreventionHeaders,
+  getCurrentTaxYear
 };
