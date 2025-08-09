@@ -1,5 +1,3 @@
-//const { render } = require("ejs");
-
 function getOrCreateDeviceId() {
   const match = document.cookie.match(/(^|;) ?deviceId=([^;]*)(;|$)/);
   if (match) return match[2];
