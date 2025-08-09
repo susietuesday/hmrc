@@ -5,6 +5,9 @@ const Redis = require('ioredis');
 const connectRedis = require('connect-redis');
 const { AuthorizationCode } = require('simple-oauth2');
 
+const expressLayouts = require('express-ejs-layouts');
+const path = require('path');
+
 // Middleware and utility functions
 const { 
   initSessionUser, 
@@ -37,6 +40,13 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('trust proxy', true); // Enabled to get Client IP for fraud prevention headers
 app.use(express.urlencoded({ extended: true }));
+
+// Set up layout
+app.set('views', path.join(__dirname, 'views'));
+app.use(expressLayouts);
+app.set('layout', 'layout'); // default layout file name without .ejs
+
+app.use(express.static(path.join(__dirname, 'public'))); // for css/js/img
 
 // Session middleware (must come before any req.session usage)
 app.use(session({
