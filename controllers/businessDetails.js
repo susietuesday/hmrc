@@ -10,21 +10,8 @@ const getBusinessList = asyncHandler(async (req, res) => {
 
   const apiResponse = await businessDetailsService.getBusinessList({ req, nino });
 
-  // Set UK property business ID
-  req.session.user.ukPropertyBusinessId = getUkPropertyBusinessId(apiResponse.body);
-
   return res.status(apiResponse.status).json(apiResponse.body);
 });
-
-function getUkPropertyBusinessId(data) {
-  if (!data || !Array.isArray(data.listOfBusinesses)) return null;
-
-  const ukProperty = data.listOfBusinesses.find(
-    (business) => business.typeOfBusiness === 'uk-property'
-  );
-
-  return ukProperty ? ukProperty.businessId : null;
-}
 
 module.exports = {
   getBusinessList
