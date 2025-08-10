@@ -26,7 +26,7 @@ const {
   postTestUkPropertyBusiness
 } = require('./controllers/testSupport.js');
 
-const { getItsaStatus } = require('./controllers/selfAssessmentIndividualDetails.js');
+const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
 const { getIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
 const { getBusinessList } = require('./controllers/businessDetails.js');
 const { postUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
