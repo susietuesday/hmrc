@@ -14,7 +14,7 @@ const getItsaStatus = asyncHandler(async(req, res) => {
   const apiResponse = await saIndividualDetailsService.getItsaStatus(nino, taxYear, req);
 
   return res.status(apiResponse.status).json(apiResponse.body);
-})
+});
 
 module.exports = { 
   getItsaStatus
