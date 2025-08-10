@@ -1,45 +1,18 @@
-const {
-    getUserRestrictedToken,
-    callApi,
-    getFraudPreventionHeaders
-} = require('../utils');
+const obligationsRepo = require('../repositories/obligationsRepo');
 
-const services = {
-  obligations: {
-    name: 'obligations',
-    version: '3.0',
-    routes: {
-      incomeAndExpenditure: (nino) => `/details/${encodeURIComponent(nino)}/income-and-expenditure`,
-      endOfPeriodStatement: (nino) => `/details/${encodeURIComponent(nino)}/end-of-period-statement`,
-      crystallisation: (nino) => `/details/${encodeURIComponent(nino)}/crystallisation`
-    }
+async function getIncomeAndExpenditureObligations(nino, req) {
+
+  // Build query parameters
+  const params = {
+    typeOfBusiness: 'uk-property',
+    //businessId: req.session.user.ukPropertyBusinessId
+    businessId: 'XPIS12345678903'
   }
-};
 
-async function fetchIncomeAndExpenditureObligations(nino, params, req) {
-  const fraudHeaders = getFraudPreventionHeaders(req);
-  const accessToken = await getUserRestrictedToken(req);
-
-  const routePath = services.obligations.routes.incomeAndExpenditure(nino);
-
-  const extraHeaders = {
-    'Gov-Test-Scenario': 'OPEN',
-    ...fraudHeaders,
-  };
-
-  const response = await callApi({
-    method: 'GET',
-    serviceName: services.obligations.name,
-    serviceVersion: services.obligations.version,
-    routePath,
-    bearerToken: accessToken,
-    extraHeaders,
-    params
-  });
-
+  const response = await obligationsRepo.fetchIncomeAndExpenditureObligations(nino, params, req); 
   return response;
 }
 
 module.exports = {
-  fetchIncomeAndExpenditureObligations,
+  getIncomeAndExpenditureObligations,
 };
