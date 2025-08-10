@@ -1,4 +1,4 @@
-const selfAssessmentIndividualDetailsRepo = require('../repositories/selfAssessmentIndividualDetailsRepo');
+const saIndividualDetailsRepo = require('../repositories/saIndividualDetailsRepo');
 
 /*
 Statuses
@@ -82,7 +82,7 @@ const itsaStatusMessages = {
 };
 
 async function getItsaStatus(nino, taxYear, req) {
-  const response = await selfAssessmentIndividualDetailsRepo.fetchItsaStatus(nino, taxYear, req);
+  const response = await saIndividualDetailsRepo.fetchItsaStatus(nino, taxYear, req);
 
   // Extract status and statusReason
 	const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
@@ -97,8 +97,8 @@ async function getItsaStatus(nino, taxYear, req) {
   return response;
 }
 
-function getMtdEligible(nino, taxYear, req) {
-  const response = getItsaStatus(nino, taxYear, req);
+async function getMtdEligible(nino, taxYear, req) {
+  const response = await getItsaStatus(nino, taxYear, req);
   const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
   const status = statusDetails?.status || null;
 
