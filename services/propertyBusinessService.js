@@ -1,39 +1,53 @@
-const {
-    getUserRestrictedToken,
-    callApi 
-} = require('../utils');
-
-const services = {
-  propertyBusiness: {
-    name: 'individuals/business/property',
-    version: '6.0',
-    routes: {
-      createUkPropertyPeriodSummary: (nino, businessId, taxYear) => `/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${taxYear}`
-    }
-  }
-};
+const propertyBusinessRepo = require('../repositories/propertyBusinessRepo.js');
 
 async function createUkPropertyPeriodSummary({ req, nino, businessId, taxYear, body }) {
-  const fraudHeaders = getFraudPreventionHeaders(req);
-  const routePath = services.propertyBusiness.routes.createUkPropertyPeriodSummary(nino, businessId, taxYear)
+  const data = {
+    "fromDate": "2024-04-06",
+    "toDate": "2024-07-05",
+    "ukFhlProperty": {
+        "income": {
+        "periodAmount": 5000.99,
+        "taxDeducted": 3123.21,
+        "rentARoom": {
+            "rentsReceived": 532.12
+        }
+        },
+        "expenses": {
+        "consolidatedExpenses": 988.18,
+        "rentARoom": {
+            "amountClaimed": 3000.87
+        }
+        }
+    },
+    "ukNonFhlProperty": {
+        "income": {
+        "premiumsOfLeaseGrant": 42.12,
+        "reversePremiums": 84.31,
+        "periodAmount": 9884.93,
+        "taxDeducted": 842.99,
+        "otherIncome": 31.44,
+        "rentARoom": {
+            "rentsReceived": 947.66
+        }
+        },
+        "expenses": {
+        "consolidatedExpenses": 988.18,
+        "residentialFinancialCost": 988.18,
+        "residentialFinancialCostsCarriedForward": 302.23,
+        "rentARoom": {
+            "amountClaimed": 952.53
+        }
+        }
+    }
+  }
 
-  const accessToken = await getUserRestrictedToken(req);
-
-  const extraHeaders = {
-    'Gov-Test-Scenario': 'STATEFUL',
-    ...fraudHeaders,
-  };
-
-  const response = await callApi({
-    method: 'POST',
-    serviceName: services.propertyBusiness.name,
-    serviceVersion: services.propertyBusiness.version,
-    routePath,
-    bearerToken: accessToken,
-    body,
-    extraHeaders
+  const response = await propertyBusinessRepo.createUkPropertyPeriodSummary({
+    req,
+    nino,
+    businessId,
+    taxYear,
+    body: data
   });
-
   return response;
 }
 
