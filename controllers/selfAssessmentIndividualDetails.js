@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const utils = require('../utils');
-const selfAssessmentIndividualDetailsService = require('../services/selfAssessmentIndividualDetailsService');
+const saIndividualDetailsService = require('../services/saIndividualDetailsService');
 
 const getItsaStatus = asyncHandler(async(req, res) => {
   // Get query parameters
@@ -11,7 +11,7 @@ const getItsaStatus = asyncHandler(async(req, res) => {
   if (!taxYear) { taxYear = utils.getCurrentTaxYear()};
 
   // Get ITSA status
-  const apiResponse = await selfAssessmentIndividualDetailsService.getItsaStatus(nino, taxYear, req);
+  const apiResponse = await saIndividualDetailsService.getItsaStatus(nino, taxYear, req);
 
   return res.status(apiResponse.status).json(apiResponse.body);
 })
