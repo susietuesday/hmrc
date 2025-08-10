@@ -1,32 +1,9 @@
-const {
-    getUserRestrictedToken,
-    callApi 
-} = require('../utils');
+const businessDetailsRepo = require('../repositories/businessDetailsRepo.js');
 
-const businessDetailsServices = {
-  businessDetails: {
-    name: 'individuals/business/details',
-    version: '1.0',
-    routes: {
-      listByNino: (nino) => `/${encodeURIComponent(nino)}/list`
-    }
-  }
-};
-
-async function fetchBusinessListByNino({ req, nino }) {
-  const accessToken = await getUserRestrictedToken(req);
-  const routePath = businessDetailsServices.businessDetails.routes.listByNino(nino);
-
-  const response = await callApi({
-    method: 'GET',
-    serviceName: businessDetailsServices.businessDetails.name,
-    serviceVersion: businessDetailsServices.businessDetails.version,
-    routePath,
-    bearerToken: accessToken,
-    extraHeaders: { 'Gov-Test-Scenario': 'STATEFUL' }
-  });
+async function getBusinessList({ req, nino }) {
+  const response = businessDetailsRepo.fetchBusinessDetailsList({ req, nino });
 
   return response;
 }
 
-module.exports = { fetchBusinessListByNino }
+module.exports = { getBusinessList }
