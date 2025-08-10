@@ -87,28 +87,22 @@ async function getItsaStatus(nino, taxYear, req) {
   // Extract status and statusReason
 	const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
 	const status = statusDetails?.status || null;
-	const statusReason = statusDetails?.statusReason || null;
+	//const statusReason = statusDetails?.statusReason || null;
 
 	// Set session data
 	req.session.user.nino = nino;
 	req.session.user.itsaStatus = status;
 	//req.session.user.itsaStatusReason = statusReason;
-	
-	const mtdEligible = getMtdEligible(status)
-	const userMessage = getItsaUserMessage(status, statusReason);
-
-	if (
-		response.body?.itsaStatuses?.[0]?.itsaStatusDetails?.[0]
-	) {
-		response.body.itsaStatuses[0].itsaStatusDetails[0].mtdEligible = mtdEligible;
-		response.body.itsaStatuses[0].itsaStatusDetails[0].userMessage = userMessage;
-	}
 
   return response;
 }
 
-function getMtdEligible(itsaStatus) {
-  return itsaStatus === 'MTD Mandated' || itsaStatus === 'MTD Voluntary';
+function getMtdEligible(nino, taxYear, req) {
+  const response = getItsaStatus(nino, taxYear, req);
+  const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
+  const status = statusDetails?.status || null;
+
+  return status === 'MTD Mandated' || itsaStatus === 'MTD Voluntary';
 }
 
 function getItsaUserMessage(status, reason) {
@@ -117,4 +111,4 @@ function getItsaUserMessage(status, reason) {
   return messagesByReason[reason] || messagesByReason["default"] || "No message available.";
 }
 
-module.exports = { getItsaStatus };
+module.exports = { getItsaStatus, getMtdEligible };
