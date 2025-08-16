@@ -19,7 +19,7 @@ async function fetchIncomeAndExpenditureObligations(nino, params, req) {
   const routePath = services.obligations.routes.incomeAndExpenditure(nino);
 
   const extraHeaders = {
-    'Gov-Test-Scenario': 'OPEN',
+    'Gov-Test-Scenario': 'DYNAMIC',
     ...fraudHeaders,
   };
 
