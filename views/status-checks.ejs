@@ -9,10 +9,47 @@
     <li class="list-group-item">
       <%= propertyRegistered ? '✅' : '❌' %> UK Property Registered
     </li>
-    <li class="list-group-item">
-      <%= openObligation ? '✅' : '❌' %> Open Obligation for Current Tax Period
-    </li>
   </ul>
+
+  <h2 class="mb-4">Your HMRC Property Income Obligations</h2>
+
+  <!-- Table -->
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Period Start</th>
+        <th>Period End</th>
+        <th>Due Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="obligationsTableBody"></tbody>
+  </table>
+
+  <!-- Embed obligations data from backend -->
+  <script>
+    const obligationsData = <%- JSON.stringify(obligationsData) %>;
+  </script>
+
+  <!-- Script to render table -->
+  <script>
+    const tbody = document.getElementById('obligationsTableBody');
+
+    obligationsData.obligations.forEach(ob => {
+      ob.obligationDetails.forEach(detail => {
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+          <td>${detail.periodStartDate}</td>
+          <td>${detail.periodEndDate}</td>
+          <td>${detail.dueDate}</td>
+          <td>${detail.status}</td>
+        `;
+
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
 
   <a href="/next-step" class="btn btn-primary">Continue</a>
 </div>

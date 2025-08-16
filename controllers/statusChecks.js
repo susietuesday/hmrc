@@ -4,7 +4,7 @@ const utils = require('../utils');
 // services/statusCheckService.js
 const saIndividualDetails = require('../services/saIndividualDetailsService');
 const businessDetails = require('../services/businessDetailsService');
-//const { getObligationsStatus } = require('./obligationsService');
+const obligations = require('../services/obligationsService');
 
 const runAllStatusChecks = asyncHandler(async(req, res) => {
   const nino = req.query.nino;
@@ -14,12 +14,12 @@ const runAllStatusChecks = asyncHandler(async(req, res) => {
 
   const mtdEligible = await saIndividualDetails.getMtdEligible(nino, taxYear, req);
   const businessId = await businessDetails.getUkPropertyBusinessId(req, nino);
-  //const obligations = await getObligationsStatus(nino);
+  const obligationsData = await obligations.getIncomeAndExpenditureObligations(nino, req);
 
   res.render('status-checks', {
     itsaStatus: mtdEligible,
     propertyRegistered: businessId !== null && businessId !== undefined,
-    openObligation: false
+    obligationsData: obligationsData.body
   });
 });
 
