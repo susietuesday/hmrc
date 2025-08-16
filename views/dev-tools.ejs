@@ -1,164 +1,143 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<script src="main.js"></script>
 <script src="devToolsPage.js"></script>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Making Tax Digital</title>
+<h1>Welcome to Making Tax Digital for Property Income</h1>
 
-  <!-- ✅ Bootstrap 5 CSS (no jQuery needed) -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
-<body>
-  <div class="container">
-    <h1>Welcome to Making Tax Digital for Property Income</h1>
-
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">api-example-nodejs-client</a>
-            </div>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">api-example-nodejs-client</a>
         </div>
-    </nav>
-
-    <h1>Testing <%= service %> API</h1>
-
-    <div>
-      <table class="table table-striped table-hover">
-        <thead>
-        <tr>
-            <th>Endpoint</th>
-            <th>Description</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><%= unRestrictedEndpoint %></td>
-            <td>Unrestricted endpoint</td>
-            <td>
-                <a class="btn btn-primary" href="unrestrictedCall">Try it</a>
-            </td>
-        </tr>
-        <tr>
-            <td><%= appRestrictedEndpoint %></td>
-            <td>Application restricted endpoint</td>
-            <td>
-                <a class="btn btn-primary" href="applicationCall">Try it</a>
-            </td>
-        </tr>
-        <tr>
-            <td><%= userRestrictedEndpoint %></td>
-            <td>User restricted endpoint</td>
-            <td>
-                <a class="btn btn-primary" href="userCall">Try it</a>
-            </td>
-        </tr>
-        </tbody>
-      </table>
     </div>
+</nav>
 
-    <style>
-      form {
-        margin-bottom: 20px; /* space between each form */
-      }
-    </style>
+<h1>Testing <%= service %> API</h1>
 
-    <h3>Log Out</h3>
+<div>
+  <table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Endpoint</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><%= unRestrictedEndpoint %></td>
+        <td>Unrestricted endpoint</td>
+        <td>
+            <a class="btn btn-primary" href="unrestrictedCall">Try it</a>
+        </td>
+    </tr>
+    <tr>
+        <td><%= appRestrictedEndpoint %></td>
+        <td>Application restricted endpoint</td>
+        <td>
+            <a class="btn btn-primary" href="applicationCall">Try it</a>
+        </td>
+    </tr>
+    <tr>
+        <td><%= userRestrictedEndpoint %></td>
+        <td>User restricted endpoint</td>
+        <td>
+            <a class="btn btn-primary" href="userCall">Try it</a>
+        </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
 
-    <form action="/logout" method="POST">
-        <button type="submit">Log Out</button>
-    </form>
+<style>
+  form {
+    margin-bottom: 20px; /* space between each form */
+  }
+</style>
 
-    <h2>Sandbox Functionality</h2>
+<h3>Log Out</h3>
 
-    <h3>Validate Fraud Prevention Headers</h3>
+<form action="/logout" method="POST">
+    <button type="submit">Log Out</button>
+</form>
 
-    <form action="/fraud-headers" method="GET">
-        <button type="submit">Validate</button>
-    </form>
+<h2>Sandbox Functionality</h2>
 
-    <h3>Get Services</h3>
+<h3>Validate Fraud Prevention Headers</h3>
 
-    <form action="/services" method="GET">
-        <button type="submit">Get Services</button>
-    </form>
+<form action="/fraud-headers" method="GET">
+    <button type="submit">Validate</button>
+</form>
 
-    <h3>Generate Test Data</h3>
+<h3>Get Services</h3>
 
-    <form action="/test-users" method="POST">
-        <button type="submit">Create Test User</button>
-    </form>
+<form action="/services" method="GET">
+    <button type="submit">Get Services</button>
+</form>
 
-    <form action="/itsa-status" method="POST">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <label for="taxYear">Tax Year:</label>
-        <input type="text" name="taxYear" id="taxYear" required>
-        <button type="submit">Create Test ITSA Status</button>
-    </form>
+<h3>Generate Test Data</h3>
 
-    <form action="/test/uk-property-business" method="POST">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <button type="submit">Create test UK Property Business</button>
-    </form>
+<form action="/test-users" method="POST">
+    <button type="submit">Create Test User</button>
+</form>
 
-    <h2>Production Functionality</h2>
+<form action="/itsa-status" method="POST">
+    <label for="nino">National Insurance Number:</label>
+    <input type="text" name="nino" id="nino" required>
+    <label for="taxYear">Tax Year:</label>
+    <input type="text" name="taxYear" id="taxYear" required>
+    <button type="submit">Create Test ITSA Status</button>
+</form>
 
-    <h3>Retrieve ITSA Status</h3>
+<form action="/test/uk-property-business" method="POST">
+    <label for="nino">National Insurance Number:</label>
+    <input type="text" name="nino" id="nino" required>
+    <button type="submit">Create test UK Property Business</button>
+</form>
 
-    <form action="/itsa-status" method="GET">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <label for="taxYear">Tax Year:</label>
-        <input type="text" name="taxYear" id="taxYear" required>
-        <button type="submit">Retrieve ITSA Status</button>
-    </form>
-    
-    <h3>Business Income Sources</h3>
+<h2>Production Functionality</h2>
 
-    <form action="/business-sources" method="GET">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <button type="submit">Fetch Business Sources</button>
-    </form>
+<h3>Retrieve ITSA Status</h3>
 
-    <h3>Retrieve Income and Expenditure Obligations</h3>
+<form action="/itsa-status" method="GET">
+    <label for="nino">National Insurance Number:</label>
+    <input type="text" name="nino" id="nino" required>
+    <label for="taxYear">Tax Year:</label>
+    <input type="text" name="taxYear" id="taxYear" required>
+    <button type="submit">Retrieve ITSA Status</button>
+</form>
 
-    <form action="/obligations" method="GET">
-        <label for="nino">National Insurance Number:</label>
-        <input type="text" name="nino" id="nino" required>
-        <button type="submit">Retrieve Obligations</button>
-    </form>
+<h3>Business Income Sources</h3>
 
-    <h3>Submit Property Period Summary</h3>
+<form action="/business-sources" method="GET">
+    <label for="nino">National Insurance Number:</label>
+    <input type="text" name="nino" id="nino" required>
+    <button type="submit">Fetch Business Sources</button>
+</form>
 
-    <form id="uploadForm" enctype="multipart/form-data">
-        <label for="csvFile">Upload CSV:</label>
-        <input type="file" id="csvFile" name="csvFile" accept=".csv" required />
-        <button type="submit">Upload</button>
-    </form>
+<h3>Retrieve Income and Expenditure Obligations</h3>
 
-    <div id="uploadStatus"></div>
+<form action="/obligations" method="GET">
+    <label for="nino">National Insurance Number:</label>
+    <input type="text" name="nino" id="nino" required>
+    <button type="submit">Retrieve Obligations</button>
+</form>
 
-    <h3>Detailed Results</h3>
-    <table id="resultsTable" border="1"></table>
+<h3>Submit Property Period Summary</h3>
 
-    <h3>Quarterly Totals</h3>
-    <table id="quarterlyTotalsTable" border="1"></table>
+<form id="uploadForm" enctype="multipart/form-data">
+    <label for="csvFile">Upload CSV:</label>
+    <input type="file" id="csvFile" name="csvFile" accept=".csv" required />
+    <button type="submit">Upload</button>
+</form>
 
-    <form action="/periodic-summary" method="POST">
-      <label for="nino">National Insurance Number:</label>
-      <input type="text" name="nino" id="nino" required>
-      <button type="submit">Submit Summary</button>
-    </form>
-  </div>
+<div id="uploadStatus"></div>
 
-  <!-- ✅ Bootstrap 5 JS bundle (includes Popper, no jQuery needed) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<h3>Detailed Results</h3>
+<table id="resultsTable" border="1"></table>
+
+<h3>Quarterly Totals</h3>
+<table id="quarterlyTotalsTable" border="1"></table>
+
+<form action="/periodic-summary" method="POST">
+  <label for="nino">National Insurance Number:</label>
+  <input type="text" name="nino" id="nino" required>
+  <button type="submit">Submit Summary</button>
+</form>
