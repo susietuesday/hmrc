@@ -52,7 +52,6 @@ function captureClientPort(req, res, next) {
     port !== 443
   ) {
     req.session.clientPort = port;
-    //log.info('Client Port: ' + port);
   }
 
   next();
