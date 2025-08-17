@@ -3,10 +3,10 @@ document.addEventListener("DOMContentLoaded", () => {
   renderObligations();
 
   // --- Upload button handler ---
-  const uploadBtn = document.getElementById('uploadBtn');
+  const uploadBtn = document.getElementById('uploadIncomeBtn');
   if (uploadBtn) {
     uploadBtn.addEventListener('click', async () => {
-        const fileInput = document.getElementById('csvFile');
+        const fileInput = document.getElementById('incomeCsvFile');
   const file = fileInput.files[0];
 
   if (!file) {
@@ -27,14 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const json = await res.json();
 
-    document.getElementById('uploadStatus').textContent = 'Upload successful!';
+    document.getElementById('incomeUploadStatus').textContent = 'Upload successful!';
 
     // 👉 Only display the transaction rows, not quarterly totals
-    const previewDiv = document.getElementById('csvPreview');
+    const previewDiv = document.getElementById('incomeCsvPreview');
     previewDiv.innerHTML = renderTable(json.data.results);
 
   } catch (err) {
-    document.getElementById('uploadStatus').textContent = 'Error uploading file';
+    document.getElementById('incomeUploadStatus').textContent = 'Error uploading file';
     console.error(err);
       }
     });
