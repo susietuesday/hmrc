@@ -4,7 +4,8 @@ const csv = require('csv-parser');
 async function processCsvFile(fileBuffer) {
 
   // Parsing logic
-  const results = await parseCsvBuffer(fileBuffer);
+  const requiredColumns = ['Date Received', 'Amount'];
+  const results = await parseCsvBuffer(fileBuffer, requiredColumns);
   const quarterlyTotalsObj = summariseByQuarter(results);
 
   return {
@@ -16,32 +17,27 @@ async function processCsvFile(fileBuffer) {
   };
 }
 
-function parseCsvBuffer(buffer) {
-  return new Promise((resolve, reject) => {
-    const results = [];
+async function parseCsvBuffer(buffer, requiredColumns) {
+  const results = [];
 
-    // Define required columns
-    const requiredColumns = ['Date Received', 'Amount'];
+  const stream = streamifier.createReadStream(buffer).pipe(csv());
 
-    streamifier.createReadStream(buffer)
-      .pipe(csv())
-      .on('data', (row) => {
-        // Build a cleaned row containing only required columns
-        const cleanedRow = {};
-        requiredColumns.forEach(col => {
-          if (row[col] !== undefined) {
-            cleanedRow[col] = row[col];
-          } else {
-            console.warn(`Missing column ${col} in row:`, row);
-          }
-        });
+  for await (const row of stream) {
+    const cleanedRow = {};
 
-        results.push(cleanedRow);
-      })
-      .on('end', () => resolve(results))
-      .on('error', reject);
-  });
-};
+    requiredColumns.forEach(col => {
+      if (row[col] !== undefined) {
+        cleanedRow[col] = row[col];
+      } else {
+        console.warn(`Missing column "${col}" in row:`, row);
+      }
+    });
+
+    results.push(cleanedRow);
+  }
+
+  return results;
+}
 
 function summariseByQuarter(dataRows) {
   const totals = {
