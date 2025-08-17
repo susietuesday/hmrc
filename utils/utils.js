@@ -14,7 +14,7 @@ const {
   DEV_VENDOR_PUBLIC_IP,
   GOV_VENDOR_PRODUCT_NAME,
   GOV_VENDOR_PRODUCT_VERSION
-} = require('./config');
+} = require('../config');
 
 const client = new AuthorizationCode(oauthConfig);
 const authorizationUri = client.authorizeURL({
