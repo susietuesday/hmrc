@@ -26,28 +26,8 @@
 </table>
 
 <!-- Embed obligations data from backend -->
-<script>
-  const obligationsData = <%- JSON.stringify(obligationsData) %>;
-</script>
-
-<!-- Script to render table -->
-<script>
-  const tbody = document.getElementById('obligationsTableBody');
-
-  obligationsData.obligations.forEach(ob => {
-    ob.obligationDetails.forEach(detail => {
-      const tr = document.createElement('tr');
-
-      tr.innerHTML = `
-        <td>${detail.periodStartDate}</td>
-        <td>${detail.periodEndDate}</td>
-        <td>${detail.dueDate}</td>
-        <td>${detail.status}</td>
-      `;
-
-      tbody.appendChild(tr);
-    });
-  });
+<script id="obligations-data" type="application/json">
+  <%- JSON.stringify(obligationsData) %>
 </script>
 
 <h3>Upload property income transactions</h3>
@@ -122,3 +102,4 @@ document.getElementById('uploadBtn').addEventListener('click', async () => {
 });
 </script>
 
+<script src="dashboardPage.js"></script>
