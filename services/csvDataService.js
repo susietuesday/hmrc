@@ -1,7 +1,7 @@
 const streamifier = require('streamifier');
 const csv = require('csv-parser');
 
-async function processCsvFile(fileBuffer) {
+async function processCsvIncomeFile(fileBuffer) {
 
   // Parsing logic
   const requiredColumns = ['Date Received', 'Amount'];
@@ -78,5 +78,5 @@ function summariseByQuarter(dataRows) {
 };
 
 module.exports = {
-  processCsvFile
+  processCsvIncomeFile
 };
