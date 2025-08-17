@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const { processCsvFile } = require('../services/csvDataService');
 
-const uploadCsvFile = asyncHandler(async (req, res) => {
+const uploadCsvIncomeFile = asyncHandler(async (req, res) => {
   // Check if file is provided
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
@@ -19,5 +19,5 @@ const uploadCsvFile = asyncHandler(async (req, res) => {
 });
 
 module.exports = {
-  uploadCsvFile,
+  uploadCsvIncomeFile
 };

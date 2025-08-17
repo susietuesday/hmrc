@@ -3,7 +3,6 @@ const router = express.Router();
 
 // Middleware and utility functions
 const { requireUser } = require('./middleware.js');
-const { uploadCsvFile } = require('./controllers/csvData.js');
 
 const multer = require('multer');
 const storage = multer.memoryStorage(); // or diskStorage if you prefer
@@ -11,6 +10,7 @@ const upload = multer({ storage });
 
 // Route handlers
 const testSupport = require('./controllers/testSupport.js');
+const csvData = require('./controllers/csvData.js');
 const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
 const { runAllStatusChecks } = require('./controllers/statusChecks.js');
 const { getIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
@@ -32,9 +32,9 @@ router.get('/itsa-status', requireUser, getItsaStatus);
 router.get('/dashboard', requireUser, runAllStatusChecks);
 router.get('/business-sources', requireUser, getBusinessList);
 router.get('/obligations', requireUser, getIncomeAndExpenditureObligations);
-router.post('/property-income', upload.single('csv'), uploadCsvFile);
+router.post('/property-income', upload.single('csv'), csvData.uploadCsvIncomeFile);
 router.post('/periodic-summary', requireUser, postUkPropertyPeriodSummary);
 
-router.post('/upload', upload.single('csvFile'), uploadCsvFile);
+router.post('/upload', upload.single('csvFile'), csvData.uploadCsvIncomeFile);
 
 module.exports = router;
