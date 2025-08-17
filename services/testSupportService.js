@@ -2,7 +2,7 @@ const {
   callApi, 
   getApplicationRestrictedToken, 
   getUserRestrictedToken 
-} = require('../utils');
+} = require('../utils/utils');
 
 const testServices = {
   hello: {

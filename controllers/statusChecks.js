@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 
 // services/statusCheckService.js
 const saIndividualDetails = require('../services/saIndividualDetailsService');

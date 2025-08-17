@@ -15,7 +15,7 @@ const {
   captureClientPort, 
   errorHandler 
 } = require('./middleware.js');
-const { log } = require('./utils');
+const { log } = require('./utils/utils.js');
 
 const { testServices } = require('./services/testSupportService.js');
 

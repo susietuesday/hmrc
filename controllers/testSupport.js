@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 
-const { getFraudPreventionHeaders } = require('../utils')
+const { getFraudPreventionHeaders } = require('../utils/utils')
 
 const { 
   fetchHelloWorld, 

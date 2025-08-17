@@ -1,4 +1,4 @@
-const { log } = require('./utils');
+const { log } = require('./utils/utils');
 const { AuthorizationCode } = require('simple-oauth2');
 
 const { 

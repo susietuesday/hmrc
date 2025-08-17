@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const utils = require('../utils');
+const utils = require('../utils/utils');
 const saIndividualDetailsService = require('../services/saIndividualDetailsService');
 
 const getItsaStatus = asyncHandler(async(req, res) => {
