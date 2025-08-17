@@ -29,7 +29,7 @@ router.post('/test/uk-property-business', requireUser, testSupport.postTestUkPro
 
 // MTD production routes
 router.get('/itsa-status', requireUser, getItsaStatus);
-router.get('/eligibility', requireUser, runAllStatusChecks);
+router.get('/dashboard', requireUser, runAllStatusChecks);
 router.get('/business-sources', requireUser, getBusinessList);
 router.get('/obligations', requireUser, getIncomeAndExpenditureObligations);
 router.post('/property-income', upload.single('csv'), uploadCsvFile);
