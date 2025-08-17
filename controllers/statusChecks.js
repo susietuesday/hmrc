@@ -16,7 +16,7 @@ const runAllStatusChecks = asyncHandler(async(req, res) => {
   const businessId = await businessDetails.getUkPropertyBusinessId(req, nino);
   const obligationsData = await obligations.getIncomeAndExpenditureObligations(nino, req);
 
-  res.render('status-checks', {
+  res.render('dashboard', {
     itsaStatus: mtdEligible,
     propertyRegistered: businessId !== null && businessId !== undefined,
     obligationsData: obligationsData.body
