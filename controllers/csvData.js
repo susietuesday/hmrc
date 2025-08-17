@@ -2,12 +2,16 @@ const streamifier = require('streamifier');
 const csv = require('csv-parser');
 
 exports.uploadCsvFile = async (req, res) => {
+  // Check if file is provided
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
   try {
+    // Parse the CSV file from the buffer
     const results = await parseCsvBuffer(req.file.buffer);
+
+    // Summarise the data by quarter
     const quarterlyTotalsObj = summariseByQuarter(results);
     const quarterlyTotals = Object.entries(quarterlyTotalsObj).map(([quarter, total]) => ({
     Quarter: quarter,
@@ -35,9 +39,24 @@ function parseCsvBuffer(buffer) {
   return new Promise((resolve, reject) => {
     const results = [];
 
+    // Define required columns
+    const requiredColumns = ['Date Received', 'Amount'];
+
     streamifier.createReadStream(buffer)
       .pipe(csv())
-      .on('data', (row) => results.push(row))
+      .on('data', (row) => {
+        // Build a cleaned row containing only required columns
+        const cleanedRow = {};
+        requiredColumns.forEach(col => {
+          if (row[col] !== undefined) {
+            cleanedRow[col] = row[col];
+          } else {
+            console.warn(`Missing column ${col} in row:`, row);
+          }
+        });
+
+        results.push(cleanedRow);
+      })
       .on('end', () => resolve(results))
       .on('error', reject);
   });
