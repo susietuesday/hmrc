@@ -1,18 +1,4 @@
 /* ==========================
-   Global Styles
-========================== */
-
-/* Links */
-a {
-  color: #0069d9;           /* custom link color */
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ==========================
    Forms
 ========================== */
 form {
@@ -20,41 +6,10 @@ form {
 }
 
 /* ==========================
-   Navbar
+   Body
 ========================== */
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.2rem;
-}
-
-/* ==========================
-   Footer
-========================== */
-footer {
-  padding: 20px;
-  text-align: center;
-  color: #666;
-  background-color: #f1f1f1;
-  margin-top: 40px;
-}
-
-/* ==========================
-   Reusable Utility Classes
-========================== */
-.highlight {
-  background-color: yellow;
-  font-weight: bold;
-}
-
-.card-shadow {
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  border-radius: 0.5rem;
-}
-
-/* ==========================
-   Page-specific (example for index page)
-========================== */
-.index-hero {
-  text-align: center;
-  padding: 50px 20px;
+body {
+  padding-bottom: 50px; /* adjust the gap size */
+  margin: 0; /* optional, remove default margins */
+  min-height: 100vh; /* ensures it fills the viewport */
 }
