@@ -1,68 +1,65 @@
-<div class="container mt-4">
-  <h1>Pre-submission Checks</h1>
-  <p>Please confirm the following checks before continuing.</p>
+<h1>Pre-submission Checks</h1>
+<p>Please confirm the following checks before continuing.</p>
 
-  <ul class="list-group mb-4">
-    <li class="list-group-item">
-      <%= itsaStatus ? '✅' : '❌' %> Registered for Making Tax Digital
-    </li>
-    <li class="list-group-item">
-      <%= propertyRegistered ? '✅' : '❌' %> UK Property Registered
-    </li>
-  </ul>
+<ul class="list-group mb-4">
+  <li class="list-group-item">
+    <%= itsaStatus ? '✅' : '❌' %> Registered for Making Tax Digital
+  </li>
+  <li class="list-group-item">
+    <%= propertyRegistered ? '✅' : '❌' %> UK Property Registered
+  </li>
+</ul>
 
-  <h2 class="mb-4">Your HMRC Property Income Obligations</h2>
+<h2 class="mb-4">Your HMRC Property Income Obligations</h2>
 
-  <!-- Table -->
-  <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-      <tr>
-        <th>Period Start</th>
-        <th>Period End</th>
-        <th>Due Date</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody id="obligationsTableBody"></tbody>
-  </table>
+<!-- Table -->
+<table class="table table-bordered table-striped">
+  <thead class="table-dark">
+    <tr>
+      <th>Period Start</th>
+      <th>Period End</th>
+      <th>Due Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody id="obligationsTableBody"></tbody>
+</table>
 
-  <!-- Embed obligations data from backend -->
-  <script>
-    const obligationsData = <%- JSON.stringify(obligationsData) %>;
-  </script>
+<!-- Embed obligations data from backend -->
+<script>
+  const obligationsData = <%- JSON.stringify(obligationsData) %>;
+</script>
 
-  <!-- Script to render table -->
-  <script>
-    const tbody = document.getElementById('obligationsTableBody');
+<!-- Script to render table -->
+<script>
+  const tbody = document.getElementById('obligationsTableBody');
 
-    obligationsData.obligations.forEach(ob => {
-      ob.obligationDetails.forEach(detail => {
-        const tr = document.createElement('tr');
+  obligationsData.obligations.forEach(ob => {
+    ob.obligationDetails.forEach(detail => {
+      const tr = document.createElement('tr');
 
-        tr.innerHTML = `
-          <td>${detail.periodStartDate}</td>
-          <td>${detail.periodEndDate}</td>
-          <td>${detail.dueDate}</td>
-          <td>${detail.status}</td>
-        `;
+      tr.innerHTML = `
+        <td>${detail.periodStartDate}</td>
+        <td>${detail.periodEndDate}</td>
+        <td>${detail.dueDate}</td>
+        <td>${detail.status}</td>
+      `;
 
-        tbody.appendChild(tr);
-      });
+      tbody.appendChild(tr);
     });
-  </script>
+  });
+</script>
 
-  <h3>Upload property income transactions</h3>
+<h3>Upload property income transactions</h3>
 
-  <div class="mb-3">
-    <label for="csvFile" class="form-label">Upload Transactions CSV</label>
-    <input class="form-control" type="file" id="csvFile" accept=".csv">
-  </div>
-  <button id="uploadBtn" class="btn btn-primary">Upload CSV</button>
-
-  <div id="uploadStatus" class="mt-3"></div>
-  <div id="csvPreview" class="mt-3"></div>
-
+<div class="mb-3">
+  <label for="csvFile" class="form-label">Upload Transactions CSV</label>
+  <input class="form-control" type="file" id="csvFile" accept=".csv">
 </div>
+<button id="uploadBtn" class="btn btn-primary">Upload CSV</button>
+
+<div id="uploadStatus" class="mt-3"></div>
+<div id="csvPreview" class="mt-3"></div>
 
 <script>
 function renderTable(data) {
