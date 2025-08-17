@@ -133,7 +133,6 @@ app.post('/session-data', express.json(), (req, res) => {
 
 // OAuth callback
 app.get('/oauth20/callback', async (req, res) => {
-  log.info('OAuth callback hit:', req.originalUrl, req.query);
   const { code } = req.query;
 
   const options = {
@@ -154,8 +153,14 @@ app.get('/oauth20/callback', async (req, res) => {
 
 // Log out
 app.post('/logout', (req, res) => {
-  req.session = null;
-  res.redirect('/');
+  req.session.destroy(err => {
+    if (err) {
+      return next(err);
+    }
+    // Clear the cookie (default name is 'connect.sid')
+    res.clearCookie('connect.sid');
+    res.redirect('/');
+  });
 });
 
 // Global error handler
