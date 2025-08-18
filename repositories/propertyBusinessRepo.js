@@ -5,7 +5,8 @@ const services = {
     name: 'individuals/business/property',
     version: '6.0',
     routes: {
-      createUkPropertyPeriodSummary: (nino, businessId, taxYear) => `/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${taxYear}`
+      createUkPropertyPeriodSummary: (nino, businessId, taxYear) => `/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/period/${taxYear}`,
+      fetchUkPropertyCumulativeSummary: (nino, businessId, taxYear) => `/uk/${encodeURIComponent(nino)}/${encodeURIComponent(businessId)}/cumulative/${taxYear}`
     }
   }
 };
@@ -34,6 +35,25 @@ async function createUkPropertyPeriodSummary({ nino, businessId, taxYear, body, 
   return response;
 }
 
+async function fetchUkPropertyCummulativeSummary({ nino, businessId, taxYear, session }) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
+  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
+  
+  const routePath = services.propertyBusiness.routes.fetchUkPropertyCumulativeSummary(nino, businessId, taxYear)
+
+  const response = await apiUtils.callApi({
+    method: 'GET',
+    serviceName: services.propertyBusiness.name,
+    serviceVersion: services.propertyBusiness.version,
+    routePath,
+    bearerToken: accessToken,
+    extraHeaders: fraudHeaders
+  });
+
+  return response;
+}
+
 module.exports = {
   createUkPropertyPeriodSummary,
+  fetchUkPropertyCummulativeSummary
 };

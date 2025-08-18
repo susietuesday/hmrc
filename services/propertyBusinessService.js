@@ -51,6 +51,18 @@ async function createUkPropertyPeriodSummary({ nino, businessId, taxYear, sessio
   return response;
 }
 
+async function getUkPropertyCumulativeSummary({ nino, businessId, taxYear, session }) {
+
+  const response = await propertyBusinessRepo.fetchUkPropertyCummulativeSummary({
+    nino,
+    businessId,
+    taxYear,
+    session
+  });
+  return response;
+}
+
 module.exports = {
   createUkPropertyPeriodSummary,
+  getUkPropertyCumulativeSummary
 };

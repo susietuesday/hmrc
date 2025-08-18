@@ -15,7 +15,7 @@ const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
 const { runAllStatusChecks } = require('./controllers/statusChecks.js');
 const { getIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
 const { getBusinessList } = require('./controllers/businessDetails.js');
-const { postUkPropertyPeriodSummary } = require('./controllers/propertyBusiness.js');
+const { postUkPropertyPeriodSummary, getUkPropertyCumulativeSummary } = require('./controllers/propertyBusiness.js');
 
 // MTD sandbox routes
 router.get('/unrestrictedCall', testSupport.getHelloWorld);
@@ -34,6 +34,7 @@ router.get('/business-sources', requireUser, getBusinessList);
 router.get('/obligations', requireUser, getIncomeAndExpenditureObligations);
 router.post('/property-income', upload.single('csv'), csvData.uploadCsvIncomeFile);
 router.post('/periodic-summary', requireUser, postUkPropertyPeriodSummary);
+router.get('/cumulative-summary', requireUser, getUkPropertyCumulativeSummary);
 
 router.post('/upload', upload.single('csvFile'), csvData.uploadCsvIncomeFile);
 
