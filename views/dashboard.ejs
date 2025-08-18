@@ -30,6 +30,131 @@
   <%- JSON.stringify(obligationsData) %>
 </script>
 
+<h2 class="mb-4">Your cumulative income and expenses summary</h2>
+
+<div class="card mb-3">
+  <div class="card-header bg-dark text-white">
+    UK Property Summary
+  </div>
+  <div class="card-body">
+    
+    <h5 class="mb-3">Income</h5>
+    <ul class="list-group mb-4">
+      <% if (cumulativeData.ukProperty.income.periodAmount) { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Total rents</span>
+          <span>£<%= cumulativeData.ukProperty.income.periodAmount %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.income.otherIncome) { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Other income</span>
+          <span>£<%= cumulativeData.ukProperty.income.otherIncome %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.income.rentARoom.rentsReceived) { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Rent a room</span>
+          <span>£<%= cumulativeData.ukProperty.income.rentARoom.rentsReceived %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.income.taxDeducted) { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Tax deducted</span>
+          <span>£<%= cumulativeData.ukProperty.income.taxDeducted %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.income.premiumsOfLeaseGrant) { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Premiums for the grant of a lease</span>
+          <span>£<%= cumulativeData.ukProperty.income.premiumsOfLeaseGrant %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.income.reversePremiums) { %>
+        <li class="list-group-item d-flex justify-content-between">
+          <span>Reverse premiums and inducements</span>
+          <span>£<%= cumulativeData.ukProperty.income.reversePremiums %></span>
+        </li>
+      <% } %>
+    </ul>
+    
+    <h5 class="mb-3">Expenses</h5>
+    <ul class="list-group">
+      <% if (cumulativeData.ukProperty.expenses.premisesRunningCosts) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Rent, rates, insurance and ground rents</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.premisesRunningCosts %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.repairsAndMaintenance) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Property repairs and maintenance</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.repairsAndMaintenance %></span>
+        </li>
+      <% } %>   
+      <% if (cumulativeData.ukProperty.expenses.financialCosts) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Non-residential property finance costs</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.financialCosts %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.professionalFees) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Legal, management and other professional fees</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.professionalFees %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.costOfServices) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Costs of services provided, including wages</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.costOfServices %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.other) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Other allowable property expenses</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.other %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.travelCosts) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Travel costs</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.travelCosts %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.rentARoom.amountClaimed) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Rent a Room exempt amount</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.rentARoom.amountClaimed %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.residentialFinancialCost) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Residential property finance costs</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCost %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Unused residential property finance costs brought forward</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward %></span>
+        </li>
+      <% } %>
+      <% if (cumulativeData.ukProperty.expenses.consolidatedExpenses) { %>
+          <li class="list-group-item d-flex justify-content-between">
+          <span>Consolidated expenses</span>
+          <span>£<%= cumulativeData.ukProperty.expenses.consolidatedExpenses %></span>
+        </li>
+      <% } %>
+    </ul>
+  </div>
+</div>
+
+<!-- Embed cumulative summary data from backend -->
+<script id="cumulative-data" type="application/json">
+  <%- JSON.stringify(cumulativeData) %>
+</script>
+
 <div class="row">
 
   <!-- Income Panel -->
