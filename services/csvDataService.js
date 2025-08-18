@@ -1,5 +1,6 @@
-const streamifier = require('streamifier');
-const csv = require('csv-parser');
+const { 
+  parseCsvBuffer
+} = require('../utils/dataUtils.js');
 
 async function processCsvIncomeFile(fileBuffer) {
 
@@ -15,28 +16,6 @@ async function processCsvIncomeFile(fileBuffer) {
       Total: total
     }))
   };
-}
-
-async function parseCsvBuffer(buffer, requiredColumns) {
-  const results = [];
-
-  const stream = streamifier.createReadStream(buffer).pipe(csv());
-
-  for await (const row of stream) {
-    const cleanedRow = {};
-
-    requiredColumns.forEach(col => {
-      if (row[col] !== undefined) {
-        cleanedRow[col] = row[col];
-      } else {
-        console.warn(`Missing column "${col}" in row:`, row);
-      }
-    });
-
-    results.push(cleanedRow);
-  }
-
-  return results;
 }
 
 function summariseByQuarter(dataRows) {
