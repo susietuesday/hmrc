@@ -12,9 +12,9 @@ const services = {
   }
 };
 
-async function fetchIncomeAndExpenditureObligations(nino, params, req) {
-  const fraudHeaders = apiUtils.getFraudPreventionHeaders(req);
-  const accessToken = await apiUtils.getUserRestrictedToken(req);
+async function fetchIncomeAndExpenditureObligations({nino, params, session}) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
+  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
 
   const routePath = services.obligations.routes.incomeAndExpenditure(nino);
 

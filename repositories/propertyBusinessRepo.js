@@ -10,11 +10,11 @@ const services = {
   }
 };
 
-async function createUkPropertyPeriodSummary({ req, nino, businessId, taxYear, body }) {
-  const fraudHeaders = utils.getFraudPreventionHeaders(req);
+async function createUkPropertyPeriodSummary({ nino, businessId, taxYear, body, session }) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
+  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
+  
   const routePath = services.propertyBusiness.routes.createUkPropertyPeriodSummary(nino, businessId, taxYear)
-
-  const accessToken = await apiUtils.getUserRestrictedToken(req);
 
   const extraHeaders = {
     'Gov-Test-Scenario': 'STATEFUL',

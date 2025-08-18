@@ -8,7 +8,10 @@ const getBusinessList = asyncHandler(async (req, res) => {
     return res.status(400).send("Missing NINO in query string");
   }
 
-  const apiResponse = await businessDetailsService.getBusinessList({ req, nino });
+  const apiResponse = await businessDetailsService.getBusinessList({ 
+    nino, 
+    session: req.session 
+  });
 
   return res.status(apiResponse.status).json(apiResponse.body);
 });

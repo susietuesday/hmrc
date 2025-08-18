@@ -10,9 +10,9 @@ const services = {
   }
 };
 
-async function fetchItsaStatus(nino, taxYear, req) {
-  const fraudHeaders = apiUtils.getFraudPreventionHeaders(req);
-  const accessToken = await apiUtils.getUserRestrictedToken(req);
+async function fetchItsaStatus({nino, taxYear, session}) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
+  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
 
   const routePath = services.selfAssessmentIndividualDetails.routes.itsaStatus(nino, taxYear);
 

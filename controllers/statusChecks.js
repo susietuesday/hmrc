@@ -5,6 +5,7 @@ const utils = require('../utils/utils');
 const saIndividualDetails = require('../services/saIndividualDetailsService');
 const businessDetails = require('../services/businessDetailsService');
 const obligations = require('../services/obligationsService');
+const session = require('express-session');
 
 const runAllStatusChecks = asyncHandler(async(req, res) => {
   const nino = req.query.nino;
@@ -12,9 +13,12 @@ const runAllStatusChecks = asyncHandler(async(req, res) => {
   // Default tax year to current year
   const taxYear = utils.getCurrentTaxYear();
 
-  const mtdEligible = await saIndividualDetails.getMtdEligible(nino, taxYear, req);
-  const businessId = await businessDetails.getUkPropertyBusinessId(req, nino);
-  const obligationsData = await obligations.getIncomeAndExpenditureObligations(nino, req);
+  const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, session: req.session});
+  const businessId = await businessDetails.getUkPropertyBusinessId({nino, session: req.session});
+  // Set UK property business ID in session
+  req.session.user.ukPropertyBusinessId = businessId;
+
+  const obligationsData = await obligations.getIncomeAndExpenditureObligations({nino, session: req.session});
 
   res.render('dashboard', {
     itsaStatus: mtdEligible,

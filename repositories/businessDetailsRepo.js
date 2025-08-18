@@ -10,9 +10,15 @@ const businessDetailsServices = {
   }
 };
 
-async function fetchBusinessDetailsList({ req, nino }) {
-  const accessToken = await apiUtils.getUserRestrictedToken(req);
+async function fetchBusinessDetailsList({ nino, session }) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
+  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
   const routePath = businessDetailsServices.businessDetails.routes.listByNino(nino);
+
+  const extraHeaders = {
+    'Gov-Test-Scenario': 'STATEFUL',
+    ...fraudHeaders
+  };
 
   const response = await apiUtils.callApi({
     method: 'GET',
@@ -20,7 +26,7 @@ async function fetchBusinessDetailsList({ req, nino }) {
     serviceVersion: businessDetailsServices.businessDetails.version,
     routePath,
     bearerToken: accessToken,
-    extraHeaders: { 'Gov-Test-Scenario': 'STATEFUL' }
+    extraHeaders
   });
 
   return response;

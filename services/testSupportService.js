@@ -67,8 +67,8 @@ async function fetchHelloApplication(){
   return response;
 };
 
-async function fetchHelloUser(req){
-  const accessToken = await getUserRestrictedToken(req);
+async function fetchHelloUser(oauth2Token){
+  const accessToken = await getUserRestrictedToken(oauth2Token);
 
   const response = await callApi({
     method: 'GET',
@@ -110,8 +110,8 @@ async function createTestUser({ body }){
   return response;
 };
 
-async function createTestItsaStatus({ req, nino, taxYear, body }) {
-  const accessToken = await getUserRestrictedToken(req);
+async function createTestItsaStatus({ nino, taxYear, body, session }) {
+  const accessToken = await getUserRestrictedToken(session.oauth2Token);
 
   const response = await callApi({
     method: 'POST',
@@ -125,8 +125,8 @@ async function createTestItsaStatus({ req, nino, taxYear, body }) {
   return response;
 }
 
-async function createTestUkPropertyBusiness({ req, nino, body }) {
-  const accessToken = await getUserRestrictedToken(req);
+async function createTestUkPropertyBusiness({ nino, body, session }) {
+  const accessToken = await getUserRestrictedToken(session.oauth2Token);
 
   const response = await callApi({
     method: 'POST',

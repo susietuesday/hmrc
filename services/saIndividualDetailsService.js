@@ -81,24 +81,14 @@ const itsaStatusMessages = {
   }
 };
 
-async function getItsaStatus(nino, taxYear, req) {
-  const response = await saIndividualDetailsRepo.fetchItsaStatus(nino, taxYear, req);
-
-  // Extract status and statusReason
-	const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
-	const status = statusDetails?.status || null;
-	//const statusReason = statusDetails?.statusReason || null;
-
-	// Set session data
-	req.session.user.nino = nino;
-	req.session.user.itsaStatus = status;
-	//req.session.user.itsaStatusReason = statusReason;
+async function getItsaStatus({nino, taxYear, session}) {
+  const response = await saIndividualDetailsRepo.fetchItsaStatus({nino, taxYear, session});
 
   return response;
 }
 
-async function getMtdEligible(nino, taxYear, req) {
-  const response = await getItsaStatus(nino, taxYear, req);
+async function getMtdEligible({nino, taxYear, session}) {
+  const response = await getItsaStatus({nino, taxYear, session});
   const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
   const status = statusDetails?.status || null;
 

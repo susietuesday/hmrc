@@ -30,18 +30,14 @@ async function getApplicationRestrictedToken() {
   return tokenResponse.token.access_token;
 }
 
-async function getUserRestrictedToken(req) {
-  const tokenData = req.session.oauth2Token;
-
-  if (!tokenData) {
-    req.session.caller = '/userCall';
+async function getUserRestrictedToken(oauth2Token) {
+  if (!oauth2Token) {
     throw new Error('User is not logged in');
   }
 
-  const accessToken = client.createToken(tokenData);
+  const accessToken = client.createToken(oauth2Token);
 
   if (accessToken.expired()) {
-    req.session.oauth2Token = null;
     throw new Error('User access token has expired');
   }
 
@@ -119,30 +115,30 @@ const callApi = async ({
   }
 };
 
-function getFraudPreventionHeaders(req) {
+function getFraudPreventionHeaders(session) {
   const encode = encodeURIComponent;
-  const s = req.session.screenInfo || {};
+  const s = session.screenInfo || {};
 
   const headers = {
     'Gov-Client-Connection-Method': GOV_CLIENT_CONNECTION_METHOD,
-    'Gov-Client-Browser-JS-User-Agent': req.session.jsUserAgent || 'Unknown',
-    'Gov-Client-Device-ID': req.session.deviceId || 'Unknown',
-    ...(req.session.clientIp ? { 'Gov-Client-Public-IP': req.session.clientIp } : {}),
-    ...(req.session.clientIpTimestamp ? { 'Gov-Client-Public-IP-Timestamp': req.session.clientIpTimestamp } : {}),
-    ...(req.session.clientPort ? { 'Gov-Client-Public-Port': req.session.clientPort.toString() } : {}),
-    'Gov-Client-Timezone': req.session.timezone || 'UTC',
-    'Gov-Client-User-IDs': 'nino=' + req.session.user.nino,
+    'Gov-Client-Browser-JS-User-Agent': session.jsUserAgent || 'Unknown',
+    'Gov-Client-Device-ID': session.deviceId || 'Unknown',
+    ...(session.clientIp ? { 'Gov-Client-Public-IP': session.clientIp } : {}),
+    ...(session.clientIpTimestamp ? { 'Gov-Client-Public-IP-Timestamp': session.clientIpTimestamp } : {}),
+    ...(session.clientPort ? { 'Gov-Client-Public-Port': session.clientPort.toString() } : {}),
+    'Gov-Client-Timezone': session.timezone || 'UTC',
+    'Gov-Client-User-IDs': 'nino=' + session.user.nino,
     ...(s.width && s.height && s.scalingFactor && s.colourDepth
       ? {
           'Gov-Client-Screens': `width=${s.width}&height=${s.height}&scaling-factor=${s.scalingFactor}&colour-depth=${s.colourDepth}`
         } 
       : {}),
-    ...(req.session.windowSize && req.session.windowSize.width && req.session.windowSize.height
+    ...(session.windowSize && session.windowSize.width && session.windowSize.height
       ? {
-          'Gov-Client-Window-Size': `width=${req.session.windowSize.width}&height=${req.session.windowSize.height}`
+          'Gov-Client-Window-Size': `width=${session.windowSize.width}&height=${session.windowSize.height}`
         }
       : {}),
-    ...(getVendorForwardedHeader(req) ? { 'Gov-Vendor-Forwarded': getVendorForwardedHeader(req) } : {}),
+    ...(getVendorForwardedHeader(session.clientIp) ? { 'Gov-Vendor-Forwarded': getVendorForwardedHeader(session.clientIp) } : {}),
     ...(DEV_VENDOR_PUBLIC_IP ? { 'Gov-Vendor-Public-IP': DEV_VENDOR_PUBLIC_IP } : {}),
     'Gov-Vendor-Product-Name': `${encode(GOV_VENDOR_PRODUCT_NAME)}`,
     'Gov-Vendor-Public-IP': DEV_VENDOR_PUBLIC_IP,
@@ -152,10 +148,9 @@ function getFraudPreventionHeaders(req) {
   return headers;
 }
 
-function getVendorForwardedHeader(req) {
+function getVendorForwardedHeader(clientIp) {
   const encode = encodeURIComponent;
 
-  const clientIp = req.session.clientIp;
   const serverIp = DEV_VENDOR_PUBLIC_IP;
 
   if (!clientIp || !serverIp) return undefined;

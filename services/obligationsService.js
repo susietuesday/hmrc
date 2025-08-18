@@ -1,6 +1,6 @@
 const obligationsRepo = require('../repositories/obligationsRepo');
 
-async function getIncomeAndExpenditureObligations(nino, req) {
+async function getIncomeAndExpenditureObligations({nino, session}) {
 
   // Build query parameters
   const params = {
@@ -12,7 +12,12 @@ async function getIncomeAndExpenditureObligations(nino, req) {
     //status: ''
   }
 
-  const response = await obligationsRepo.fetchIncomeAndExpenditureObligations(nino, params, req); 
+  const response = await obligationsRepo.fetchIncomeAndExpenditureObligations({
+    nino, 
+    params, 
+    session
+  });
+
   return response;
 }
 

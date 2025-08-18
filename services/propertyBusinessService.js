@@ -1,6 +1,6 @@
 const propertyBusinessRepo = require('../repositories/propertyBusinessRepo.js');
 
-async function createUkPropertyPeriodSummary({ req, nino, businessId, taxYear, body }) {
+async function createUkPropertyPeriodSummary({ nino, businessId, taxYear, session }) {
   const data = {
     "fromDate": "2024-04-06",
     "toDate": "2024-07-05",
@@ -42,11 +42,11 @@ async function createUkPropertyPeriodSummary({ req, nino, businessId, taxYear, b
   }
 
   const response = await propertyBusinessRepo.createUkPropertyPeriodSummary({
-    req,
     nino,
     businessId,
     taxYear,
-    body: data
+    body: data,
+    session
   });
   return response;
 }

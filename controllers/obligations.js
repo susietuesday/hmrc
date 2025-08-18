@@ -7,7 +7,10 @@ const getIncomeAndExpenditureObligations = asyncHandler(async(req, res) => {
     return res.status(400).json({ error: 'Missing NINO in query string' });
   }
 
-  const apiResponse = await obligationsService.getIncomeAndExpenditureObligations(nino, req);
+  const apiResponse = await obligationsService.getIncomeAndExpenditureObligations({
+    nino, 
+    session: req.session
+  });
 
   return res.status(apiResponse.status).json(apiResponse.body);
 })

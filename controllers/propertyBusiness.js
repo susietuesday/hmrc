@@ -10,7 +10,13 @@ const postUkPropertyPeriodSummary = asyncHandler(async (req, res) => {
     return res.status(400).send('NINO is required');
   }
   
-  const apiResponse = await propertyBusinessService.createUkPropertyPeriodSummary(req, nino, businessId, taxYear);
+  const apiResponse = await propertyBusinessService.createUkPropertyPeriodSummary({
+    nino, 
+    businessId, 
+    taxYear,
+    session: req.session
+  });
+
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
