@@ -5,7 +5,6 @@ const utils = require('../utils/utils');
 const saIndividualDetails = require('../services/saIndividualDetailsService');
 const businessDetails = require('../services/businessDetailsService');
 const obligations = require('../services/obligationsService');
-const session = require('express-session');
 
 const runAllStatusChecks = asyncHandler(async(req, res) => {
   const nino = req.query.nino;
