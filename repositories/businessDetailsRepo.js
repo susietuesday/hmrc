@@ -1,4 +1,4 @@
-const utils = require('../utils/utils');
+const apiUtils = require('../utils/apiUtils.js');
 
 const businessDetailsServices = {
   businessDetails: {
@@ -11,10 +11,10 @@ const businessDetailsServices = {
 };
 
 async function fetchBusinessDetailsList({ req, nino }) {
-  const accessToken = await utils.getUserRestrictedToken(req);
+  const accessToken = await apiUtils.getUserRestrictedToken(req);
   const routePath = businessDetailsServices.businessDetails.routes.listByNino(nino);
 
-  const response = await utils.callApi({
+  const response = await apiUtils.callApi({
     method: 'GET',
     serviceName: businessDetailsServices.businessDetails.name,
     serviceVersion: businessDetailsServices.businessDetails.version,

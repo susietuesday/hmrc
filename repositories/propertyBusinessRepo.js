@@ -1,4 +1,4 @@
-const utils = require('../utils/utils');
+const apiUtils = require('../utils/apiUtils.js');
 
 const services = {
   propertyBusiness: {
@@ -14,14 +14,14 @@ async function createUkPropertyPeriodSummary({ req, nino, businessId, taxYear, b
   const fraudHeaders = utils.getFraudPreventionHeaders(req);
   const routePath = services.propertyBusiness.routes.createUkPropertyPeriodSummary(nino, businessId, taxYear)
 
-  const accessToken = await utils.getUserRestrictedToken(req);
+  const accessToken = await apiUtils.getUserRestrictedToken(req);
 
   const extraHeaders = {
     'Gov-Test-Scenario': 'STATEFUL',
     ...fraudHeaders,
   };
 
-  const response = await utils.callApi({
+  const response = await apiUtils.callApi({
     method: 'POST',
     serviceName: services.propertyBusiness.name,
     serviceVersion: services.propertyBusiness.version,

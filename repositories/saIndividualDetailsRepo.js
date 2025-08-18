@@ -1,4 +1,4 @@
-const utils = require('../utils/utils');
+const apiUtils = require('../utils/apiUtils.js');
 
 const services = {
   selfAssessmentIndividualDetails: {
@@ -11,8 +11,8 @@ const services = {
 };
 
 async function fetchItsaStatus(nino, taxYear, req) {
-  const fraudHeaders = utils.getFraudPreventionHeaders(req);
-  const accessToken = await utils.getUserRestrictedToken(req);
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(req);
+  const accessToken = await apiUtils.getUserRestrictedToken(req);
 
   const routePath = services.selfAssessmentIndividualDetails.routes.itsaStatus(nino, taxYear);
 
@@ -21,7 +21,7 @@ async function fetchItsaStatus(nino, taxYear, req) {
     ...fraudHeaders,
   };
 
-  const response = await utils.callApi({
+  const response = await apiUtils.callApi({
     method: 'GET',
     serviceName: services.selfAssessmentIndividualDetails.name,
     serviceVersion: services.selfAssessmentIndividualDetails.version,
