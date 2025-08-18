@@ -16,10 +16,6 @@ const {
 } = require('../config');
 
 const client = new AuthorizationCode(oauthConfig);
-const authorizationUri = client.authorizeURL({
-  redirect_uri: REDIRECT_URI,
-  scope: OAUTH_SCOPE,
-});
 
 async function getApplicationRestrictedToken() {
   const config = {
