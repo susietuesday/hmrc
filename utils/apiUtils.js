@@ -5,7 +5,6 @@ const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
 // Environment variables
 const {
   OAUTH_SCOPE,
-  REDIRECT_URI,
   oauthConfig,
   apiBaseUrl,
   getAcceptHeader,
