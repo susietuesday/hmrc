@@ -2,17 +2,6 @@ const asyncHandler = require('express-async-handler');
 const { getFraudPreventionHeaders } = require('../utils/apiUtils')
 const testSupport = require('../services/testSupportService');
 
-const { 
-  fetchHelloWorld, 
-  fetchHelloApplication, 
-  fetchHelloUser, 
-  fetchServices,
-  createTestUser,
-  createTestItsaStatus,
-  createTestUkPropertyBusiness,
-  validateFraudHeaders
-} = require('../services/testSupportService');
-
 const showDevToolsPage = asyncHandler(async(req, res) => {
   const hello = testSupport.testServices.hello;
 
@@ -25,21 +14,21 @@ const showDevToolsPage = asyncHandler(async(req, res) => {
 });
 
 const getHelloWorld = asyncHandler(async (_req, res) => {
-  const apiResponse = await fetchHelloWorld();
+  const apiResponse = await testSupport.fetchHelloWorld();
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 const getHelloApplication = asyncHandler(async (_req, res) => {
-  const apiResponse = await fetchHelloApplication();
+  const apiResponse = await testSupport.fetchHelloApplication();
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 const getHelloUser = asyncHandler(async (req, res) => {
-  const apiResponse = await fetchHelloUser(req.session.oauth2Token);
+  const apiResponse = await testSupport.fetchHelloUser(req.session.oauth2Token);
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 const getServices = asyncHandler(async (_req, res) => {
-  const apiResponse = await fetchServices();
+  const apiResponse = await testSupport.fetchServices();
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
@@ -56,7 +45,7 @@ const postTestUser = asyncHandler(async (req, res) => {
     //"common-transit-convention-traders-legacy"
   ];
 
-  const apiResponse = await createTestUser({ body: { serviceNames } });
+  const apiResponse = await testSupport.createTestUser({ body: { serviceNames } });
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
@@ -74,7 +63,7 @@ const postTestItsaStatus = asyncHandler(async (req, res) => {
     ]
   };
 
-  const apiResponse = await createTestItsaStatus({nino, taxYear, body, session: req.session});
+  const apiResponse = await testSupport.createTestItsaStatus({nino, taxYear, body, session: req.session});
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
@@ -105,13 +94,13 @@ const postTestUkPropertyBusiness = asyncHandler(async (req, res) => {
     //cessationDate: "2025-04-06"
   };
 
-  const apiResponse = await createTestUkPropertyBusiness({nino, body, session: req.session});
+  const apiResponse = await testSupport.createTestUkPropertyBusiness({nino, body, session: req.session});
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
 const validateFraudPreventionHeaders = asyncHandler(async (req, res) => {
   const fraudHeaders = getFraudPreventionHeaders(req.session);
-  const apiResponse = await validateFraudHeaders(fraudHeaders);
+  const apiResponse = await testSupport.validateFraudHeaders(fraudHeaders);
   return res.status(apiResponse.status).json(apiResponse.body);
 });
 
