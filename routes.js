@@ -12,7 +12,7 @@ const upload = multer({ storage });
 const testSupport = require('./controllers/testSupport.js');
 const csvData = require('./controllers/csvData.js');
 const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
-const { runAllStatusChecks } = require('./controllers/dashboard.js');
+const { showDashboardPage } = require('./controllers/dashboard.js');
 const { getIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
 const { getBusinessList } = require('./controllers/businessDetails.js');
 const { postUkPropertyPeriodSummary, getUkPropertyCumulativeSummary } = require('./controllers/propertyBusiness.js');
@@ -30,7 +30,7 @@ router.post('/test/uk-property-business', requireUser, testSupport.postTestUkPro
 
 // MTD production routes
 router.get('/itsa-status', requireUser, getItsaStatus);
-router.get('/dashboard', requireUser, runAllStatusChecks);
+router.get('/dashboard', requireUser, showDashboardPage);
 router.get('/business-sources', requireUser, getBusinessList);
 router.get('/obligations', requireUser, getIncomeAndExpenditureObligations);
 router.post('/property-income', upload.single('csv'), csvData.uploadCsvIncomeFile);

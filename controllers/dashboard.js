@@ -6,7 +6,7 @@ const businessDetails = require('../services/businessDetailsService');
 const obligations = require('../services/obligationsService');
 const propertyBusiness = require('../services/propertyBusinessService');
 
-const runAllStatusChecks = asyncHandler(async(req, res) => {
+const showDashboardPage = asyncHandler(async(req, res) => {
   const nino = req.query.nino;
 
   // Default tax year to current year
@@ -39,4 +39,4 @@ const runAllStatusChecks = asyncHandler(async(req, res) => {
   });
 });
 
-module.exports = { runAllStatusChecks };
+module.exports = { showDashboardPage };
