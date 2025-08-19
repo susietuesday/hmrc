@@ -17,8 +17,6 @@ const {
 } = require('./middleware.js');
 const { log } = require('./utils/utils.js');
 
-const { testServices } = require('./services/testSupportService.js');
-
 // Environment variables
 const {
   CLIENT_ID,
@@ -96,24 +94,11 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-// Dev tools route
-app.get('/dev-tools', (req, res) => {
-  res.render('dev-tools', {
-    service: `${testServices.hello.name} (v${testServices.hello.version})`,
-    unRestrictedEndpoint: testServices.hello.routes.world,
-    appRestrictedEndpoint: testServices.hello.routes.application,
-    userRestrictedEndpoint: testServices.hello.routes.user
-  });
-});
-
 // Capture fraud prevention headers info
 app.use(captureClientIp);
 app.use(captureClientPort);
 
 app.post('/session-data', express.json(), (req, res) => {
-  //log.info('Headers: ' + JSON.stringify(req.headers));
-  //log.info('Request body:' + JSON.stringify(req.body));
-
   const { screenInfo, windowSize, timezone } = req.body;
 
   req.session.jsUserAgent = req.headers['x-user-agent'];

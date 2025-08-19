@@ -9,6 +9,7 @@ const storage = multer.memoryStorage(); // or diskStorage if you prefer
 const upload = multer({ storage });
 
 // Route handlers
+const devTools = require('./controllers/devTools.js');
 const testSupport = require('./controllers/testSupport.js');
 const csvData = require('./controllers/csvData.js');
 const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
@@ -19,6 +20,7 @@ const { postUkPropertyPeriodSummary, getUkPropertyCumulativeSummary } = require(
 const income = require('./controllers/income.js');
 
 // MTD sandbox routes
+router.get('/dev-tools', devTools.showDevToolsPage);
 router.get('/unrestrictedCall', testSupport.getHelloWorld);
 router.get('/applicationCall', testSupport.getHelloApplication);
 router.get('/userCall', requireUser, testSupport.getHelloUser);
