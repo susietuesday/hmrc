@@ -10,7 +10,6 @@ const upload = multer({ storage });
 
 // Route handlers
 const devTools = require('./controllers/devTools.js');
-const testSupport = require('./controllers/testSupport.js');
 const csvData = require('./controllers/csvData.js');
 const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
 const { showDashboardPage } = require('./controllers/dashboard.js');
@@ -19,16 +18,16 @@ const { getBusinessList } = require('./controllers/businessDetails.js');
 const { postUkPropertyPeriodSummary, getUkPropertyCumulativeSummary } = require('./controllers/propertyBusiness.js');
 const income = require('./controllers/income.js');
 
-// MTD sandbox routes
+// Dev tools routes
 router.get('/dev-tools', devTools.showDevToolsPage);
-router.get('/unrestrictedCall', testSupport.getHelloWorld);
-router.get('/applicationCall', testSupport.getHelloApplication);
-router.get('/userCall', requireUser, testSupport.getHelloUser);
-router.get('/fraud-headers', testSupport.validateFraudPreventionHeaders);
-router.get('/services', testSupport.getServices);
-router.post('/test-users', testSupport.postTestUser);
-router.post('/itsa-status', requireUser, testSupport.postTestItsaStatus);
-router.post('/test/uk-property-business', requireUser, testSupport.postTestUkPropertyBusiness);
+router.get('/unrestrictedCall', devTools.getHelloWorld);
+router.get('/applicationCall', devTools.getHelloApplication);
+router.get('/userCall', requireUser, devTools.getHelloUser);
+router.get('/fraud-headers', devTools.validateFraudPreventionHeaders);
+router.get('/services', devTools.getServices);
+router.post('/test-users', devTools.postTestUser);
+router.post('/itsa-status', requireUser, devTools.postTestItsaStatus);
+router.post('/test/uk-property-business', requireUser, devTools.postTestUkPropertyBusiness);
 
 // MTD production routes
 router.get('/itsa-status', requireUser, getItsaStatus);
