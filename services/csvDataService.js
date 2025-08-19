@@ -19,6 +19,21 @@ async function processCsvIncomeFile(fileBuffer) {
   };
 };
 
+async function processCsvExpensesFile(fileBuffer) {
+
+  // Parsing logic
+  const requiredColumns = ['Payment Date', 'Amount'];
+  const results = await parseCsvBuffer(fileBuffer, requiredColumns);
+
+  // Calculate total amount
+  const periodAmount = calculateTotalAmount(results, 'Amount');
+
+  return {
+    results,
+    periodAmount
+  };
+};
+
 function calculateTotalAmount(rows, amountColumn = 'Amount') {
   const totalPence = rows.reduce((sum, row) => {
     return sum + utils.parseCurrencyToPence(row?.[amountColumn]);
@@ -30,5 +45,6 @@ function calculateTotalAmount(rows, amountColumn = 'Amount') {
 }
 
 module.exports = {
-  processCsvIncomeFile
+  processCsvIncomeFile,
+  processCsvExpensesFile
 };
