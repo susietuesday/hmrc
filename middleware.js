@@ -15,9 +15,15 @@ const authorizationUri = client.authorizeURL({
 });
 
 function initSessionUser(req, res, next) {
+  // Initialize session user object if it doesn't exist
   if (!req.session.user) {
     req.session.user = {};
+    req.session.user.summary = {};
+    req.session.user.summary.ukProperty = {};
+    req.session.user.summary.ukProperty.income = {};
+    req.session.user.summary.ukProperty.expenses = {};
   }
+  
   next();
 }
 
