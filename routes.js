@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 // Middleware and utility functions
-const { requireUser } = require('./middleware.js');
+const { requireUser, attachContext } = require('./middleware.js');
+router.use(attachContext);
 
 const multer = require('multer');
 const storage = multer.memoryStorage(); // or diskStorage if you prefer

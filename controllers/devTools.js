@@ -27,6 +27,7 @@ const getHelloUser = asyncHandler(async (req, res) => {
   const apiResponse = await testSupport.fetchHelloUser(req.session.oauth2Token);
   return res.status(apiResponse.status).json(apiResponse.body);
 });
+
 const getServices = asyncHandler(async (_req, res) => {
   const apiResponse = await testSupport.fetchServices();
   return res.status(apiResponse.status).json(apiResponse.body);
@@ -99,7 +100,7 @@ const postTestUkPropertyBusiness = asyncHandler(async (req, res) => {
 });
 
 const validateFraudPreventionHeaders = asyncHandler(async (req, res) => {
-  const fraudHeaders = getFraudPreventionHeaders(req.session);
+  const fraudHeaders = getFraudPreventionHeaders(req.context);
   const apiResponse = await testSupport.validateFraudHeaders(fraudHeaders);
   return res.status(apiResponse.status).json(apiResponse.body);
 });

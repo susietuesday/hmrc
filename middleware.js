@@ -21,6 +21,25 @@ function initSessionUser(req, res, next) {
   next();
 }
 
+// middleware/context.js
+function attachContext(req, res, next) {
+  req.context = {
+    screenInfo: req.session.screenInfo,
+    windowSize: req.session.windowSize,
+    jsUserAgent: req.session.jsUserAgent,
+    deviceId: req.session.deviceId,
+    clientIp: req.session.clientIp,
+    clientIpTimestamp: req.session.clientIpTimestamp,
+    clientPort: req.session.clientPort,
+    timezone: req.session.timezone,
+    user: {
+      nino: req.session.user?.nino
+    },
+    accessToken: req.accessToken
+  };
+  next();
+}
+
 function captureClientIp (req, res, next) {
   const ip = req.ip;
 
@@ -96,6 +115,7 @@ function errorHandler(err, req, res, next) {
 
 module.exports = {
   initSessionUser,
+  attachContext,
   captureClientIp,
   captureClientPort,
   requireUser,
