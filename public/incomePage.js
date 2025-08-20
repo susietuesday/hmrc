@@ -71,6 +71,7 @@ function uploadIncome() {
     const json = await res.json();
 
     document.getElementById('incomeUploadStatus').textContent = 'Upload successful!';
+    continueBtn.disabled = false;
 
     // Display the transaction rows
     const previewDiv = document.getElementById('incomeCsvPreview');
