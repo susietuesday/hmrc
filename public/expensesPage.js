@@ -30,6 +30,7 @@ function uploadExpenses() {
     const json = await res.json();
 
     document.getElementById('expensesUploadStatus').textContent = 'Upload successful!';
+    continueBtn.disabled = false;
 
     // Display the transaction rows
     const previewDiv = document.getElementById('expensesCsvPreview');
