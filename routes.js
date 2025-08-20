@@ -18,6 +18,7 @@ const { getIncomeAndExpenditureObligations } = require('./controllers/obligation
 const { getBusinessList } = require('./controllers/businessDetails.js');
 const { postUkPropertyPeriodSummary, getUkPropertyCumulativeSummary } = require('./controllers/propertyBusiness.js');
 const income = require('./controllers/income.js');
+const expenses = require('./controllers/expenses.js');
 
 // Dev tools routes
 router.get('/dev-tools', devTools.showDevToolsPage);
@@ -40,6 +41,7 @@ router.post('/property-expenses', upload.single('csv'), csvData.uploadCsvExpense
 router.post('/periodic-summary', requireUser, postUkPropertyPeriodSummary);
 router.get('/cumulative-summary', requireUser, getUkPropertyCumulativeSummary);
 router.get('/income', income.showIncomePage);
+router.get('/expenses', expenses.showExpensesPage);
 
 router.post('/upload', upload.single('csvFile'), csvData.uploadCsvIncomeFile);
 
