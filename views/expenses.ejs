@@ -19,5 +19,14 @@
 
 <button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
 
+<script>
+  const continueBtn = document.getElementById('continueBtn');
+
+  continueBtn.addEventListener('click', () => {
+    // Navigate to /summary
+    window.location.href = '/summary';
+  });
+</script>
+
 <script src="utils.js"></script>
 <script src="expensesPage.js"></script>
