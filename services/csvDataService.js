@@ -26,11 +26,11 @@ async function processCsvExpensesFile(fileBuffer) {
   const results = await parseCsvBuffer(fileBuffer, requiredColumns);
 
   // Calculate total amount
-  const periodAmount = calculateTotalAmount(results, 'Amount');
+  const consolidatedExpenses = calculateTotalAmount(results, 'Amount');
 
   return {
     results,
-    periodAmount
+    consolidatedExpenses
   };
 };
 
