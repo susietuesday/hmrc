@@ -125,3 +125,37 @@
     </div>
   </div>
 </div>
+
+<div class="alert alert-info mt-3" role="alert">
+  <h5 class="alert-heading mb-2">Submit an interim update</h5>
+  <p class="mb-2">
+    You can submit an interim update for this obligation period.
+  </p>
+  <p class="mb-2">
+    Choose an <strong>Update to</strong> date; your totals should include all transactions up to that date.
+  </p>
+  <p class="mb-0">
+    You can submit again later, up to the obligation end date, with updated figures.
+  </p>
+</div>
+
+<label for="toDate" class="form-label">Update to (inclusive)</label>
+<input
+  type="date"
+  id="toDate"
+  name="toDate"
+  class="form-control"
+  min="<%= fromDate %>"
+  max="<%= defaultToDate %>"
+  value="<%= new Date().toISOString().split('T')[0] %>" />
+<p class="text-secondary mt-1">
+  Your update will cover <strong><%= fromDate %></strong> to
+  <strong id="toDateLabel"><%= toDate %></strong>.
+</p>
+
+<script>
+  const toDateInput = document.getElementById('toDate');
+  const lbl = document.getElementById('toDateLabel');
+  toDateInput.addEventListener('input', () => lbl.textContent = toDateInput.value);
+</script>
+
