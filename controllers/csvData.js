@@ -8,12 +8,12 @@ const uploadCsvIncomeFile = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
-  const { results, totalAmount } = await processCsvIncomeFile(req.file.buffer);
+  const { results, periodAmount } = await processCsvIncomeFile(req.file.buffer);
 
   // Save cumulative totals to session
   req.session.user.summary.fromDate = utils.getCurrentTaxYearStart();
   req.session.user.summary.toDate = utils.getTodayDate();
-  req.session.user.summary.ukProperty.income.periodAmount = totalAmount;
+  req.session.user.summary.ukProperty.income.periodAmount = periodAmount;
 
   res.json({
     message: 'CSV parsed successfully',
