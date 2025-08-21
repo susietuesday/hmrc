@@ -11,8 +11,6 @@ const uploadCsvIncomeFile = asyncHandler(async (req, res) => {
   const { results, periodAmount } = await processCsvIncomeFile(req.file.buffer);
 
   // Save cumulative totals to session
-  req.session.user.summary.fromDate = utils.getCurrentTaxYearStart();
-  req.session.user.summary.toDate = utils.getTodayDate();
   req.session.user.summary.ukProperty.income.periodAmount = periodAmount;
 
   res.json({
