@@ -1,0 +1,127 @@
+<h2>Summary of Your Property Income & Expenses</h2>
+
+<div class="col-md-6">
+  <div class="card mt-3">
+    <div class="card-header bg-dark text-white">Income</div>
+    <div class="card-body">
+        <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>Total rents</th>
+            <td>
+              £<%= (income.periodAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Other income</th>
+            <td>
+              £<%= (income.otherIncome || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Rent a room</th>
+            <td>
+              £<%= (income.rentARoom?.rentsReceived || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Tax deducted</th>
+            <td>
+              £<%= (income.taxDeducted || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Premiums for the grant of a lease</th>
+            <td>
+              £<%= (income.premiumsOfLeaseGrant || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Reverse premiums and inducements</th>
+            <td>
+              £<%= (income.reversePremiums || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-6">
+  <div class="card mt-3">
+    <div class="card-header bg-dark text-white">Expenses</div>
+    <div class="card-body">
+        <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>Rent, rates, insurance and ground rents</th>
+            <td>
+              £<%= (expenses.premisesRunningCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Property repairs and maintenance</th>
+            <td>
+              £<%= (expenses.repairsAndMaintenance || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Non-residential property finance costs</th>
+            <td>
+              £<%= (expenses.financialCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Legal, management and other professional fees</th>
+            <td>
+              £<%= (expenses.professionalFees || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Costs of services provided, including wages</th>
+            <td>
+              £<%= (expenses.costOfServices || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Other allowable property expenses</th>
+            <td>
+              £<%= (expenses.other || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Travel costs</th>
+            <td>
+              £<%= (expenses.travelCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Rent a Room exempt amount</th>
+            <td>
+              £<%= (expenses.rentARoom?.amountClaimed || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Residential property finance costs</th>
+            <td>
+              £<%= (expenses.residentialFinancialCost || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Unused residential property finance costs brought forward</th>
+            <td>
+              £<%= (expenses.residentialFinancialCostsCarriedForward || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+          <tr>
+            <th>Consolidated expenses</th>
+            <td>
+              £<%= (expenses.consolidatedExpenses || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
