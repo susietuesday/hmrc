@@ -97,10 +97,17 @@ function parseCurrencyToPence(value) {
   return negative ? -pence : pence;
 }
 
+function addDays(date, days) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
 module.exports = { 
   log,
   getCurrentTaxYear,
   getCurrentTaxYearStart,
   getTodayDate,
-  parseCurrencyToPence
+  parseCurrencyToPence,
+  addDays
 };
