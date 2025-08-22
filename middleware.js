@@ -41,6 +41,7 @@ function attachContext(req, res, next) {
     user: {
       nino: req.session.user?.nino
     },
+    oauth2Token: req.session.oauth2Token,
     accessToken: req.accessToken
   };
   next();
