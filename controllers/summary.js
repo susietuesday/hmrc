@@ -32,7 +32,10 @@ const submitSummary = asyncHandler(async(req, res) => {
     context: req.context
   });
 
-  return res.status(apiResponse.status).json(apiResponse.body);
+  const correlationId = apiResponse.headers?.['x-correlationid'] || null;
+  req.session.user.summary.correlationId = correlationId;
+
+  return res.redirect('/confirmation');
 });
 
 module.exports = { 
