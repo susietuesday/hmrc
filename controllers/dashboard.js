@@ -17,11 +17,13 @@ const showDashboardPage = asyncHandler(async(req, res) => {
 
   // Get UK property business ID
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, session: req.session});
-  // Set UK property business ID in session
-  req.session.user.ukPropertyBusinessId = businessId;
 
   // Get obligations
   const obligationsData = await obligations.getIncomeAndExpenditureObligations({nino, session: req.session});
+  
+  // Set session details
+  req.session.user.nino = nino;
+  req.session.user.ukPropertyBusinessId = businessId;
 
   // Get a UK property cumulative summary
   const cumulativeData = await propertyBusiness.getUkPropertyCumulativeSummary({
