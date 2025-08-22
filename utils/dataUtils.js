@@ -24,6 +24,20 @@ async function parseCsvBuffer(buffer, requiredColumns) {
   return results;
 }
 
+// Helper to include a property only if the value is defined
+function optionalProp(value, key) {
+  if (value === undefined || value === null) return {};
+  return { [key]: value };
+}
+
+// Helper for nested objects
+function optionalNested(valueObj, key) {
+  if (!valueObj || Object.keys(valueObj).length === 0) return {};
+  return { [key]: valueObj };
+}
+
 module.exports = { 
-  parseCsvBuffer
+  parseCsvBuffer,
+  optionalProp,
+  optionalNested
 };
