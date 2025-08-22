@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const utils = require('../utils/utils');
+const propertyBusinessService = require('../services/propertyBusinessService.js');
 
 const showSummaryPage = asyncHandler(async(req, res) => {
   const summary = req.session.user.summary.ukProperty;
@@ -18,4 +19,23 @@ const showSummaryPage = asyncHandler(async(req, res) => {
   });
 });
 
-module.exports = { showSummaryPage };
+const submitSummary = asyncHandler(async(req, res) => {
+  const nino = req.session.user.nino;
+  const businessId = req.session.user.ukPropertyBusinessId;
+  const taxYear = utils.getCurrentTaxYear();
+
+  const apiResponse = await propertyBusinessService.createUkPropertyCumulativeSummary({
+    nino,
+    businessId,
+    taxYear,
+    body: req.session.user.summary,
+    context: req.context
+  });
+
+  return res.status(apiResponse.status).json(apiResponse.body);
+});
+
+module.exports = { 
+  showSummaryPage,
+  submitSummary
+};
