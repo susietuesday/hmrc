@@ -21,7 +21,6 @@ const income = require('./controllers/income.js');
 const expenses = require('./controllers/expenses.js');
 const summary = require('./controllers/summary.js');
 const confirmation = require('./controllers/confirmation.js');
-const { getObligations } = require('./services/obligationsService.js');
 
 // Dev tools routes
 router.get('/dev-tools', devTools.showDevToolsPage);
