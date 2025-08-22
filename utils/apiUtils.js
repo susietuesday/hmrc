@@ -98,9 +98,11 @@ const callApi = async ({
     }
 
     log.info('✅ Success:', response.data);
+    log.info('API response headers:', response.headers);
 
     return {
       status: response.status,
+      headers: response.headers,
       body: response.data
     };
 
