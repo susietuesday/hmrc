@@ -1,13 +1,26 @@
-<h1>Making Tax Digital for UK Property Income</h1>
+<!-- Hero Section -->
+<section class="bg-light py-5">
+  <div class="container d-flex justify-content-center">
+    <div class="card shadow-sm p-4 p-md-5 text-center" style="max-width: 600px; width: 100%;">
+      <h1 class="display-4 fw-bold mb-3">Making Tax Digital, Simplified</h1>
+      <p class="lead mb-2">
+        Keep using your spreadsheets while staying fully compliant with HMRC.
+      </p>
+      <p class="lead mb-4">
+        Automatically submit rental income and expenses directly to HMRC: securely, accurately, and effortlessly.
+      </p>
 
-<p class="fs-4 text-secondary mb-4">
-    Submit your quarterly UK property income and expenses to HMRC in minutes.
-</p>
+      <!-- Eligibility Form -->
+      <form action="/dashboard" method="GET" class="d-flex justify-content-center gap-2 flex-wrap">
+        <input type="text" name="nino" id="nino" placeholder="National Insurance Number" class="form-control" required style="max-width: 250px;">
+        <button type="submit" class="btn btn-primary btn-lg">Continue</button>
+      </form>
 
-<h2>Check your eligibility</h2>
-
-<form action="/dashboard" method="GET">
-    <label for="nino">National Insurance Number:</label>
-    <input type="text" name="nino" id="nino" required>
-    <button type="submit">Continue</button>
-</form>
+      <!-- Login Information / Reassurance -->
+      <p class="text-muted small mb-0">
+        After you click "Continue", you'll be redirected to HMRC to log in and grant permission. <br>
+        We do not store any personal information or HMRC login details, and your data remains secure.
+      </p>
+    </div>
+  </div>
+</section>
