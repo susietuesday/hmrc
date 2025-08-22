@@ -6,6 +6,7 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const OAUTH_SCOPE = process.env.SCOPE;
 const REDIRECT_URI = process.env.REDIRECT_URI;
+const REDIS_URL = process.env.REDIS_URL;
 const API_BASE_URL_SANDBOX = process.env.API_BASE_URL_SANDBOX;
 const API_BASE_URL_PRODUCTION = process.env.API_BASE_URL_PRODUCTION;
 const useSandbox = process.env.USE_SANDBOX;
@@ -41,6 +42,7 @@ module.exports = {
   CLIENT_SECRET,
   OAUTH_SCOPE,
   REDIRECT_URI,
+  REDIS_URL,
   apiBaseUrl,
   oauthConfig,
   getAcceptHeader,

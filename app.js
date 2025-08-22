@@ -22,12 +22,15 @@ const {
   CLIENT_ID,
   CLIENT_SECRET,
   REDIRECT_URI,
+  REDIS_URL,
   oauthConfig
 } = require('./config');
 
 // Create Redis client and session store
 const RedisStore = connectRedis(session);
-const redisClient = new Redis();  // auto-connect
+
+// Get Redis url from environment variable
+const redisClient = new Redis(REDIS_URL);  // auto-connect
 
 redisClient.on('error', (err) => {
   console.error('Redis Client Error', err);
