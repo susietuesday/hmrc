@@ -1,6 +1,6 @@
 const obligationsRepo = require('../repositories/obligationsRepo');
 
-async function getIncomeAndExpenditureObligations({nino, session}) {
+async function getObligations({nino, session}) {
 
   // Build query parameters
   const params = {
@@ -12,7 +12,7 @@ async function getIncomeAndExpenditureObligations({nino, session}) {
     //status: ''
   }
 
-  const response = await obligationsRepo.fetchIncomeAndExpenditureObligations({
+  const response = await obligationsRepo.fetchObligations({
     nino, 
     params, 
     session
@@ -22,5 +22,5 @@ async function getIncomeAndExpenditureObligations({nino, session}) {
 }
 
 module.exports = {
-  getIncomeAndExpenditureObligations,
+  getObligations,
 };

@@ -12,7 +12,7 @@ const services = {
   }
 };
 
-async function fetchIncomeAndExpenditureObligations({nino, params, session}) {
+async function fetchObligations({nino, params, session}) {
   const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
   const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
 
@@ -37,5 +37,5 @@ async function fetchIncomeAndExpenditureObligations({nino, params, session}) {
 }
 
 module.exports = {
-  fetchIncomeAndExpenditureObligations,
+  fetchObligations,
 };

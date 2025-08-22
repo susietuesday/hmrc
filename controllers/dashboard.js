@@ -19,7 +19,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, session: req.session});
 
   // Get obligations
-  const obligationsData = await obligations.getIncomeAndExpenditureObligations({nino, session: req.session});
+  const obligationsData = await obligations.getObligations({nino, session: req.session});
   
   // Set session details
   req.session.user.nino = nino;

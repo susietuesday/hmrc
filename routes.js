@@ -14,13 +14,14 @@ const devTools = require('./controllers/devTools.js');
 const csvData = require('./controllers/csvData.js');
 const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
 const { showDashboardPage } = require('./controllers/dashboard.js');
-const { getIncomeAndExpenditureObligations } = require('./controllers/obligations.js');
+const { getObligations } = require('./controllers/obligations.js');
 const { getBusinessList } = require('./controllers/businessDetails.js');
 const { postUkPropertyPeriodSummary, getUkPropertyCumulativeSummary } = require('./controllers/propertyBusiness.js');
 const income = require('./controllers/income.js');
 const expenses = require('./controllers/expenses.js');
 const summary = require('./controllers/summary.js');
 const confirmation = require('./controllers/confirmation.js');
+const { getObligations } = require('./services/obligationsService.js');
 
 // Dev tools routes
 router.get('/dev-tools', devTools.showDevToolsPage);
@@ -37,7 +38,7 @@ router.post('/test/uk-property-business', requireUser, devTools.postTestUkProper
 router.get('/itsa-status', requireUser, getItsaStatus);
 router.get('/dashboard', requireUser, showDashboardPage);
 router.get('/business-sources', requireUser, getBusinessList);
-router.get('/obligations', requireUser, getIncomeAndExpenditureObligations);
+router.get('/obligations', requireUser, getObligations);
 router.post('/property-income', upload.single('csv'), csvData.uploadCsvIncomeFile);
 router.post('/property-expenses', upload.single('csv'), csvData.uploadCsvExpensesFile);
 router.post('/periodic-summary', requireUser, postUkPropertyPeriodSummary);

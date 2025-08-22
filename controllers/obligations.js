@@ -1,13 +1,13 @@
 const asyncHandler = require('express-async-handler');
 const obligationsService = require('../services/obligationsService');
 
-const getIncomeAndExpenditureObligations = asyncHandler(async(req, res) => {
+const getObligations = asyncHandler(async(req, res) => {
   const nino = req.query.nino;
   if (!nino) {
     return res.status(400).json({ error: 'Missing NINO in query string' });
   }
 
-  const apiResponse = await obligationsService.getIncomeAndExpenditureObligations({
+  const apiResponse = await obligationsService.getObligations({
     nino, 
     session: req.session
   });
@@ -16,5 +16,5 @@ const getIncomeAndExpenditureObligations = asyncHandler(async(req, res) => {
 })
 
 module.exports = { 
-  getIncomeAndExpenditureObligations
+  getObligations
 };
