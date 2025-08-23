@@ -9,18 +9,15 @@
       <div class="alert alert-info">
         <ul class="mb-0">
           <li><strong>Works with any spreadsheet</strong> (Excel, Google Sheets, Numbers, etc.).</li>
-          <li>Just <strong>download/export as .csv</strong> and upload the file below.</li>
+          <li>Just <strong>download</strong> or <strong>export</strong> the relevant sheet as a <strong>.csv file</strong> and upload the file below.</li>
           <li>Your table can include <strong>any columns</strong>, but you <strong>must</strong> have <code>Date</code> and <code>Amount</code> columns.</li>
           <li>Include <strong>all transactions for the current tax year</strong> — even if you've sent some previously.</li>
           <li>We'll ignore all other columns and any extra data.</li>
           <li>We'll automatically summarise your transactions.</li>
+          <li>After upload, we'll check your file and confirm everything looks correct before sending to HMRC.</li>
           <li><strong>We only use this data for your tax submission</strong> — it is not saved and never shared with anyone else.</li>
         </ul>
       </div>
-
-      <p class="small text-muted mt-3">
-        After upload, we'll check your file and confirm everything looks correct before sending to HMRC.
-      </p>
 
       <details class="mt-3">
         <summary class="text-muted">See a minimal example CSV</summary>
@@ -36,14 +33,13 @@
       <!-- Income Panel -->
       <div class="card mt-4">
         <div class="card-header bg-dark text-white">
-          Upload Property Income
+          Upload your UK property income transactions
         </div>
         <div class="card-body">
           <div class="mb-3">
-            <label for="incomeCsvFile" class="form-label">Upload Transactions CSV</label>
             <input class="form-control" type="file" id="incomeCsvFile" accept=".csv">
             <div class="form-text">
-              Make sure your file contains <code>Date</code> and <code>Amount</code> columns. Other columns are optional and will be ignored.
+              Make sure your file contains <code>Date</code> and <code>Amount</code> columns.
             </div>            </div>
           <button id="uploadIncomeBtn" class="btn btn-primary">Upload CSV</button>
 
