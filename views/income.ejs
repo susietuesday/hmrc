@@ -1,33 +1,70 @@
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
 
-<!-- Income Panel -->
-<div class="col-md-6">
-  <div class="card">
-    <div class="card-header bg-dark text-white">
-      Upload Property Income
-    </div>
-    <div class="card-body">
-      <div class="mb-3">
-        <label for="incomeCsvFile" class="form-label">Upload Transactions CSV</label>
-        <input class="form-control" type="file" id="incomeCsvFile" accept=".csv">
+      <h2 class="mb-3">Upload your property income</h2>
+      <p class="text-muted">
+        Export your UK property income transactions from any spreadsheet and upload them here as a <strong>.csv</strong> file.
+      </p>
+
+      <div class="alert alert-info">
+        <ul class="mb-0">
+          <li><strong>Works with any spreadsheet</strong> (Excel, Google Sheets, Numbers, etc.).</li>
+          <li>Just <strong>download/export as .csv</strong> and upload the file below.</li>
+          <li>Your table can include <strong>any columns</strong>, but you <strong>must</strong> have <code>Date</code> and <code>Amount</code> columns.</li>
+          <li>Include <strong>all transactions for the current tax year</strong> — even if you've sent some previously.</li>
+          <li>We'll ignore all other columns and any extra data.</li>
+          <li>We'll automatically summarise your transactions.</li>
+          <li><strong>We only use this data for your tax submission</strong> — it is not saved and never shared with anyone else.</li>
+        </ul>
       </div>
-      <button id="uploadIncomeBtn" class="btn btn-primary">Upload CSV</button>
 
-      <div id="incomeUploadStatus" class="mt-3"></div>
-      <div id="incomeCsvPreview" class="mt-3"></div>
+      <p class="small text-muted mt-3">
+        After upload, we'll check your file and confirm everything looks correct before sending to HMRC.
+      </p>
+
+      <details class="mt-3">
+        <summary class="text-muted">See a minimal example CSV</summary>
+        <pre class="bg-light p-3 rounded mt-2 mb-0"><code>Date,Amount,Description
+2025-04-10,750,"April rent"
+2025-05-10,750,"May rent"
+</code></pre>
+        <p class="small text-muted mt-2 mb-0">
+          Column names don't have to be in this order, but they must include <code>Date</code> and <code>Amount</code>.
+        </p>
+      </details>
+
+      <!-- Income Panel -->
+      <div class="card mt-4">
+        <div class="card-header bg-dark text-white">
+          Upload Property Income
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="incomeCsvFile" class="form-label">Upload Transactions CSV</label>
+            <input class="form-control" type="file" id="incomeCsvFile" accept=".csv">
+            <div class="form-text">
+              Make sure your file contains <code>Date</code> and <code>Amount</code> columns. Other columns are optional and will be ignored.
+            </div>            </div>
+          <button id="uploadIncomeBtn" class="btn btn-primary">Upload CSV</button>
+
+          <div id="incomeUploadStatus" class="mt-3"></div>
+          <div id="incomeCsvPreview" class="mt-3"></div>
+        </div>
+      </div>
+
+      <button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
+
+      <script>
+        const continueBtn = document.getElementById('continueBtn');
+
+        continueBtn.addEventListener('click', () => {
+          // Navigate to /expenses
+          window.location.href = '/expenses';
+        });
+      </script>
     </div>
   </div>
-</div>
 
-<button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
-
-<script>
-  const continueBtn = document.getElementById('continueBtn');
-
-  continueBtn.addEventListener('click', () => {
-    // Navigate to /expenses
-    window.location.href = '/expenses';
-  });
-</script>
 
 <script src="utils.js"></script>
 <script src="incomePage.js"></script>
