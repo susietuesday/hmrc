@@ -7,7 +7,7 @@ const utils = require('../utils/utils.js');
 async function processCsvIncomeFile(fileBuffer) {
 
   // Parsing logic
-  const requiredColumns = ['Date Received', 'Amount'];
+  const requiredColumns = ['Date', 'Amount'];
   const results = await parseCsvBuffer(fileBuffer, requiredColumns);
 
   // Calculate total amount
