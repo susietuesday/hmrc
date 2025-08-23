@@ -10,6 +10,7 @@ const storage = multer.memoryStorage(); // or diskStorage if you prefer
 const upload = multer({ storage });
 
 // Route handlers
+const home = require('./controllers/home.js');
 const devTools = require('./controllers/devTools.js');
 const csvData = require('./controllers/csvData.js');
 const { getItsaStatus } = require('./controllers/saIndividualDetails.js');
@@ -34,6 +35,7 @@ router.post('/itsa-status', requireUser, devTools.postTestItsaStatus);
 router.post('/test/uk-property-business', requireUser, devTools.postTestUkPropertyBusiness);
 
 // MTD production routes
+router.post('/nino', home.validateNino);
 router.get('/itsa-status', requireUser, getItsaStatus);
 router.get('/dashboard', requireUser, showDashboardPage);
 router.get('/business-sources', requireUser, getBusinessList);
