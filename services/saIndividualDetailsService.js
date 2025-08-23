@@ -89,11 +89,22 @@ async function getItsaStatus({nino, taxYear, session}) {
 
 async function getMtdEligible({nino, taxYear, session}) {
   const response = await getItsaStatus({nino, taxYear, session});
+
+  //Check response status
+  if (response.status !== 200) {
+    if (response.body.code === 'FORMAT_NINO') {
+      throw new Error('Invalid National Insurance number format. Please check and try again.');
+    }
+    else {
+      throw new Error(`Failed to fetch ITSA status: ${response.status}`);
+    }
+  };
+
   const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
   const status = statusDetails?.status || null;
 
   return status === 'MTD Mandated' || itsaStatus === 'MTD Voluntary';
-}
+};
 
 function getItsaUserMessage(status, reason) {
   const messagesByReason = itsaStatusMessages[status];
