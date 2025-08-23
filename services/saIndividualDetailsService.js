@@ -97,7 +97,7 @@ async function getMtdEligible({nino, taxYear, session}) {
         throw new Error('Invalid National Insurance number format. Please check and try again.');
       }
       case 'CLIENT_OR_AGENT_NOT_AUTHORISED':{
-        throw new Error('This National Insurance number is not authorised for your account.');
+        throw new Error('The National Insurance number you entered does not match your HMRC account. Please try again.');
       }
     default: {
       throw new Error(`Failed to fetch ITSA status: ${response.status}`);
