@@ -103,11 +103,42 @@ function addDays(date, days) {
   return result;
 }
 
+function validateNino(nino) {
+  if (!nino) return false;
+
+  // Normalize input: remove spaces and uppercase
+  const normalized = nino.replace(/\s+/g, '').toUpperCase();
+
+  // Must be exactly 9 characters
+  if (normalized.length !== 9) return false;
+
+  const firstChar = normalized[0];
+  const secondChar = normalized[1];
+  const digits = normalized.slice(2, 8);
+  const lastChar = normalized[8];
+
+  // First character must not be D, F, I, Q, U, V
+  if (/[DFIQUV]/.test(firstChar)) return false;
+
+  // Second character must not be D, F, I, O, Q, U, V
+  if (/[DFIOQUV]/.test(secondChar)) return false;
+
+  // Characters 3-8 must be numeric
+  if (!/^\d{6}$/.test(digits)) return false;
+
+  // Last character must be A, B, C, D or space
+  if (!/[ABCD ]/.test(lastChar)) return false;
+
+  // Passed all checks
+  return true;
+}
+
 module.exports = { 
   log,
   getCurrentTaxYear,
   getCurrentTaxYearStart,
   getTodayDate,
   parseCurrencyToPence,
-  addDays
+  addDays,
+  validateNino
 };
