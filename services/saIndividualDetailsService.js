@@ -99,6 +99,9 @@ async function getMtdEligible({nino, taxYear, session}) {
       case 'CLIENT_OR_AGENT_NOT_AUTHORISED':{
         throw new Error('The National Insurance number you entered does not match your HMRC account. Please try again.');
       }
+      case 'MATCHING_RESOURCE_NOT_FOUND':{
+        throw new Error('No records found for the provided National Insurance number and tax year. Please check and try again.');
+      }
     default: {
       throw new Error(`Failed to fetch ITSA status: ${response.status}`);
     }};
