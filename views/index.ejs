@@ -10,8 +10,13 @@
         Automatically submit rental income and expenses directly to HMRC: securely, accurately, and effortlessly.
       </p>
 
-      <!-- Eligibility Form -->
-      <form action="/dashboard" method="GET" class="d-flex justify-content-center gap-2 flex-wrap">
+      <!-- NINO validation message -->
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger"><%= error %></div>
+      <% } %>
+
+      <!-- Continue form -->
+      <form action="/nino" method="POST" class="d-flex justify-content-center gap-2 flex-wrap">
         <input type="text" name="nino" id="nino" placeholder="National Insurance Number" class="form-control" required style="max-width: 250px;">
         <button type="submit" class="btn btn-primary btn-lg">Continue</button>
       </form>

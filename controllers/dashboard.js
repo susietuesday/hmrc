@@ -7,7 +7,7 @@ const obligations = require('../services/obligationsService');
 const propertyBusiness = require('../services/propertyBusinessService');
 
 const showDashboardPage = asyncHandler(async(req, res) => {
-  const nino = req.query.nino;
+  const nino = req.session.user?.nino;
 
   // Default tax year to current year
   const taxYear = utils.getCurrentTaxYear();
