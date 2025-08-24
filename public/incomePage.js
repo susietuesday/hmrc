@@ -46,6 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
         // Validate rows
         const dateIndex = headers.indexOf('date');
         const amountIndex = headers.indexOf('amount');
+        const categoryIndex = headers.indexOf('category');
+
+        const allowedCategories = [
+          'premiumsOfLeaseGrant',
+          'reversePremiums',
+          'periodAmount',
+          'taxDeducted',
+          'otherIncome',
+          'rentARoom',
+          'rentsReceived'
+        ];
 
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
@@ -53,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const dateVal = row[dateIndex]?.trim();
             const amountVal = row[amountIndex]?.trim();
+            const categoryVal = categoryIndex !== -1 ? row[categoryIndex]?.trim() : null;
 
             // Check for valid date
             if (isNaN(Date.parse(dateVal))) {
@@ -62,6 +74,11 @@ document.addEventListener("DOMContentLoaded", () => {
             // Check for numeric amount
             if (isNaN(parseFloat(amountVal))) {
                 errors.push(`Row ${i + 1}: Amount must be numeric.`);
+            }
+
+            // If category column exists, validate its value
+            if (categoryVal && !allowedCategories.includes(categoryVal)) {
+              errors.push(`Row ${i + 1}: Invalid category "${categoryVal}".`);
             }
         }
 
