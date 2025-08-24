@@ -3,7 +3,16 @@ document.addEventListener("DOMContentLoaded", () => {
   uploadIncome();
 
   document.getElementById('incomeCsvFile').addEventListener('change', function(e) {
-    validateCsv(document, e);
+    const allowedCategories = [
+      'Rent',
+      'Lease Premium',
+      'Reverse Premium',
+      'Other Property Income',
+      'Tax Deducted',
+      'Rent-a-Room',
+    ];
+
+    validateCsv(allowedCategories, document, e);
   });
 });
 

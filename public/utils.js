@@ -23,7 +23,7 @@ function renderTable(data) {
   return html;
 };
 
-function validateCsv(document, e) {
+function validateCsv(allowedCategories, document, e) {
   const file = e.target.files[0];
   const errorDiv = document.getElementById('errorMessages');
   errorDiv.innerHTML = '';
@@ -69,15 +69,6 @@ function validateCsv(document, e) {
         const dateIndex = headers.indexOf('date');
         const amountIndex = headers.indexOf('amount');
         const categoryIndex = headers.indexOf('category');
-
-        const allowedCategories = [
-          'Rent',
-          'Lease Premium',
-          'Reverse Premium',
-          'Other Property Income',
-          'Tax Deducted',
-          'Rent-a-Room',
-        ];
 
         for (let i = 1; i < lines.length; i++) {
             const row = lines[i].split(',');
