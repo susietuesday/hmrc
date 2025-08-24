@@ -1,32 +1,51 @@
-  <!-- Expenses Panel -->
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header bg-dark text-white">
-        Upload Property Expenses
-      </div>
-      <div class="card-body">
-        <div class="mb-3">
-          <label for="expensesCsvFile" class="form-label">Upload Transactions CSV</label>
-          <input class="form-control" type="file" id="expensesCsvFile" accept=".csv">
-        </div>
-        <button id="uploadExpensesBtn" class="btn btn-primary">Upload CSV</button>
+ <div class="row justify-content-center">
+    <div class="col-lg-8">
 
-        <div id="expensesUploadStatus" class="mt-3"></div>
-        <div id="expensesCsvPreview" class="mt-3"></div>
+      <h2 class="mb-3">Upload your property expenses</h2>
+      <p class="text-muted">
+        Export your UK property expense transactions from any spreadsheet and upload them here as a <strong>.csv</strong> file.
+      </p>
+
+      <div class="alert alert-info">
+        <ul class="mb-0">
+          <li>Prepare one sheet for <strong>expense</strong> transactions.</li>
+          <li><strong>Export</strong> your <strong>expenses</strong> as <strong>.csv</strong> and upload below.</li>
+          <li>Your file must include <code>Date</code> and <code>Amount</code> columns (other columns are ignored).</li>
+          <li>Include <strong>all transactions for the current tax year</strong>, even if previously sent.</li>
+          <li>We'll <strong>summarize your data</strong> and let you check it before sending to HMRC.</li>
+          <li><strong>Your data is not saved or shared</strong> — only used for this submission.</li>
+        </ul>
+      </div>
+
+    <!-- Expenses Panel -->
+    <div class="col-mt-4">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          Upload expenses
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <input class="form-control" type="file" id="expensesCsvFile" accept=".csv">
+          </div>
+          <button id="uploadExpensesBtn" class="btn btn-primary">Upload CSV</button>
+
+          <div id="expensesUploadStatus" class="mt-3"></div>
+          <div id="expensesCsvPreview" class="mt-3"></div>
+        </div>
       </div>
     </div>
-  </div>
 
-<button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
+  <button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
 
-<script>
-  const continueBtn = document.getElementById('continueBtn');
+  <script>
+    const continueBtn = document.getElementById('continueBtn');
 
-  continueBtn.addEventListener('click', () => {
-    // Navigate to /summary
-    window.location.href = '/summary';
-  });
-</script>
+    continueBtn.addEventListener('click', () => {
+      // Navigate to /summary
+      window.location.href = '/summary';
+    });
+  </script>
+</div>
 
 <script src="utils.js"></script>
 <script src="expensesPage.js"></script>
