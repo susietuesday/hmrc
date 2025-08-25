@@ -1,3 +1,6 @@
+// /public/incomePage.js
+import { validateCsv, renderTable } from './utils.js';
+
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   uploadExpenses();
