@@ -44,7 +44,7 @@ export function validateRows(headers, lines, allowedCategories, errors) {
       const row = lines[i].split(',');
       if (row.length < 2) continue;
 
-      const dateVal = row[dateIndex]?.trim();
+      const dateVal = parseDate(row[dateIndex]?.trim());
       const amountVal = parseAmount(row[amountIndex]?.trim());
       const categoryVal = categoryIndex !== -1 ? row[categoryIndex]?.trim() : null;
 
@@ -80,4 +80,50 @@ export function parseAmount(amountStr) {
 
   const value = parseFloat(cleaned);
   return isNaN(value) ? 0 : value;
+}
+
+function parseDate(dateStr) {
+  if (!dateStr) return null;
+
+  dateStr = dateStr.trim();
+
+  // Try native parse first
+  let timestamp = Date.parse(dateStr);
+  if (!isNaN(timestamp)) {
+    return new Date(timestamp);
+  }
+
+  // DD-MMM-YYYY (24-Apr-2025)
+  const dmyRegex = /^(\d{1,2})[-\/](\w{3,})[-\/](\d{4})$/i;
+  const match = dateStr.match(dmyRegex);
+  if (match) {
+    const [ , day, month, year ] = match;
+    const months = {
+      jan: 0, feb: 1, mar: 2, apr: 3, may: 4, jun: 5,
+      jul: 6, aug: 7, sep: 8, oct: 9, nov: 10, dec: 11
+    };
+    const m = months[month.toLowerCase().slice(0,3)];
+    if (m !== undefined) {
+      return new Date(parseInt(year), m, parseInt(day));
+    }
+  }
+
+  // UK DD/MM/YYYY or DD-MM-YYYY or DD/MM/YY or DD-MM-YY
+  const ukRegex = /^(\d{1,2})[-\/](\d{1,2})[-\/](\d{2}|\d{4})$/;
+  const ukMatch = dateStr.match(ukRegex);
+  if (ukMatch) {
+    let [ , day, month, year ] = ukMatch;
+    day = parseInt(day, 10);
+    month = parseInt(month, 10);
+    year = parseInt(year, 10);
+
+    // Handle 2-digit year
+    if (year < 100) {
+      year += (year < 50) ? 2000 : 1900;
+    }
+
+    return new Date(year, month - 1, day);
+  }
+
+  return null; // Could not parse
 }
