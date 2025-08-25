@@ -1,4 +1,7 @@
-function renderTable(data) {
+// Import from shared validation
+import { getTaxYearBounds } from '../shared/validation.js';
+
+export function renderTable(data) {
   if (!Array.isArray(data) || data.length === 0) {
     return '<p>No transactions found</p>';
   }
@@ -23,15 +26,15 @@ function renderTable(data) {
   return html;
 };
 
-function validateCsv(allowedCategories, document, e) {
+export function validateCsv(allowedCategories, document, e) {
   const file = e.target.files[0];
   const errorDiv = document.getElementById('errorMessages');
   errorDiv.innerHTML = '';
-  const { start, end } = getTaxYearBounds();
 
   if (!file) return;
 
   const errors = [];
+  const { start, end } = getTaxYearBounds();
 
   // 1. File type check
   if (!file.name.endsWith('.csv')) {
@@ -113,21 +116,3 @@ function validateCsv(allowedCategories, document, e) {
     reader.readAsText(file);
 };
 
-// Function to get current UK tax year start and end
-function getTaxYearBounds() {
-  const today = new Date();
-  const year = today.getFullYear();
-  let start, end;
-
-  if (today.getMonth() + 1 >= 4 && today.getDate() >= 6) {
-    // After 6 April: current tax year started this year
-    start = new Date(year, 3, 6); // 6 April
-    end = new Date(year + 1, 3, 5); // 5 April next year
-  } else {
-    // Before 6 April: still in previous tax year
-    start = new Date(year - 1, 3, 6);
-    end = new Date(year, 3, 5);
-  }
-
-  return { start, end };
-};
