@@ -12,9 +12,6 @@ async function processCsvIncomeFile(fileBuffer) {
 
   const totals = sumCsvByCategory(results);
   const income = mapPropertyIncome(totals);
-
-  // Calculate total amount
-  //const periodAmount = calculateTotalAmount(results, 'Amount');
   
   return {
     results,
