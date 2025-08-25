@@ -45,7 +45,7 @@ export function validateRows(headers, lines, allowedCategories, errors) {
       if (row.length < 2) continue;
 
       const dateVal = row[dateIndex]?.trim();
-      const amountVal = row[amountIndex]?.trim();
+      const amountVal = parseAmount(row[amountIndex]?.trim());
       const categoryVal = categoryIndex !== -1 ? row[categoryIndex]?.trim() : null;
 
       // Check for valid date
@@ -71,3 +71,13 @@ export function validateRows(headers, lines, allowedCategories, errors) {
       }
   }
 };
+
+export function parseAmount(amountStr) {
+  if (!amountStr) return 0;
+
+  // Remove £, commas, spaces
+  const cleaned = amountStr.replace(/[^0-9.-]+/g, '');
+
+  const value = parseFloat(cleaned);
+  return isNaN(value) ? 0 : value;
+}
