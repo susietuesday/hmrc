@@ -1,6 +1,5 @@
 const asyncHandler = require('express-async-handler');
 const { processCsvIncomeFile, processCsvExpensesFile } = require('../services/csvDataService');
-const utils = require('../utils/utils');
 
 const uploadCsvIncomeFile = asyncHandler(async (req, res) => {
   // Check if file is provided
