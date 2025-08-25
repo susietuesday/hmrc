@@ -10,14 +10,41 @@ async function processCsvIncomeFile(fileBuffer) {
   const requiredColumns = ['Date', 'Amount', 'Category'];
   const results = await parseCsvBuffer(fileBuffer, requiredColumns);
 
-  // Calculate total amount
-  const periodAmount = calculateTotalAmount(results, 'Amount');
+  const totals = sumCsvByCategory(results);
+  const income = mapPropertyIncome(totals);
 
+  // Calculate total amount
+  //const periodAmount = calculateTotalAmount(results, 'Amount');
+  
   return {
     results,
-    periodAmount
+    income
   };
 };
+
+function mapPropertyIncome(totals) {
+  // HMRC maximum value
+  const MAX_VALUE = 99999999999.99;
+
+  // Helper to safely get a number with 2 decimal places, capped at MAX_VALUE
+  const getValue = (key) => {
+    const val = parseFloat(totals[key]) || 0;
+    return Math.min(MAX_VALUE, Math.round(val * 100) / 100);
+  };
+
+  const income = {
+    premiumsOfLeaseGrant: getValue("Lease Premium"),
+    reversePremiums: getValue("Reverse Premium"),
+    periodAmount: getValue("Rent"),
+    taxDeducted: getValue("Tax Deducted"),
+    otherIncome: getValue("Other Property Income") + getValue("Rent"),
+    rentARoom: {
+      rentsReceived: getValue("Rent-a-Room")
+    }
+  };
+
+  return income;
+}
 
 async function processCsvExpensesFile(fileBuffer) {
 
@@ -33,6 +60,29 @@ async function processCsvExpensesFile(fileBuffer) {
     consolidatedExpenses
   };
 };
+
+function sumCsvByCategory(results) {
+  if (!results || results.length === 0) return {};
+
+  const firstRow = results[0];
+  const hasCategory = 'Category' in firstRow || 'category' in firstRow;
+
+  const totals = {};
+
+  for (const row of results) {
+    const amount = parseFloat(row.Amount || row.amount);
+    if (isNaN(amount)) continue;
+
+    if (hasCategory) {
+      const category = (row.Category || row.category || 'Uncategorized').trim();
+      totals[category] = Math.round(((totals[category] || 0) + amount) * 100) / 100;
+    } else {
+      totals['Total'] = Math.round(((totals['Total'] || 0) + amount) * 100) / 100;
+    }
+  }
+
+  return totals;
+}
 
 function calculateTotalAmount(rows, amountColumn = 'Amount') {
   const totalPence = rows.reduce((sum, row) => {
