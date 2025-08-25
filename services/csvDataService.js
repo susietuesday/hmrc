@@ -7,7 +7,7 @@ const utils = require('../utils/utils.js');
 async function processCsvIncomeFile(fileBuffer) {
 
   // Parsing logic
-  const requiredColumns = ['Date', 'Amount', 'Category'];
+  const requiredColumns = ['Date', 'Amount'];
   const results = await parseCsvBuffer(fileBuffer, requiredColumns);
 
   const totals = sumCsvByCategory(results);
@@ -37,7 +37,7 @@ function mapPropertyIncome(totals) {
     reversePremiums: getValue("Reverse Premium"),
     periodAmount: getValue("Rent"),
     taxDeducted: getValue("Tax Deducted"),
-    otherIncome: getValue("Other Property Income") + getValue("Rent"),
+    otherIncome: getValue("Other Property Income"),
     rentARoom: {
       rentsReceived: getValue("Rent-a-Room")
     }
@@ -70,14 +70,14 @@ function sumCsvByCategory(results) {
   const totals = {};
 
   for (const row of results) {
-    const amount = parseFloat(row.Amount || row.amount);
+    const amount = utils.parseAmount(row.Amount || row.amount);
     if (isNaN(amount)) continue;
 
     if (hasCategory) {
       const category = (row.Category || row.category || 'Uncategorized').trim();
       totals[category] = Math.round(((totals[category] || 0) + amount) * 100) / 100;
     } else {
-      totals['Total'] = Math.round(((totals['Total'] || 0) + amount) * 100) / 100;
+      totals['Rent'] = Math.round(((totals['Rent'] || 0) + amount) * 100) / 100;
     }
   }
 
