@@ -133,6 +133,13 @@ function validateNino(nino) {
   return true;
 }
 
+function parseAmount(amountStr) {
+  if (!amountStr) return 0;
+  const cleaned = amountStr.toString().replace(/[^0-9.-]+/g, '');
+  const value = parseFloat(cleaned);
+  return isNaN(value) ? 0 : value;
+}
+
 module.exports = { 
   log,
   getCurrentTaxYear,
@@ -140,5 +147,6 @@ module.exports = {
   getTodayDate,
   parseCurrencyToPence,
   addDays,
-  validateNino
+  validateNino,
+  parseAmount
 };
