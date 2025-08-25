@@ -64,6 +64,7 @@ app.use('/', routes);
 
 // Serve static files from front end
 app.use(express.static('public'));
+app.use('/shared', express.static('shared')); // allow browser to import shared code
 
 // Serve index.ejs
 app.set('view engine', 'ejs');
