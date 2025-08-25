@@ -28,13 +28,47 @@
             Use one of the following categories:
           </p>
           <ul class="list-group mb-3">
-            <li class="list-group-item"><strong>Rent</strong> – Regular rent payments from tenants (e.g., monthly rent).</li>
-            <li class="list-group-item"><strong>Lease Premium</strong> – A one-off payment for granting a lease.</li>
-            <li class="list-group-item"><strong>Reverse Premium</strong> – A payment you made to encourage someone to take a lease.</li>
-            <li class="list-group-item"><strong>Other Property Income</strong> – Extra charges for services (e.g., cleaning, gardening) or other property-related income.</li>
-            <li class="list-group-item"><strong>Tax Deducted</strong> – Tax already taken off by an agent or tenant before paying you.</li>
-            <li class="list-group-item"><strong>Rent-a-Room</strong> – Income under the Rent-a-Room scheme (e.g., from a lodger in your home).</li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Rent</strong></span>
+              <span class="desc">Regular rent payments from tenants (e.g., monthly rent).</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Lease Premium</strong></span>
+              <span class="desc">A one-off payment for granting a lease.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Reverse Premium</strong></span>
+              <span class="desc">A payment you made to encourage someone to take a lease.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Other Property Income</strong></span>
+              <span class="desc">Extra charges for services (e.g., cleaning, gardening) or other property-related income.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Tax Deducted</strong></span>
+              <span class="desc">Tax already taken off by an agent or tenant before paying you.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Rent-a-Room</strong></span>
+              <span class="desc">Income under the Rent-a-Room scheme (e.g., from a lodger in your home).</span>
+            </li>
           </ul>
+
+          <style>
+          .two-col {
+            display: grid;
+            grid-template-columns: 200px 1fr; /* Left = fixed width, Right = flexible */
+            gap: 15px;
+            align-items: start;
+          }
+          .label {
+            font-weight: bold;
+            text-align: right;
+          }
+          .desc {
+            color: #555; /* optional styling */
+          }
+          </style>
           <p class="text-muted mb-0">
             <i class="bi bi-info-circle"></i> If you don’t include a category, we’ll assume it’s <strong>Rent</strong> unless we detect otherwise.
           </p>
@@ -42,7 +76,7 @@
       </div>
 
       <details class="mt-3">
-        <summary class="text-muted">See a minimal example CSV</summary>
+        <summary class="text-muted">See an example CSV</summary>
             <pre class="bg-light p-2 rounded" style="font-size: 0.9rem; white-space: pre;">
 Date,Amount,Category
 2025-04-01,750.00,Rent
