@@ -46,7 +46,7 @@ function mapPropertyIncome(totals) {
 async function processCsvExpensesFile(fileBuffer) {
 
   // Parsing logic
-  const requiredColumns = ['Payment Date', 'Amount'];
+  const requiredColumns = ['Date', 'Amount', 'Category'];
   const results = await parseCsvBuffer(fileBuffer, requiredColumns);
 
   // Calculate total amount
