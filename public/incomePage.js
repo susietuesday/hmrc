@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
       'Reverse Premium',
       'Other Property Income',
       'Tax Deducted',
-      'Rent-a-Room',
+      'Rent-a-Room'
     ];
 
     validateCsv(allowedCategories, document, e);
