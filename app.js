@@ -152,6 +152,11 @@ app.post('/logout', (req, res) => {
   });
 });
 
+// Catch missing pages
+app.use((req, res) => {
+  res.status(404).render('404'); // or sendFile
+});
+
 // Global error handler
 app.use(errorHandler);
 
