@@ -19,30 +19,6 @@ async function processCsvIncomeFile(fileBuffer) {
   };
 };
 
-function mapPropertyIncome(totals) {
-  // HMRC maximum value
-  const MAX_VALUE = 99999999999.99;
-
-  // Helper to safely get a number with 2 decimal places, capped at MAX_VALUE
-  const getValue = (key) => {
-    const val = parseFloat(totals[key]) || 0;
-    return Math.min(MAX_VALUE, Math.round(val * 100) / 100);
-  };
-
-  const income = {
-    premiumsOfLeaseGrant: getValue("Lease Premium"),
-    reversePremiums: getValue("Reverse Premium"),
-    periodAmount: getValue("Rent"),
-    taxDeducted: getValue("Tax Deducted"),
-    otherIncome: getValue("Other Property Income"),
-    rentARoom: {
-      rentsReceived: getValue("Rent-a-Room")
-    }
-  };
-
-  return income;
-}
-
 async function processCsvExpensesFile(fileBuffer) {
 
   // Parsing logic
@@ -50,13 +26,96 @@ async function processCsvExpensesFile(fileBuffer) {
   const results = await parseCsvBuffer(fileBuffer, requiredColumns);
 
   // Calculate total amount
-  const consolidatedExpenses = calculateTotalAmount(results, 'Amount');
+  const totals = sumCsvByCategory(results);
+  const expenses = mapPropertyExpenses(totals);
 
   return {
     results,
-    consolidatedExpenses
+    expenses
   };
 };
+
+function mapPropertyIncome(totals) {
+  const MAX_VALUE = 99999999999.99;
+
+  const getValue = (key) => {
+    const val = parseFloat(totals[key]);
+    if (isNaN(val)) return null;
+    const rounded = Math.round(val * 100) / 100;
+    if (rounded === 0) return null;
+    return Math.min(MAX_VALUE, rounded);
+  };
+
+  const income = {};
+
+  const addIfNotNull = (field, key) => {
+    const value = getValue(key);
+    if (value !== null) {
+      income[field] = value;
+    }
+  };
+
+  addIfNotNull("premiumsOfLeaseGrant", "Lease Premium");
+  addIfNotNull("reversePremiums", "Reverse Premium");
+  addIfNotNull("periodAmount", "Rent");
+  addIfNotNull("taxDeducted", "Tax Deducted");
+  addIfNotNull("otherIncome", "Other Property Income");
+
+  // rentARoom only if it has a value
+  const rentARoomValue = getValue("Rent-a-Room");
+  if (rentARoomValue !== null) {
+    income.rentARoom = { rentsReceived: rentARoomValue };
+  }
+
+  return income;
+}
+
+function mapPropertyExpenses(totals) {
+  const MAX_VALUE = 99999999999.99;
+  const MIN_VALUE = -99999999999.99;
+  const MIN_ZERO = 0;
+
+  const getValue = (key, zeroOnly = false) => {
+    const val = parseFloat(totals[key]);
+    if (isNaN(val)) return null; // No value
+    const rounded = Math.round(val * 100) / 100;
+    if (rounded === 0) return null; // Exclude zeros
+    if (zeroOnly) {
+      return Math.min(MAX_VALUE, Math.max(MIN_ZERO, rounded));
+    } else {
+      return Math.min(MAX_VALUE, Math.max(MIN_VALUE, rounded));
+    }
+  };
+
+  const expenses = {};
+
+  const addIfNotNull = (field, key, zeroOnly = false) => {
+    const value = getValue(key, zeroOnly);
+    if (value !== null) {
+      expenses[field] = value;
+    }
+  };
+
+  addIfNotNull("premisesRunningCosts", "Premises Running Costs");
+  addIfNotNull("repairsAndMaintenance", "Repairs and Maintenance");
+  addIfNotNull("financialCosts", "Financial Costs");
+  addIfNotNull("professionalFees", "Professional Fees");
+  addIfNotNull("costOfServices", "Cost of Services");
+  addIfNotNull("other", "Other Expenses");
+  addIfNotNull("residentialFinancialCost", "Residential Financial Cost", true);
+  addIfNotNull("travelCosts", "Travel Costs");
+  addIfNotNull("residentialFinancialCostsCarriedForward", "Residential Financial Costs Carried Forward", true);
+  addIfNotNull("consolidatedExpenses", "Consolidated Expenses");
+
+  // Special handling for rentARoom because it's an object
+  const rentARoomValue = getValue("Rent-a-Room Deduction", true);
+  if (rentARoomValue !== null) {
+    expenses.rentARoom = { amountClaimed: rentARoomValue };
+  }
+
+  return expenses;
+}
+
 
 function sumCsvByCategory(results) {
   if (!results || results.length === 0) return {};
@@ -79,16 +138,6 @@ function sumCsvByCategory(results) {
   }
 
   return totals;
-}
-
-function calculateTotalAmount(rows, amountColumn = 'Amount') {
-  const totalPence = rows.reduce((sum, row) => {
-    return sum + utils.parseCurrencyToPence(row?.[amountColumn]);
-  }, 0);
-
-  // Return pounds as a number with 2dp
-  return (totalPence / 100);
-  // or as a formatted string: return (totalPence / 100).toFixed(2);
 }
 
 module.exports = {

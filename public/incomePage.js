@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function uploadIncome() {
   // --- Upload button handler ---
-  const uploadBtn = document.getElementById('uploadIncomeBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
   if (uploadBtn) {
     uploadBtn.addEventListener('click', async () => {
         const fileInput = document.getElementById('incomeCsvFile');

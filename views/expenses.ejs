@@ -17,6 +17,101 @@
         </ul>
       </div>
 
+      <div class="card mt-4">
+        <div class="card-header bg-primary text-white">
+          How to Categorise Your Transactions
+        </div>
+        <div class="card-body">
+          <p class="mb-3">
+            You can include an optional <strong>Category</strong> column in your CSV to help us report your expenses correctly to HMRC.
+            Use one of the following categories:
+          </p>
+          <ul class="list-group mb-3">
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Premises Running Costs</strong></span>
+              <span class="desc">Rent, rates, insurance, ground rents, and other running costs.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Repairs and Maintenance</strong></span>
+              <span class="desc">Repairs to the property (e.g., fixing leaks) and maintenance like repainting (not improvements).</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Financial Costs</strong></span>
+              <span class="desc">Mortgage interest, overdraft fees, and other loan or finance costs (not capital repayments).</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Professional Fees</strong></span>
+              <span class="desc">Fees for accountants, letting agents, legal advice, or other professional services.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Cost of Services</strong></span>
+              <span class="desc">Expenses for services such as cleaning, gardening, or staff wages related to the property.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Other Expenses</strong></span>
+              <span class="desc">Any other allowable property expenses incurred wholly for your rental business.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Residential Financial Cost</strong></span>
+              <span class="desc">Tax relief on finance costs (restricted amount deductible from rental income).</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Travel Costs</strong></span>
+              <span class="desc">Car, van, or travel expenses incurred for managing or maintaining the property.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Residential Financial Costs Carried Forward</strong></span>
+              <span class="desc">Unrelieved residential finance costs brought forward to future years.</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Rent-a-Room Deduction</strong></span>
+              <span class="desc">Amount claimed under the Rent-a-Room scheme (if eligible).</span>
+            </li>
+            <li class="list-group-item two-col">
+              <span class="label"><strong>Consolidated Expenses</strong></span>
+              <span class="desc">A single total figure for all allowable expenses for the period (if using simplified reporting).</span>
+            </li>
+          </ul>
+
+          <style>
+          .two-col {
+            display: grid;
+            grid-template-columns: 200px 1fr; /* Left = fixed width, Right = flexible */
+            gap: 15px;
+            align-items: start;
+          }
+          .label {
+            font-weight: bold;
+            text-align: right;
+          }
+          .desc {
+            color: #555; /* optional styling */
+          }
+          </style>
+          <p class="text-muted mb-0">
+            <i class="bi bi-info-circle"></i> If you don’t include a category, we’ll assume it’s <strong>Consolidated Expenses</strong> unless we detect otherwise.
+          </p>
+        </div>
+      </div>
+
+      <details class="mt-3">
+        <summary class="text-muted">See an example CSV</summary>
+            <pre class="bg-light p-2 rounded" style="font-size: 0.9rem; white-space: pre;">
+Date,Amount,Category
+2025-04-05,250.00,Premises Running Costs
+2025-04-15,120.00,Repairs and Maintenance
+2025-05-02,150.00,Financial Costs
+2025-05-18,80.00,Professional Fees
+2025-06-05,90.00,Cost of Services
+2025-06-20,60.00,Travel Costs
+2025-07-08,75.00,Other Expenses
+2025-07-15,100.00,Professional Fees
+            </pre>
+        <p class="small text-muted mt-2 mb-0">
+          Column names don't have to be in this order, but they must include <code>Date</code> and <code>Amount</code>.
+        </p>
+      </details>
+
     <!-- Expenses Panel -->
     <div class="col-mt-4">
       <div class="card">
@@ -26,8 +121,9 @@
         <div class="card-body">
           <div class="mb-3">
             <input class="form-control" type="file" id="expensesCsvFile" accept=".csv">
+            <div id="errorMessages" style="color: red;"></div>
           </div>
-          <button id="uploadExpensesBtn" class="btn btn-primary">Upload CSV</button>
+          <button id="uploadBtn" class="btn btn-primary">Upload CSV</button>
 
           <div id="expensesUploadStatus" class="mt-3"></div>
           <div id="expensesCsvPreview" class="mt-3"></div>
@@ -47,4 +143,4 @@
   </script>
 </div>
 
-<script type="module" src="expensesPage.js"></script>
+<script type="module" src="/expensesPage.js"></script>

@@ -4,11 +4,29 @@ import { validateCsv, renderTable } from './utils.js';
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   uploadExpenses();
+
+  document.getElementById('expensesCsvFile').addEventListener('change', function(e) {
+    const allowedCategories = [
+      'Premises Running Costs',
+      'Repairs and Maintenance',
+      'Financial Costs',
+      'Professional Fees',
+      'Cost of Services',
+      'Other Expenses',
+      'Residential Financial Cost',
+      'Travel Costs',
+      'Residential Financial Costs Carried Forward',
+      'Rent-a-Room Deduction',
+      'Consolidated Expenses'
+    ];
+
+    validateCsv(allowedCategories, document, e);
+  });
 });
 
 function uploadExpenses() {
   // --- Upload button handler ---
-  const uploadBtn = document.getElementById('uploadExpensesBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
   if (uploadBtn) {
     uploadBtn.addEventListener('click', async () => {
         const fileInput = document.getElementById('expensesCsvFile');

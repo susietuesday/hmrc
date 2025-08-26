@@ -64,7 +64,7 @@ export function validateCsv(allowedCategories, document, e) {
       errorDiv.innerHTML = errors.join('<br>');
     } else {
       errorDiv.innerHTML = '✅ File looks good!';
-      const uploadButton = document.getElementById('uploadIncomeBtn');
+      const uploadButton = document.getElementById('uploadBtn');
       uploadButton.disabled = false; // Enable button if validation passes
     }
   };
