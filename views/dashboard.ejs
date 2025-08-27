@@ -1,150 +1,154 @@
-<h2 class="mb-4">Your HMRC Property Income Obligations</h2>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h2 class="mb-4">Your HMRC Property Income Obligations</h2>
 
-<!-- Table -->
-<table class="table table-bordered table-striped">
-  <thead class="table-dark">
-    <tr>
-      <th>Period Start</th>
-      <th>Period End</th>
-      <th>Due Date</th>
-      <th>Status</th>
-    </tr>
-  </thead>
-  <tbody id="obligationsTableBody"></tbody>
-</table>
+    <!-- Table -->
+    <table class="table table-bordered table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th>Period Start</th>
+          <th>Period End</th>
+          <th>Due Date</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="obligationsTableBody"></tbody>
+    </table>
 
-<!-- Embed obligations data from backend -->
-<script id="obligations-data" type="application/json">
-  <%- JSON.stringify(obligationsData) %>
-</script>
+    <!-- Embed obligations data from backend -->
+    <script id="obligations-data" type="application/json">
+      <%- JSON.stringify(obligationsData) %>
+    </script>
 
-<h2 class="mb-4">Your cumulative income and expenses summary</h2>
+    <h2 class="mb-4">Your cumulative income and expenses summary</h2>
 
-<div class="card mb-3">
-  <div class="card-header bg-dark text-white">
-    <div class="d-flex flex-column">
-      <span class="fw-bold">UK Property Summary</span>
-      <small class="text-light opacity-75">
-        From: <%= cumulativeData.fromDate %> &nbsp;|&nbsp;
-        To: <%= cumulativeData.toDate %> &nbsp;|&nbsp;
-        Submitted: <%= cumulativeData.submittedOn %>
-      </small>
+    <div class="card mb-3">
+      <div class="card-header bg-dark text-white">
+        <div class="d-flex flex-column">
+          <span class="fw-bold">UK Property Summary</span>
+          <small class="text-light opacity-75">
+            From: <%= cumulativeData.fromDate %> &nbsp;|&nbsp;
+            To: <%= cumulativeData.toDate %> &nbsp;|&nbsp;
+            Submitted: <%= cumulativeData.submittedOn %>
+          </small>
+        </div>
+      </div>
+      <div class="card-body">
+        
+        <h5 class="mb-3">Income</h5>
+        <ul class="list-group mb-4">
+          <% if (cumulativeData.ukProperty.income.periodAmount) { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <span><%= getIncomeCategory('periodAmount') %></span>
+              <span>£<%= cumulativeData.ukProperty.income.periodAmount %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.income.otherIncome) { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <span><%= getIncomeCategory('otherIncome') %></span>
+              <span>£<%= cumulativeData.ukProperty.income.otherIncome %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.income.rentARoom.rentsReceived) { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <span><%= getIncomeCategory('rentARoom.rentsReceived') %></span>
+              <span>£<%= cumulativeData.ukProperty.income.rentARoom.rentsReceived %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.income.taxDeducted) { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <span><%= getIncomeCategory('taxDeducted') %></span>
+              <span>£<%= cumulativeData.ukProperty.income.taxDeducted %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.income.premiumsOfLeaseGrant) { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <span><%= getIncomeCategory('premiumsOfLeaseGrant') %></span>
+              <span>£<%= cumulativeData.ukProperty.income.premiumsOfLeaseGrant %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.income.reversePremiums) { %>
+            <li class="list-group-item d-flex justify-content-between">
+              <span><%= getIncomeCategory('reversePremiums') %></span>
+              <span>£<%= cumulativeData.ukProperty.income.reversePremiums %></span>
+            </li>
+          <% } %>
+        </ul>
+        
+        <h5 class="mb-3">Expenses</h5>
+        <ul class="list-group">
+          <% if (cumulativeData.ukProperty.expenses.premisesRunningCosts) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('premisesRunningCosts') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.premisesRunningCosts %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.repairsAndMaintenance) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('premisesRunningCosts') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.repairsAndMaintenance %></span>
+            </li>
+          <% } %>   
+          <% if (cumulativeData.ukProperty.expenses.financialCosts) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('financialCosts') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.financialCosts %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.professionalFees) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('professionalFees') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.professionalFees %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.costOfServices) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('costOfServices') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.costOfServices %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.other) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('other') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.other %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.travelCosts) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('travelCosts') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.travelCosts %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.rentARoom.amountClaimed) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('rentARoom.amountClaimed') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.rentARoom.amountClaimed %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.residentialFinancialCost) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('residentialFinancialCost') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCost %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('residentialFinancialCostsCarriedForward') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward %></span>
+            </li>
+          <% } %>
+          <% if (cumulativeData.ukProperty.expenses.consolidatedExpenses) { %>
+              <li class="list-group-item d-flex justify-content-between">
+              <span><%= getExpensesCategory('consolidatedExpenses') %></span>
+              <span>£<%= cumulativeData.ukProperty.expenses.consolidatedExpenses %></span>
+            </li>
+          <% } %>
+        </ul>
+      </div>
     </div>
-  </div>
-  <div class="card-body">
-    
-    <h5 class="mb-3">Income</h5>
-    <ul class="list-group mb-4">
-      <% if (cumulativeData.ukProperty.income.periodAmount) { %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span><%= getIncomeCategory('periodAmount') %></span>
-          <span>£<%= cumulativeData.ukProperty.income.periodAmount %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.income.otherIncome) { %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span><%= getIncomeCategory('otherIncome') %></span>
-          <span>£<%= cumulativeData.ukProperty.income.otherIncome %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.income.rentARoom.rentsReceived) { %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span><%= getIncomeCategory('rentARoom.rentsReceived') %></span>
-          <span>£<%= cumulativeData.ukProperty.income.rentARoom.rentsReceived %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.income.taxDeducted) { %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span><%= getIncomeCategory('taxDeducted') %></span>
-          <span>£<%= cumulativeData.ukProperty.income.taxDeducted %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.income.premiumsOfLeaseGrant) { %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span><%= getIncomeCategory('premiumsOfLeaseGrant') %></span>
-          <span>£<%= cumulativeData.ukProperty.income.premiumsOfLeaseGrant %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.income.reversePremiums) { %>
-        <li class="list-group-item d-flex justify-content-between">
-          <span><%= getIncomeCategory('reversePremiums') %></span>
-          <span>£<%= cumulativeData.ukProperty.income.reversePremiums %></span>
-        </li>
-      <% } %>
-    </ul>
-    
-    <h5 class="mb-3">Expenses</h5>
-    <ul class="list-group">
-      <% if (cumulativeData.ukProperty.expenses.premisesRunningCosts) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('premisesRunningCosts') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.premisesRunningCosts %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.repairsAndMaintenance) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('premisesRunningCosts') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.repairsAndMaintenance %></span>
-        </li>
-      <% } %>   
-      <% if (cumulativeData.ukProperty.expenses.financialCosts) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('financialCosts') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.financialCosts %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.professionalFees) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('professionalFees') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.professionalFees %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.costOfServices) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('costOfServices') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.costOfServices %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.other) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('other') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.other %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.travelCosts) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('travelCosts') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.travelCosts %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.rentARoom.amountClaimed) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('rentARoom.amountClaimed') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.rentARoom.amountClaimed %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.residentialFinancialCost) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('residentialFinancialCost') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCost %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('residentialFinancialCostsCarriedForward') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward %></span>
-        </li>
-      <% } %>
-      <% if (cumulativeData.ukProperty.expenses.consolidatedExpenses) { %>
-          <li class="list-group-item d-flex justify-content-between">
-          <span><%= getExpensesCategory('consolidatedExpenses') %></span>
-          <span>£<%= cumulativeData.ukProperty.expenses.consolidatedExpenses %></span>
-        </li>
-      <% } %>
-    </ul>
+
+    <a href="/income" class="btn btn-primary btn-lg w-100">Continue</a>
   </div>
 </div>
-
-<a href="/income" class="btn btn-primary btn-lg w-100">Continue</a>
 
 <script src="dashboardPage.js"></script>
