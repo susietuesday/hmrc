@@ -17,61 +17,78 @@
         </ul>
       </div>
 
-      <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-          How to Categorise Your Transactions
-        </div>
-        <div class="card-body">
-          <p class="mb-3">
-            You can include an optional <strong>Category</strong> column in your CSV to help us report your expenses correctly to HMRC.
-            Use one of the following categories:
-          </p>
-          <ul class="list-group mb-3">
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('premisesRunningCosts') %></strong></span>
-              <span class="desc"><%= getDescription('premisesRunningCosts') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('repairsAndMaintenance') %></strong></span>
-              <span class="desc"><%= getDescription('repairsAndMaintenance') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('financialCosts') %></strong></span>
-              <span class="desc"><%= getDescription('financialCosts') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('professionalFees') %></strong></span>
-              <span class="desc"><%= getDescription('professionalFees') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('costOfServices') %></strong></span>
-              <span class="desc"><%= getDescription('costOfServices') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('other') %></strong></span>
-              <span class="desc"><%= getDescription('other') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('residentialFinancialCost') %></strong></span>
-              <span class="desc"><%= getDescription('residentialFinancialCost') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('travelCosts') %></strong></span>
-              <span class="desc"><%= getDescription('travelCosts') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('residentialFinancialCostsCarriedForward') %></strong></span>
-              <span class="desc"><%= getDescription('residentialFinancialCostsCarriedForward') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('rentARoom.amountClaimed') %></strong></span>
-              <span class="desc"><%= getDescription('rentARoom.amountClaimed') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('consolidatedExpenses') %></strong></span>
-              <span class="desc"><%= getDescription('consolidatedExpenses') %></span>
-            </li>
-          </ul>
+  <div class="card mt-4">
+    <div class="card-header bg-primary text-white">
+      How to Categorise Your Transactions
+    </div>
+    <div class="card-body">
+      <p class="mb-3">
+        You can include an optional <strong>Category</strong> column in your CSV to help us report your expenses correctly to HMRC.
+        Choose one of the categories below that best matches each transaction.
+      </p>
+
+      <!-- Consolidated Expenses Notice -->
+      <div class="alert alert-info mb-3">
+        <h6 class="mb-2"><strong>Consolidated Expenses (Simplified)</strong></h6>
+        <p class="mb-1">
+          If your <strong>property income is less than £90,000</strong> for the period, you can use <strong>Consolidated Expenses</strong> as a simplified way to report all your property expenses in a single figure.
+        </p>
+        <p class="mb-0">
+          If your income is £90,000 or more, you must report expenses under the separate categories below. You cannot mix both in the same quarterly update.
+        </p>
+      </div>
+
+      <!-- Consolidated Expenses row -->
+      <ul class="list-group mb-3">
+        <li class="list-group-item two-col bg-light">
+          <span class="label"><strong><%= getCategory('consolidatedExpenses') %></strong></span>
+          <span class="desc"><%= getDescription('consolidatedExpenses') %></span>
+        </li>
+      </ul>
+
+      <!-- Other expense categories -->
+      <ul class="list-group">
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('premisesRunningCosts') %></strong></span>
+          <span class="desc"><%= getDescription('premisesRunningCosts') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('repairsAndMaintenance') %></strong></span>
+          <span class="desc"><%= getDescription('repairsAndMaintenance') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('financialCosts') %></strong></span>
+          <span class="desc"><%= getDescription('financialCosts') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('professionalFees') %></strong></span>
+          <span class="desc"><%= getDescription('professionalFees') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('costOfServices') %></strong></span>
+          <span class="desc"><%= getDescription('costOfServices') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('other') %></strong></span>
+          <span class="desc"><%= getDescription('other') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('residentialFinancialCost') %></strong></span>
+          <span class="desc"><%= getDescription('residentialFinancialCost') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('travelCosts') %></strong></span>
+          <span class="desc"><%= getDescription('travelCosts') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('residentialFinancialCostsCarriedForward') %></strong></span>
+          <span class="desc"><%= getDescription('residentialFinancialCostsCarriedForward') %></span>
+        </li>
+        <li class="list-group-item two-col">
+          <span class="label"><strong><%= getCategory('rentARoom.amountClaimed') %></strong></span>
+          <span class="desc"><%= getDescription('rentARoom.amountClaimed') %></span>
+        </li>
+      </ul>
 
           <style>
           .two-col {
