@@ -5,6 +5,8 @@ const saIndividualDetails = require('../services/saIndividualDetailsService');
 const businessDetails = require('../services/businessDetailsService');
 const obligations = require('../services/obligationsService');
 const propertyBusiness = require('../services/propertyBusinessService');
+const schemaMappings = require('../config/schemaMappings.js');
+const schema = require('../shared/schema.js');
 
 const MESSAGES = {
   NOT_FOUND: `We couldn't find any UK property details registered for your account.\n\nIf you believe this is an error, please check your HMRC account or contact HMRC support.`
@@ -52,7 +54,12 @@ const showDashboardPage = asyncHandler(async(req, res) => {
     itsaStatus: mtdEligible,
     propertyRegistered: businessId !== null && businessId !== undefined,
     obligationsData: obligationsData.body,
-    cumulativeData: cumulativeData.body
+    cumulativeData: cumulativeData.body,
+    incomeCategories: schemaMappings.INCOME_CATEGORIES,
+    getIncomeCategory: schema.getIncomeCategory,
+    getIncomeDescription: schema.getIncomeDescription,
+    getExpensesCategory: schema.getExpenseCategory,
+    getExpensesDescription: schema.getExpenseDescription
   });
 });
 

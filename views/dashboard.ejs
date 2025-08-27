@@ -49,37 +49,37 @@
     <ul class="list-group mb-4">
       <% if (cumulativeData.ukProperty.income.periodAmount) { %>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Total rents</span>
+          <span><%= getIncomeCategory('periodAmount') %></span>
           <span>£<%= cumulativeData.ukProperty.income.periodAmount %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.income.otherIncome) { %>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Other income</span>
+          <span><%= getIncomeCategory('otherIncome') %></span>
           <span>£<%= cumulativeData.ukProperty.income.otherIncome %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.income.rentARoom.rentsReceived) { %>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Rent a room</span>
+          <span><%= getIncomeCategory('rentARoom.rentsReceived') %></span>
           <span>£<%= cumulativeData.ukProperty.income.rentARoom.rentsReceived %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.income.taxDeducted) { %>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Tax deducted</span>
+          <span><%= getIncomeCategory('taxDeducted') %></span>
           <span>£<%= cumulativeData.ukProperty.income.taxDeducted %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.income.premiumsOfLeaseGrant) { %>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Premiums for the grant of a lease</span>
+          <span><%= getIncomeCategory('premiumsOfLeaseGrant') %></span>
           <span>£<%= cumulativeData.ukProperty.income.premiumsOfLeaseGrant %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.income.reversePremiums) { %>
         <li class="list-group-item d-flex justify-content-between">
-          <span>Reverse premiums and inducements</span>
+          <span><%= getIncomeCategory('reversePremiums') %></span>
           <span>£<%= cumulativeData.ukProperty.income.reversePremiums %></span>
         </li>
       <% } %>
@@ -89,67 +89,67 @@
     <ul class="list-group">
       <% if (cumulativeData.ukProperty.expenses.premisesRunningCosts) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Rent, rates, insurance and ground rents</span>
+          <span><%= getExpensesCategory('premisesRunningCosts') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.premisesRunningCosts %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.repairsAndMaintenance) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Property repairs and maintenance</span>
+          <span><%= getExpensesCategory('premisesRunningCosts') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.repairsAndMaintenance %></span>
         </li>
       <% } %>   
       <% if (cumulativeData.ukProperty.expenses.financialCosts) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Non-residential property finance costs</span>
+          <span><%= getExpensesCategory('financialCosts') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.financialCosts %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.professionalFees) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Legal, management and other professional fees</span>
+          <span><%= getExpensesCategory('professionalFees') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.professionalFees %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.costOfServices) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Costs of services provided, including wages</span>
+          <span><%= getExpensesCategory('costOfServices') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.costOfServices %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.other) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Other allowable property expenses</span>
+          <span><%= getExpensesCategory('other') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.other %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.travelCosts) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Travel costs</span>
+          <span><%= getExpensesCategory('travelCosts') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.travelCosts %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.rentARoom.amountClaimed) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Rent a Room exempt amount</span>
+          <span><%= getExpensesCategory('rentARoom.amountClaimed') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.rentARoom.amountClaimed %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.residentialFinancialCost) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Residential property finance costs</span>
+          <span><%= getExpensesCategory('residentialFinancialCost') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCost %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Unused residential property finance costs brought forward</span>
+          <span><%= getExpensesCategory('residentialFinancialCostsCarriedForward') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.residentialFinancialCostsCarriedForward %></span>
         </li>
       <% } %>
       <% if (cumulativeData.ukProperty.expenses.consolidatedExpenses) { %>
           <li class="list-group-item d-flex justify-content-between">
-          <span>Consolidated expenses</span>
+          <span><%= getExpensesCategory('consolidatedExpenses') %></span>
           <span>£<%= cumulativeData.ukProperty.expenses.consolidatedExpenses %></span>
         </li>
       <% } %>
