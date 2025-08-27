@@ -1,120 +1,120 @@
-  <div class="row justify-content-center">
-    <div class="col-lg-8">
+<div class="row justify-content-center">
+  <div class="col-lg-8">
 
-      <h2 class="mb-3">Upload your property income</h2>
-      <p class="text-muted">
-        Export your UK property income transactions from any spreadsheet and upload them here as a <strong>.csv</strong> file.
-      </p>
+    <h2 class="mb-3">Upload your property income</h2>
+    <p class="text-muted">
+      Export your UK property income transactions from any spreadsheet and upload them here as a <strong>.csv</strong> file.
+    </p>
 
-      <div class="alert alert-info">
-        <ul class="mb-0">
-          <li><strong>Works with any spreadsheet</strong> (Excel, Google Sheets, Numbers, etc.).</li>
-          <li>Prepare one sheet for <strong>income</strong> transactions.</li>
-          <li><strong>Export</strong> your <strong>income</strong> as <strong>.csv</strong> and upload below.</li>
-          <li>Your file must include <code>Date</code> and <code>Amount</code> columns (other columns are ignored).</li>
-          <li>Include <strong>all transactions for the current tax year</strong>, even if previously sent.</li>
-          <li>We'll <strong>summarize your data</strong> and let you check it before sending to HMRC.</li>
-          <li><strong>Your data is not saved or shared</strong> — only used for this submission.</li>
+    <div class="alert alert-info">
+      <ul class="mb-0">
+        <li><strong>Works with any spreadsheet</strong> (Excel, Google Sheets, Numbers, etc.).</li>
+        <li>Prepare one sheet for <strong>income</strong> transactions.</li>
+        <li><strong>Export</strong> your <strong>income</strong> as <strong>.csv</strong> and upload below.</li>
+        <li>Your file must include <code>Date</code> and <code>Amount</code> columns (other columns are ignored).</li>
+        <li>Include <strong>all transactions for the current tax year</strong>, even if previously sent.</li>
+        <li>We'll <strong>summarize your data</strong> and let you check it before sending to HMRC.</li>
+        <li><strong>Your data is not saved or shared</strong> — only used for this submission.</li>
+      </ul>
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-header bg-primary text-white">
+        How to Categorise Your Transactions
+      </div>
+      <div class="card-body">
+        <p class="mb-3">
+          You can include an optional <strong>Category</strong> column in your CSV to help us report your income correctly to HMRC.
+          Use one of the following categories:
+        </p>
+        <ul class="list-group mb-3">
+          <li class="list-group-item two-col">
+            <span class="label"><strong><%= getCategory('periodAmount') %></strong></span>
+            <span class="desc"><%= getDescription('periodAmount') %></span>
+          </li>
+          <li class="list-group-item two-col">
+            <span class="label"><strong><%= getCategory('premiumsOfLeaseGrant') %></strong></span>
+            <span class="desc"><%= getDescription('premiumsOfLeaseGrant') %></span>
+          </li>
+          <li class="list-group-item two-col">
+            <span class="label"><strong><%= getCategory('reversePremiums') %></strong></span>
+            <span class="desc"><%= getDescription('reversePremiums') %></span>
+          </li>
+          <li class="list-group-item two-col">
+            <span class="label"><strong><%= getCategory('otherIncome') %></strong></span>
+            <span class="desc"><%= getDescription('otherIncome') %></span>
+          </li>
+          <li class="list-group-item two-col">
+            <span class="label"><strong><%= getCategory('taxDeducted') %></strong></span>
+            <span class="desc"><%= getDescription('taxDeducted') %></span>
+          </li>
+          <li class="list-group-item two-col">
+            <span class="label"><strong><%= getCategory('rentARoom.rentsReceived') %></strong></span>
+            <span class="desc"><%= getDescription('rentARoom.rentsReceived') %></span>
+          </li>
         </ul>
+
+        <style>
+        .two-col {
+          display: grid;
+          grid-template-columns: 200px 1fr; /* Left = fixed width, Right = flexible */
+          gap: 15px;
+          align-items: start;
+        }
+        .label {
+          font-weight: bold;
+          text-align: right;
+        }
+        .desc {
+          color: #555; /* optional styling */
+        }
+        </style>
+        <p class="text-muted mb-0">
+          <i class="bi bi-info-circle"></i> If you don’t include a category, we’ll assume it’s <strong>Rent</strong> unless we detect otherwise.
+        </p>
       </div>
+    </div>
 
-      <div class="card mt-4">
-        <div class="card-header bg-primary text-white">
-          How to Categorise Your Transactions
-        </div>
-        <div class="card-body">
-          <p class="mb-3">
-            You can include an optional <strong>Category</strong> column in your CSV to help us report your income correctly to HMRC.
-            Use one of the following categories:
-          </p>
-          <ul class="list-group mb-3">
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('periodAmount') %></strong></span>
-              <span class="desc"><%= getDescription('periodAmount') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('premiumsOfLeaseGrant') %></strong></span>
-              <span class="desc"><%= getDescription('premiumsOfLeaseGrant') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('reversePremiums') %></strong></span>
-              <span class="desc"><%= getDescription('reversePremiums') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('otherIncome') %></strong></span>
-              <span class="desc"><%= getDescription('otherIncome') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('taxDeducted') %></strong></span>
-              <span class="desc"><%= getDescription('taxDeducted') %></span>
-            </li>
-            <li class="list-group-item two-col">
-              <span class="label"><strong><%= getCategory('rentARoom.rentsReceived') %></strong></span>
-              <span class="desc"><%= getDescription('rentARoom.rentsReceived') %></span>
-            </li>
-          </ul>
-
-          <style>
-          .two-col {
-            display: grid;
-            grid-template-columns: 200px 1fr; /* Left = fixed width, Right = flexible */
-            gap: 15px;
-            align-items: start;
-          }
-          .label {
-            font-weight: bold;
-            text-align: right;
-          }
-          .desc {
-            color: #555; /* optional styling */
-          }
-          </style>
-          <p class="text-muted mb-0">
-            <i class="bi bi-info-circle"></i> If you don’t include a category, we’ll assume it’s <strong>Rent</strong> unless we detect otherwise.
-          </p>
-        </div>
-      </div>
-
-      <details class="mt-3">
-        <summary class="text-muted">See an example CSV</summary>
-            <pre class="bg-light p-2 rounded" style="font-size: 0.9rem; white-space: pre;">
+    <details class="mt-3">
+      <summary class="text-muted">See an example CSV</summary>
+          <pre class="bg-light p-2 rounded" style="font-size: 0.9rem; white-space: pre;">
 Date,Amount,Category
 2025-04-01,750.00,Rent
 2025-05-01,750.00,Rent
 2025-06-15,1200.00,Lease Premium
 2025-07-10,50.00,Other Property Income
-            </pre>
-        <p class="small text-muted mt-2 mb-0">
-          Column names don't have to be in this order, but they must include <code>Date</code> and <code>Amount</code>.
-        </p>
-      </details>
+          </pre>
+      <p class="small text-muted mt-2 mb-0">
+        Column names don't have to be in this order, but they must include <code>Date</code> and <code>Amount</code>.
+      </p>
+    </details>
 
-      <!-- Income Panel -->
-      <div class="card mt-4">
-        <div class="card-header bg-dark text-white">Upload income</div>
-        <div class="card-body">
-          <div class="mb-3">
-            <input class="form-control" type="file" id="incomeCsvFile" accept=".csv">
-            <div id="errorMessages" style="color: red;"></div>
-          </div>
-          <button id="uploadBtn" class="btn btn-primary" disabled>Upload CSV</button>
-
-          <div id="incomeUploadStatus" class="mt-3"></div>
-          <div id="incomeCsvPreview" class="mt-3"></div>
+    <!-- Income Panel -->
+    <div class="card mt-4">
+      <div class="card-header bg-dark text-white">Upload income</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <input class="form-control" type="file" id="incomeCsvFile" accept=".csv">
+          <div id="errorMessages" style="color: red;"></div>
         </div>
+        <button id="uploadBtn" class="btn btn-primary" disabled>Upload CSV</button>
+
+        <div id="incomeUploadStatus" class="mt-3"></div>
+        <div id="incomeCsvPreview" class="mt-3"></div>
       </div>
-
-      <button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
-
-      <script>
-        const continueBtn = document.getElementById('continueBtn');
-
-        continueBtn.addEventListener('click', () => {
-          // Navigate to /expenses
-          window.location.href = '/expenses';
-        });
-      </script>
     </div>
+
+    <button id="continueBtn" class="btn btn-primary mt-4" disabled>Continue</button>
+
+    <script>
+      const continueBtn = document.getElementById('continueBtn');
+
+      continueBtn.addEventListener('click', () => {
+        // Navigate to /expenses
+        window.location.href = '/expenses';
+      });
+    </script>
   </div>
+</div>
 
 <script type="module" src="/incomePage.js"></script>
