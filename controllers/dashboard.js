@@ -6,6 +6,10 @@ const businessDetails = require('../services/businessDetailsService');
 const obligations = require('../services/obligationsService');
 const propertyBusiness = require('../services/propertyBusinessService');
 
+const MESSAGES = {
+  NOT_FOUND: `We couldn't find any UK property details registered for your account.\n\nIf you believe this is an error, please check your HMRC account or contact HMRC support.`
+};
+
 const showDashboardPage = asyncHandler(async(req, res) => {
   const nino = req.session.user?.nino;
   const context = req.context
@@ -23,6 +27,11 @@ const showDashboardPage = asyncHandler(async(req, res) => {
 
   // Get UK property business ID
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, context});
+
+  if (!businessId) {
+    req.session.error = MESSAGES.NOT_FOUND
+    return res.redirect('/');
+  }
 
   // Get obligations
   const obligationsData = await obligations.getObligations({nino, context});
