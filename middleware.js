@@ -117,7 +117,6 @@ function errorHandler(err, req, res, next) {
   }
 
   const status = err.status || err.response?.status || 500;
-  res.status(status).json({ error: 'Internal Server Error' });
 
   // Render a user-friendly error page
   if (status === 404) {
