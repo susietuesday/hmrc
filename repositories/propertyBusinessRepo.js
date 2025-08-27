@@ -35,9 +35,9 @@ async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, bo
   return response;
 }
 
-async function fetchUkPropertyCummulativeSummary({ nino, businessId, taxYear, session }) {
-  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
-  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
+async function fetchUkPropertyCummulativeSummary({ nino, businessId, taxYear, context }) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(context);
+  const accessToken = await apiUtils.getUserRestrictedToken(context.oauth2Token);
   
   const routePath = services.propertyBusiness.routes.fetchUkPropertyCumulativeSummary(nino, businessId, taxYear)
 
