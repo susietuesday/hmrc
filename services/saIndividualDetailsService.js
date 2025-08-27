@@ -44,27 +44,31 @@ async function getItsaStatus({nino, taxYear, context}) {
 async function getMtdEligible({nino, taxYear, context}) {
   const response = await getItsaStatus({nino, taxYear, context});
 
-  //Check response status
+  // Check response status and handle known validation/error responses
   if (response.status !== 200) {
-    switch(response.body.code) {
-      case 'FORMAT_NINO':{
-        throw new Error(MESSAGES.FORMAT_NINO);
-      }
-      case 'CLIENT_OR_AGENT_NOT_AUTHORISED':{
-        throw new Error(MESSAGES.CLIENT_OR_AGENT_NOT_AUTHORISED);
-      }
-      case 'MATCHING_RESOURCE_NOT_FOUND':{
-        throw new Error(MESSAGES.MATCHING_RESOURCE_NOT_FOUND);
-      }
-    default: {
-      throw new Error(`Failed to fetch ITSA status: ${response.status}`);
-    }};
-  };
+    let message;
+    switch (response.body.code) {
+      case 'FORMAT_NINO':
+        message = MESSAGES.FORMAT_NINO;
+        break;
+      case 'CLIENT_OR_AGENT_NOT_AUTHORISED':
+        message = MESSAGES.CLIENT_OR_AGENT_NOT_AUTHORISED;
+        break;
+      case 'MATCHING_RESOURCE_NOT_FOUND':
+        message = MESSAGES.MATCHING_RESOURCE_NOT_FOUND;
+        break;
+      default:
+        message = `Failed to fetch ITSA status: ${response.status}`;
+    }
+    // Return structured failure for controller
+    return { success: false, message };
+  }
 
   const statusDetails = response.body.itsaStatuses?.[0]?.itsaStatusDetails?.[0];
   const status = statusDetails?.status || null;
+  const eligible = status === 'MTD Mandated' || status === 'MTD Voluntary';
 
-  return status === 'MTD Mandated' || itsaStatus === 'MTD Voluntary';
+  return { success: true, eligible };
 };
 
 module.exports = { getItsaStatus, getMtdEligible };

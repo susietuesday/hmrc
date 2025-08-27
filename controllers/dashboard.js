@@ -16,6 +16,11 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   // Check for eligible MTD status
   const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, context});
 
+  if (!mtdEligible.success) {
+    req.session.error = mtdEligible.message;
+    return res.redirect('/');
+  }
+
   // Get UK property business ID
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, context});
 
