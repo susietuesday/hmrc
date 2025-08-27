@@ -12,15 +12,8 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   // Default tax year to current year
   const taxYear = utils.getCurrentTaxYear();
 
-  let mtdEligible;
-  try {
-    // Check for eligible MTD status
-    mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, session: req.session});
-    } 
-    catch (error) {
-      res.render('index', { error: error.message });
-      return;
-  };
+  // Check for eligible MTD status
+  const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, context: req.context});
 
   // Get UK property business ID
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, session: req.session});
