@@ -24,7 +24,7 @@ const {
   REDIRECT_URI,
   REDIS_URL,
   oauthConfig
-} = require('./config');
+} = require('./config/config.js');
 
 // Create Redis client and session store
 const RedisStore = connectRedis(session);
