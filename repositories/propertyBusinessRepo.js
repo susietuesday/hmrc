@@ -41,13 +41,18 @@ async function fetchUkPropertyCummulativeSummary({ nino, businessId, taxYear, se
   
   const routePath = services.propertyBusiness.routes.fetchUkPropertyCumulativeSummary(nino, businessId, taxYear)
 
+  const extraHeaders = {
+    'Gov-Test-Scenario': 'STATEFUL',
+    ...fraudHeaders,
+  };
+
   const response = await apiUtils.callApi({
     method: 'GET',
     serviceName: services.propertyBusiness.name,
     serviceVersion: services.propertyBusiness.version,
     routePath,
     bearerToken: accessToken,
-    extraHeaders: fraudHeaders
+    extraHeaders
   });
 
   return response;
