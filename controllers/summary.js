@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
 const utils = require('../utils/utils');
 const propertyBusinessService = require('../services/propertyBusinessService.js');
+const schemaMappings = require('../config/schemaMappings.js');
+const schema = require('../shared/schema.js');
 
 const showSummaryPage = asyncHandler(async(req, res) => {
   const summary = req.session.user.summary.ukProperty;
@@ -15,7 +17,12 @@ const showSummaryPage = asyncHandler(async(req, res) => {
     expenses: summary.expenses,
     fromDate: summary.fromDate,
     toDate: summary.toDate,
-    defaultToDate: defaultToDate
+    defaultToDate: defaultToDate,
+    incomeCategories: schemaMappings.INCOME_CATEGORIES,
+    getIncomeCategory: schema.getIncomeCategory,
+    getIncomeDescription: schema.getIncomeDescription,
+    getExpensesCategory: schema.getExpenseCategory,
+    getExpensesDescription: schema.getExpenseDescription
   });
 });
 

@@ -7,37 +7,37 @@
         <table class="table table-bordered">
         <tbody>
           <tr>
-            <th>Total rents</th>
+            <th><%= getIncomeCategory('periodAmount') %></th>
             <td>
               £<%= (income.periodAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Other income</th>
+            <th><%= getIncomeCategory('otherIncome') %></th>
             <td>
               £<%= (income.otherIncome || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Rent a room</th>
+            <th><%= getIncomeCategory('rentARoom.rentsReceived') %></th>
             <td>
               £<%= (income.rentARoom?.rentsReceived || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Tax deducted</th>
+            <th><%= getIncomeCategory('taxDeducted') %></th>
             <td>
               £<%= (income.taxDeducted || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Premiums for the grant of a lease</th>
+            <th><%= getIncomeCategory('premiumsOfLeaseGrant') %></th>
             <td>
               £<%= (income.premiumsOfLeaseGrant || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Reverse premiums and inducements</th>
+            <th><%= getIncomeCategory('reversePremiums') %></th>
             <td>
               £<%= (income.reversePremiums || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
@@ -55,67 +55,67 @@
         <table class="table table-bordered">
         <tbody>
           <tr>
-            <th>Rent, rates, insurance and ground rents</th>
+            <th><%= getExpensesCategory('premisesRunningCosts') %></th>
             <td>
               £<%= (expenses.premisesRunningCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Property repairs and maintenance</th>
+            <th><%= getExpensesCategory('repairsAndMaintenance') %></th>
             <td>
               £<%= (expenses.repairsAndMaintenance || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Non-residential property finance costs</th>
+            <th><%= getExpensesCategory('financialCosts') %></th>
             <td>
               £<%= (expenses.financialCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Legal, management and other professional fees</th>
+            <th><%= getExpensesCategory('professionalFees') %></th>
             <td>
               £<%= (expenses.professionalFees || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Costs of services provided, including wages</th>
+            <th><%= getExpensesCategory('costOfServices') %></th>
             <td>
               £<%= (expenses.costOfServices || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Other allowable property expenses</th>
+            <th><%= getExpensesCategory('other') %></th>
             <td>
               £<%= (expenses.other || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Travel costs</th>
+            <th><%= getExpensesCategory('travelCosts') %></th>
             <td>
               £<%= (expenses.travelCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Rent a Room exempt amount</th>
+            <th><%= getExpensesCategory('rentARoom.amountClaimed') %></th>
             <td>
               £<%= (expenses.rentARoom?.amountClaimed || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Residential property finance costs</th>
+            <th><%= getExpensesCategory('residentialFinancialCost') %></th>
             <td>
               £<%= (expenses.residentialFinancialCost || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Unused residential property finance costs brought forward</th>
+            <th><%= getExpensesCategory('residentialFinancialCostsCarriedForward') %></th>
             <td>
               £<%= (expenses.residentialFinancialCostsCarriedForward || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
           </tr>
           <tr>
-            <th>Consolidated expenses</th>
+            <th><%= getExpensesCategory('consolidatedExpenses') %></th>
             <td>
               £<%= (expenses.consolidatedExpenses || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
             </td>
