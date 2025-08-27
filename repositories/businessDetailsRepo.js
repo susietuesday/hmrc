@@ -10,9 +10,9 @@ const businessDetailsServices = {
   }
 };
 
-async function fetchBusinessDetailsList({ nino, session }) {
-  const fraudHeaders = apiUtils.getFraudPreventionHeaders(session);
-  const accessToken = await apiUtils.getUserRestrictedToken(session.oauth2Token);
+async function fetchBusinessDetailsList({ nino, context }) {
+  const fraudHeaders = apiUtils.getFraudPreventionHeaders(context);
+  const accessToken = await apiUtils.getUserRestrictedToken(context.oauth2Token);
   const routePath = businessDetailsServices.businessDetails.routes.listByNino(nino);
 
   const extraHeaders = {
