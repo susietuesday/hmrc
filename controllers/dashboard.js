@@ -51,8 +51,6 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   });
 
   res.render('dashboard', {
-    itsaStatus: mtdEligible,
-    propertyRegistered: businessId !== null && businessId !== undefined,
     obligationsData: obligationsData.body,
     cumulativeData: cumulativeData.body,
     incomeCategories: schemaMappings.INCOME_CATEGORIES,
