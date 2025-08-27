@@ -35,14 +35,14 @@ MTD ITSA Opt-In
 Digitally Exempt
 */
 
-async function getItsaStatus({nino, taxYear, session}) {
-  const response = await saIndividualDetailsRepo.fetchItsaStatus({nino, taxYear, session});
+async function getItsaStatus({nino, taxYear, context}) {
+  const response = await saIndividualDetailsRepo.fetchItsaStatus({nino, taxYear, context});
 
   return response;
 }
 
-async function getMtdEligible({nino, taxYear, session}) {
-  const response = await getItsaStatus({nino, taxYear, session});
+async function getMtdEligible({nino, taxYear, context}) {
+  const response = await getItsaStatus({nino, taxYear, context});
 
   //Check response status
   if (response.status !== 200) {
