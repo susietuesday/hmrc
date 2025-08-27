@@ -95,6 +95,12 @@ app.get('/', (req, res) => {
 
   log.info('ℹ️ NINO: ' + req.session.user.nino);
 
+  const error = req.session.error;
+  if (error) {
+    delete req.session.error; // clear it after reading
+    return res.render('index', { error });
+  }
+
   res.render('index');
 });
 
