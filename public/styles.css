@@ -13,3 +13,7 @@ body {
   margin: 0; /* optional, remove default margins */
   min-height: 100vh; /* ensures it fills the viewport */
 }
+
+.error-message {
+  white-space: pre-line; /* preserves \n line breaks */
+}
