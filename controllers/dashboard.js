@@ -16,7 +16,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, context: req.context});
 
   // Get UK property business ID
-  const businessId = await businessDetails.getUkPropertyBusinessId({nino, session: req.session});
+  const businessId = await businessDetails.getUkPropertyBusinessId({nino, context: req.context});
 
   // Get obligations
   const obligationsData = await obligations.getObligations({nino, session: req.session});
@@ -30,7 +30,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
     nino,
     businessId,
     taxYear,
-    session: req.session
+    context: req.context
   });
 
   res.render('dashboard', {

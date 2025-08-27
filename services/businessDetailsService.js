@@ -1,12 +1,12 @@
 const businessDetailsRepo = require('../repositories/businessDetailsRepo.js');
 
-async function getBusinessList({ nino, session }) {
-  const response = businessDetailsRepo.fetchBusinessDetailsList({ nino, session });
+async function getBusinessList({ nino, context }) {
+  const response = businessDetailsRepo.fetchBusinessDetailsList({ nino, context });
   return response;
 }
 
-async function getUkPropertyBusinessId({nino, session}) {
-  const data = await getBusinessList({ nino, session });
+async function getUkPropertyBusinessId({nino, context}) {
+  const data = await getBusinessList({ nino, context });
 
   if (!data || !Array.isArray(data.body.listOfBusinesses)) return null;
 

@@ -49,13 +49,13 @@ const data = {
   return response;
 }
 
-async function getUkPropertyCumulativeSummary({ nino, businessId, taxYear, session }) {
+async function getUkPropertyCumulativeSummary({ nino, businessId, taxYear, context }) {
 
   const response = await propertyBusinessRepo.fetchUkPropertyCummulativeSummary({
     nino,
     businessId,
     taxYear,
-    session
+    context
   });
   return response;
 }
