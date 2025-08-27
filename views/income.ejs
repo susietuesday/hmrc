@@ -29,28 +29,28 @@
           </p>
           <ul class="list-group mb-3">
             <li class="list-group-item two-col">
-              <span class="label"><strong>Rent</strong></span>
-              <span class="desc">Regular rent payments from tenants (e.g., monthly rent).</span>
+              <span class="label"><strong><%= getCategory('periodAmount') %></strong></span>
+              <span class="desc"><%= getDescription('periodAmount') %></span>
             </li>
             <li class="list-group-item two-col">
-              <span class="label"><strong>Lease Premium</strong></span>
-              <span class="desc">A one-off payment for granting a lease.</span>
+              <span class="label"><strong><%= getCategory('premiumsOfLeaseGrant') %></strong></span>
+              <span class="desc"><%= getDescription('premiumsOfLeaseGrant') %></span>
             </li>
             <li class="list-group-item two-col">
-              <span class="label"><strong>Reverse Premium</strong></span>
-              <span class="desc">A payment you made to encourage someone to take a lease.</span>
+              <span class="label"><strong><%= getCategory('reversePremiums') %></strong></span>
+              <span class="desc"><%= getDescription('reversePremiums') %></span>
             </li>
             <li class="list-group-item two-col">
-              <span class="label"><strong>Other Property Income</strong></span>
-              <span class="desc">Extra charges for services (e.g., cleaning, gardening) or other property-related income.</span>
+              <span class="label"><strong><%= getCategory('otherIncome') %></strong></span>
+              <span class="desc"><%= getDescription('otherIncome') %></span>
             </li>
             <li class="list-group-item two-col">
-              <span class="label"><strong>Tax Deducted</strong></span>
-              <span class="desc">Tax already taken off by an agent or tenant before paying you.</span>
+              <span class="label"><strong><%= getCategory('taxDeducted') %></strong></span>
+              <span class="desc"><%= getDescription('taxDeducted') %></span>
             </li>
             <li class="list-group-item two-col">
-              <span class="label"><strong>Rent-a-Room</strong></span>
-              <span class="desc">Income under the Rent-a-Room scheme (e.g., from a lodger in your home).</span>
+              <span class="label"><strong><%= getCategory('rentARoom.rentsReceived') %></strong></span>
+              <span class="desc"><%= getDescription('rentARoom.rentsReceived') %></span>
             </li>
           </ul>
 
