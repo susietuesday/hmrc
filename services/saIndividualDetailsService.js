@@ -100,7 +100,7 @@ async function getMtdEligible({nino, taxYear, session}) {
         throw new Error('The National Insurance number you entered does not match your HMRC account. Please try again.');
       }
       case 'MATCHING_RESOURCE_NOT_FOUND':{
-        throw new Error('No records found for the provided National Insurance number and tax year. Please check and try again.');
+        throw new Error(`We couldn't find a Self Assessment record for your National Insurance number. \n\nThis usually means you're not registered for Self Assessment. If you think this is wrong, please check your details or contact HMRC.`);
       }
     default: {
       throw new Error(`Failed to fetch ITSA status: ${response.status}`);
