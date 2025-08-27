@@ -1,163 +1,168 @@
-<h2>Summary of Your Property Income & Expenses</h2>
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h2>Summary of Your Property Income & Expenses</h2>
 
-<div class="col-md-6">
-  <div class="card mt-3">
-    <div class="card-header bg-dark text-white">Income</div>
-    <div class="card-body">
-        <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <th><%= getIncomeCategory('periodAmount') %></th>
-            <td>
-              £<%= (income.periodAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getIncomeCategory('otherIncome') %></th>
-            <td>
-              £<%= (income.otherIncome || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getIncomeCategory('rentARoom.rentsReceived') %></th>
-            <td>
-              £<%= (income.rentARoom?.rentsReceived || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getIncomeCategory('taxDeducted') %></th>
-            <td>
-              £<%= (income.taxDeducted || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getIncomeCategory('premiumsOfLeaseGrant') %></th>
-            <td>
-              £<%= (income.premiumsOfLeaseGrant || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getIncomeCategory('reversePremiums') %></th>
-            <td>
-              £<%= (income.reversePremiums || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card mt-3">
+      <div class="card-header bg-dark text-white">Income</div>
+      <div class="card-body">
+          <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th><%= getIncomeCategory('periodAmount') %></th>
+              <td>
+                £<%= (income.periodAmount || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getIncomeCategory('otherIncome') %></th>
+              <td>
+                £<%= (income.otherIncome || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getIncomeCategory('rentARoom.rentsReceived') %></th>
+              <td>
+                £<%= (income.rentARoom?.rentsReceived || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getIncomeCategory('taxDeducted') %></th>
+              <td>
+                £<%= (income.taxDeducted || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getIncomeCategory('premiumsOfLeaseGrant') %></th>
+              <td>
+                £<%= (income.premiumsOfLeaseGrant || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getIncomeCategory('reversePremiums') %></th>
+              <td>
+                £<%= (income.reversePremiums || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="col-md-6">
-  <div class="card mt-3">
-    <div class="card-header bg-dark text-white">Expenses</div>
-    <div class="card-body">
-        <table class="table table-bordered">
-        <tbody>
-          <tr>
-            <th><%= getExpensesCategory('premisesRunningCosts') %></th>
-            <td>
-              £<%= (expenses.premisesRunningCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('repairsAndMaintenance') %></th>
-            <td>
-              £<%= (expenses.repairsAndMaintenance || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('financialCosts') %></th>
-            <td>
-              £<%= (expenses.financialCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('professionalFees') %></th>
-            <td>
-              £<%= (expenses.professionalFees || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('costOfServices') %></th>
-            <td>
-              £<%= (expenses.costOfServices || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('other') %></th>
-            <td>
-              £<%= (expenses.other || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('travelCosts') %></th>
-            <td>
-              £<%= (expenses.travelCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('rentARoom.amountClaimed') %></th>
-            <td>
-              £<%= (expenses.rentARoom?.amountClaimed || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('residentialFinancialCost') %></th>
-            <td>
-              £<%= (expenses.residentialFinancialCost || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('residentialFinancialCostsCarriedForward') %></th>
-            <td>
-              £<%= (expenses.residentialFinancialCostsCarriedForward || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-          <tr>
-            <th><%= getExpensesCategory('consolidatedExpenses') %></th>
-            <td>
-              £<%= (expenses.consolidatedExpenses || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="col-lg-8">
+    <div class="card mt-3">
+      <div class="card-header bg-dark text-white">Expenses</div>
+      <div class="card-body">
+          <table class="table table-bordered">
+          <tbody>
+            <tr>
+              <th><%= getExpensesCategory('premisesRunningCosts') %></th>
+              <td>
+                £<%= (expenses.premisesRunningCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('repairsAndMaintenance') %></th>
+              <td>
+                £<%= (expenses.repairsAndMaintenance || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('financialCosts') %></th>
+              <td>
+                £<%= (expenses.financialCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('professionalFees') %></th>
+              <td>
+                £<%= (expenses.professionalFees || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('costOfServices') %></th>
+              <td>
+                £<%= (expenses.costOfServices || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('other') %></th>
+              <td>
+                £<%= (expenses.other || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('travelCosts') %></th>
+              <td>
+                £<%= (expenses.travelCosts || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('rentARoom.amountClaimed') %></th>
+              <td>
+                £<%= (expenses.rentARoom?.amountClaimed || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('residentialFinancialCost') %></th>
+              <td>
+                £<%= (expenses.residentialFinancialCost || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('residentialFinancialCostsCarriedForward') %></th>
+              <td>
+                £<%= (expenses.residentialFinancialCostsCarriedForward || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+            <tr>
+              <th><%= getExpensesCategory('consolidatedExpenses') %></th>
+              <td>
+                £<%= (expenses.consolidatedExpenses || 0).toLocaleString('en-GB', { minimumFractionDigits: 2 }) %>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
+
+  <div class="col-lg-8">
+    <div class="alert alert-info mt-3" role="alert">
+      <h5 class="alert-heading mb-2">Submit an interim update</h5>
+      <p class="mb-2">
+        You can submit an interim update for this obligation period.
+      </p>
+      <p class="mb-2">
+        Choose an <strong>Update to</strong> date; your totals should include all transactions up to that date.
+      </p>
+      <p class="mb-0">
+        You can submit again later, up to the obligation end date, with updated figures.
+      </p>
+    </div>
+  
+
+  <label for="toDate" class="form-label">Update to (inclusive)</label>
+  <input
+    type="date"
+    id="toDate"
+    name="toDate"
+    class="form-control"
+    min="<%= fromDate %>"
+    max="<%= defaultToDate %>"
+    value="<%= new Date().toISOString().split('T')[0] %>" />
+  <p class="text-secondary mt-1">
+    Your update will cover <strong><%= fromDate %></strong> to
+    <strong id="toDateLabel"><%= toDate %></strong>.
+  </p>
+
+  <form action="/summary" method="POST" class="mt-3">
+    <button type="submit" class="btn btn-primary btn-lg w-100">
+      Submit summary
+    </button>
+  </form>
+  </div>
 </div>
-
-<div class="alert alert-info mt-3" role="alert">
-  <h5 class="alert-heading mb-2">Submit an interim update</h5>
-  <p class="mb-2">
-    You can submit an interim update for this obligation period.
-  </p>
-  <p class="mb-2">
-    Choose an <strong>Update to</strong> date; your totals should include all transactions up to that date.
-  </p>
-  <p class="mb-0">
-    You can submit again later, up to the obligation end date, with updated figures.
-  </p>
-</div>
-
-<label for="toDate" class="form-label">Update to (inclusive)</label>
-<input
-  type="date"
-  id="toDate"
-  name="toDate"
-  class="form-control"
-  min="<%= fromDate %>"
-  max="<%= defaultToDate %>"
-  value="<%= new Date().toISOString().split('T')[0] %>" />
-<p class="text-secondary mt-1">
-  Your update will cover <strong><%= fromDate %></strong> to
-  <strong id="toDateLabel"><%= toDate %></strong>.
-</p>
-
-<form action="/summary" method="POST" class="mt-3">
-  <button type="submit" class="btn btn-primary btn-lg w-100">
-    Submit summary
-  </button>
-</form>
 
 <script>
   const toDateInput = document.getElementById('toDate');
