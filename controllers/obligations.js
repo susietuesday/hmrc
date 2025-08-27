@@ -9,7 +9,7 @@ const getObligations = asyncHandler(async(req, res) => {
 
   const apiResponse = await obligationsService.getObligations({
     nino, 
-    session: req.session
+    context: req.context
   });
 
   return res.status(apiResponse.status).json(apiResponse.body);

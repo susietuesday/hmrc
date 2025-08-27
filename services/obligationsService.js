@@ -1,6 +1,6 @@
 const obligationsRepo = require('../repositories/obligationsRepo');
 
-async function getObligations({nino, session}) {
+async function getObligations({nino, context}) {
 
   // Build query parameters
   const params = {
@@ -15,7 +15,7 @@ async function getObligations({nino, session}) {
   const response = await obligationsRepo.fetchObligations({
     nino, 
     params, 
-    session
+    context
   });
 
   return response;

@@ -8,18 +8,19 @@ const propertyBusiness = require('../services/propertyBusinessService');
 
 const showDashboardPage = asyncHandler(async(req, res) => {
   const nino = req.session.user?.nino;
+  const context = req.context
 
   // Default tax year to current year
   const taxYear = utils.getCurrentTaxYear();
 
   // Check for eligible MTD status
-  const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, context: req.context});
+  const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, context});
 
   // Get UK property business ID
-  const businessId = await businessDetails.getUkPropertyBusinessId({nino, context: req.context});
+  const businessId = await businessDetails.getUkPropertyBusinessId({nino, context});
 
   // Get obligations
-  const obligationsData = await obligations.getObligations({nino, session: req.session});
+  const obligationsData = await obligations.getObligations({nino, context});
   
   // Set session details
   req.session.user.nino = nino;
@@ -30,7 +31,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
     nino,
     businessId,
     taxYear,
-    context: req.context
+    context
   });
 
   res.render('dashboard', {
