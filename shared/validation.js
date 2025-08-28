@@ -40,6 +40,9 @@ export function validateRows(headers, lines, allowedCategories, errors) {
   const categoryIndex = headers.indexOf('category');
   const { start, end } = getTaxYearBounds();
 
+  let hasConsolidated = false;
+  let hasOtherCategories = false;
+
   for (let i = 1; i < lines.length; i++) {
       const row = lines[i].split(',');
       if (row.length < 2) continue;
@@ -69,6 +72,20 @@ export function validateRows(headers, lines, allowedCategories, errors) {
       if (categoryVal && !allowedCategoriesLower.includes(categoryVal.toLowerCase())) {
       errors.push(`Row ${i + 1}: Invalid category "${categoryVal}".`);
       }
+
+      // Track consolidated vs other categories
+      if (categoryVal.toLowerCase() === 'consolidated expenses') {
+        hasConsolidated = true;
+      } else {
+        hasOtherCategories = true;
+      }
+  }
+
+  // Ensure Consolidated Expenses isn't mixed with other categories
+  if (hasConsolidated && hasOtherCategories) {
+    errors.push(
+      'You cannot mix "Consolidated Expenses" with individual expense categories in the same update.'
+    );
   }
 };
 
