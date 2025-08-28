@@ -5,16 +5,17 @@ const schemaMappings = require('../config/schemaMappings.js');
 const schema = require('../shared/schema.js');
 
 const showSummaryPage = asyncHandler(async(req, res) => {
-  const summary = req.session.user.summary.ukProperty;
 
   // Set default dates
   req.session.user.summary.fromDate = utils.getCurrentTaxYearStart();
   req.session.user.summary.toDate = utils.getTodayDate();
+
+  const summary = req.session.user.summary;
   const defaultToDate = utils.addDays(summary.toDate, 10);
 
   res.render("summary", {
-    income: summary.income,
-    expenses: summary.expenses,
+    income: summary.ukProperty.income,
+    expenses: summary.ukProperty.expenses,
     fromDate: summary.fromDate,
     toDate: summary.toDate,
     defaultToDate: defaultToDate,
