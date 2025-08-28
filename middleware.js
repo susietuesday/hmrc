@@ -123,6 +123,10 @@ function errorHandler(err, req, res, next) {
     return res.status(404).render('404'); // or res.sendFile('/path/to/404.html')
   }
 
+  if (status === 403) {
+    return res.status(403).render('permission-required');
+  }
+
   return res.status(status).render('error', { code: status });
 }
 
