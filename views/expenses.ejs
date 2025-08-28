@@ -130,21 +130,17 @@ Date,Amount,Category
       </details>
 
     <!-- Expenses Panel -->
-    <div class="col-mt-4">
-      <div class="card">
-        <div class="card-header bg-dark text-white">
-          Upload expenses
+    <div class="card mt-4">
+      <div class="card-header bg-dark text-white">Upload expenses</div>
+      <div class="card-body">
+        <div class="mb-3">
+          <input class="form-control" type="file" id="expensesCsvFile" accept=".csv">
+          <div id="errorMessages" style="color: red;"></div>
         </div>
-        <div class="card-body">
-          <div class="mb-3">
-            <input class="form-control" type="file" id="expensesCsvFile" accept=".csv">
-            <div id="errorMessages" style="color: red;"></div>
-          </div>
-          <button id="uploadBtn" class="btn btn-primary">Upload CSV</button>
+        <button id="uploadBtn" class="btn btn-primary">Upload CSV</button>
 
-          <div id="expensesUploadStatus" class="mt-3"></div>
-          <div id="expensesCsvPreview" class="mt-3"></div>
-        </div>
+        <div id="expensesUploadStatus" class="mt-3"></div>
+        <div id="expensesCsvPreview" class="mt-3"></div>
       </div>
     </div>
 
