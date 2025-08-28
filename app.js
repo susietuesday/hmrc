@@ -127,7 +127,7 @@ app.post('/session-data', express.json(), (req, res) => {
 });
 
 // OAuth callback
-app.get('/oauth20/callback', async (req, res) => {
+app.get('/oauth20/callback', async (req, res, next) => {
   const { code } = req.query;
 
   const options = {
@@ -142,7 +142,10 @@ app.get('/oauth20/callback', async (req, res) => {
     req.session.oauth2Token = accessToken;
     res.redirect(req.session.caller || '/');
   } catch (error) {
-    res.status(500).json('Authentication failed');
+    // If the user denied permission, throw a 403
+    const err = new Error('User denied HMRC permission');
+    err.status = 403;
+    next(err);
   }
 });
 
