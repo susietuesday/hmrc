@@ -10,13 +10,13 @@ const INCOME_CATEGORIES = [
 const EXPENSE_CATEGORIES = [
   { key: 'premisesRunningCosts', category: 'Premises Running Costs', description: 'Rent, rates, insurance, ground rents, and other running costs.' },
   { key: 'repairsAndMaintenance', category: 'Repairs and Maintenance', description: 'Repairs to the property (e.g., fixing leaks) and maintenance like repainting (not improvements).Repairs to the property (e.g., fixing leaks) and maintenance like repainting (not improvements).' },
-  { key: 'financialCosts', category: 'Financial Costs', description: 'Mortgage interest, overdraft fees, and other loan or finance costs (not capital repayments).' },
+  { key: 'financialCosts', category: 'Finance Costs', description: 'Mortgage interest, overdraft fees, and other loan or finance costs (not capital repayments).' },
   { key: 'professionalFees', category: 'Professional Fees', description: 'Fees for accountants, letting agents, legal advice, or other professional services.' },
   { key: 'costOfServices', category: 'Cost of Services', description: 'Expenses for services such as cleaning, gardening, or staff wages related to the property.' },
   { key: 'other', category: 'Other Expenses', description: 'Any other allowable property expenses incurred wholly for your rental business.' },
-  { key: 'residentialFinancialCost', category: 'Residential Financial Cost', description: 'Tax relief on finance costs (restricted amount deductible from rental income).' },
+  { key: 'residentialFinancialCost', category: 'Residential Finance Cost', description: 'Tax relief on finance costs (restricted amount deductible from rental income).' },
   { key: 'travelCosts', category: 'Travel Costs', description: 'Car, van, or travel expenses incurred for managing or maintaining the property.' },
-  { key: 'residentialFinancialCostsCarriedForward', category: 'Residential Financial Costs Carried Forward', description: 'Unrelieved residential finance costs brought forward to future years.' },
+  { key: 'residentialFinancialCostsCarriedForward', category: 'Residential Finance Costs Carried Forward', description: 'Unrelieved residential finance costs brought forward to future years.' },
   { key: 'rentARoom.amountClaimed', category: 'Rent-a-Room Deduction', description: 'Amount claimed under the Rent-a-Room scheme (if eligible).' },
   { key: 'consolidatedExpenses', category: 'Consolidated Expenses', description: 'A single total figure for all allowable expenses for the period (if using simplified reporting).' }
 ];
