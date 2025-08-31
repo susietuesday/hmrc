@@ -10,7 +10,7 @@ const getBusinessList = asyncHandler(async (req, res) => {
 
   const apiResponse = await businessDetailsService.getBusinessList({ 
     nino, 
-    session: req.session 
+    context: req.context
   });
 
   return res.status(apiResponse.status).json(apiResponse.body);
