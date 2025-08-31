@@ -117,12 +117,6 @@ app.post('/session-data', express.json(), (req, res) => {
   req.session.windowSize = windowSize;
   req.session.timezone = timezone;
 
-  log.info('JS User Agent: ' + req.session.jsUserAgent);
-  log.info('Device ID: ' + req.session.deviceId);
-  log.info('Screen Info:' + JSON.stringify(screenInfo));
-  log.info('Window Size: ' + JSON.stringify(windowSize));
-  log.info('Timezone: ' + JSON.stringify(timezone));
-
   res.sendStatus(200);
 });
 
