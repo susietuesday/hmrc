@@ -4,12 +4,21 @@ const utils = require('../utils/utils');
 const saIndividualDetails = require('../services/saIndividualDetailsService');
 const businessDetails = require('../services/businessDetailsService');
 const obligations = require('../services/obligationsService');
-const propertyBusiness = require('../services/propertyBusinessService');
 const schemaMappings = require('../config/schemaMappings.js');
 const schema = require('../shared/schema.js');
 
 const MESSAGES = {
-  NOT_FOUND: `We couldn't find any UK property details registered for your account.\n\nIf you believe this is an error, please check your HMRC account or contact HMRC support.`
+  itsaStatus:{
+    FORMAT_NINO: `Invalid National Insurance number format. Please check and try again.`,
+    CLIENT_OR_AGENT_NOT_AUTHORISED: `The National Insurance number you entered does not match your HMRC account. Please try again.`,
+    MATCHING_RESOURCE_NOT_FOUND: `We couldn't find a Self Assessment record for your National Insurance number.\n\nThis usually means you're not registered for Self Assessment.\nIf you think this is wrong, please check your details or contact HMRC.`
+  },
+  propertyDetails:{
+    NOT_FOUND: `We couldn't find any UK property details registered for your account.\n\nIf you believe this is an error, please check your HMRC account or contact HMRC support.`
+  },
+  cumulativeSummary:{
+    MATCHING_RESOURCE_NOT_FOUND: `We could't find any existing cumulative summary data.`
+  }
 };
 
 const showDashboardPage = asyncHandler(async(req, res) => {
@@ -23,7 +32,22 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   const mtdEligible = await saIndividualDetails.getMtdEligible({nino, taxYear, context});
 
   if (!mtdEligible.success) {
-    req.session.error = mtdEligible.message;
+    let message;
+    switch (mtdEligible.code) {
+      case 'FORMAT_NINO':
+        message = MESSAGES.itsaStatus.FORMAT_NINO;
+        break;
+      case 'CLIENT_OR_AGENT_NOT_AUTHORISED':
+        message = MESSAGES.itsaStatus.CLIENT_OR_AGENT_NOT_AUTHORISED;
+        break;
+      case 'MATCHING_RESOURCE_NOT_FOUND':
+        message = MESSAGES.itsaStatus.MATCHING_RESOURCE_NOT_FOUND;
+        break;
+      default:
+        throw new error(mtdEligible.code);
+    };
+
+    req.session.error = message;
     return res.redirect('/');
   }
 
@@ -31,7 +55,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, context});
 
   if (!businessId) {
-    req.session.error = MESSAGES.NOT_FOUND
+    req.session.error = MESSAGES.propertyBusiness.NOT_FOUND
     return res.redirect('/');
   }
 
@@ -42,17 +66,8 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   req.session.user.nino = nino;
   req.session.user.ukPropertyBusinessId = businessId;
 
-  // Get a UK property cumulative summary
-  const cumulativeData = await propertyBusiness.getUkPropertyCumulativeSummary({
-    nino,
-    businessId,
-    taxYear,
-    context
-  });
-
   res.render('dashboard', {
     obligationsData: obligationsData.body,
-    cumulativeData: cumulativeData.body,
     incomeCategories: schemaMappings.INCOME_CATEGORIES,
     getIncomeCategory: schema.getIncomeCategory,
     getIncomeDescription: schema.getIncomeDescription,
