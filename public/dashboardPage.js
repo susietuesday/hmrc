@@ -1,6 +1,67 @@
+const fetchBtn = document.getElementById('fetchCumulativeSummaryBtn');
+const messageDiv = document.getElementById('cumulativeSummaryMessage');
+const summaryDiv = document.getElementById('cumulativeSummaryContainer');
+const incomeList = document.getElementById('incomeList');
+const expensesList = document.getElementById('expensesList');
+const summaryDates = document.getElementById('summaryDates');
+
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   renderObligations();
+
+  fetchBtn.addEventListener('click', async () => {
+    // Reset UI
+    messageDiv.classList.add('d-none');
+    summaryDiv.classList.add('d-none');
+    incomeList.innerHTML = '';
+    expensesList.innerHTML = '';
+    summaryDates.textContent = '';
+
+    try {
+      const response = await fetch('/cumulative-summary'); // Adjust endpoint
+      const data = await response.json(); // parse JSON payload
+      if (data.hmrcStatus === 404) {
+        messageDiv.textContent = data.message
+        messageDiv.classList.remove('d-none');
+        return;
+      }
+      if (!response.ok) throw new Error(`Error fetching summary: ${response.status}`);
+
+      // Populate summary dates
+      summaryDates.textContent = `From: ${data.fromDate} | To: ${data.toDate} | Submitted: ${data.submittedOn}`;
+
+      // Populate income
+      const income = data.ukProperty.income || {};
+      for (const key in incomeCategories) {
+        const value = key.split('.').reduce((obj, k) => obj?.[k], income);
+        if (value != null) {
+          const li = document.createElement('li');
+          li.className = 'list-group-item d-flex justify-content-between';
+          li.innerHTML = `<span>${incomeCategories[key]}</span><span>£${value}</span>`;
+          incomeList.appendChild(li);
+        }
+      }
+
+      // Populate expenses
+      const expenses = data.ukProperty.expenses || {};
+      for (const key in expensesCategories) {
+        const value = key.split('.').reduce((obj, k) => obj?.[k], expenses);
+        if (value != null) {
+          const li = document.createElement('li');
+          li.className = 'list-group-item d-flex justify-content-between';
+          li.innerHTML = `<span>${expensesCategories[key]}</span><span>£${value}</span>`;
+          expensesList.appendChild(li);
+        }
+      }
+
+      summaryDiv.classList.remove('d-none');
+
+    } catch (err) {
+      console.error(err);
+      messageDiv.textContent = "An error occurred while fetching the cumulative summary. Please try again.";
+      messageDiv.classList.remove('d-none');
+    }
+  });
 });
 
 function renderObligations(){
