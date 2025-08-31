@@ -79,7 +79,7 @@ const callApi = async ({
     headers['Content-Type'] = 'application/json';
   }
   
-  log.info('Request headers:', headers);
+  //log.info('Request headers:', headers);
 
   let response;
 
@@ -98,7 +98,8 @@ const callApi = async ({
     }
 
     log.info('✅ Success:', response.data);
-    log.info('API response headers:', response.headers);
+    // x-correlationid
+    //log.info('API response headers:', response.headers);
 
     return {
       status: response.status,
