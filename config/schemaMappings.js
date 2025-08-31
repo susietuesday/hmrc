@@ -14,7 +14,7 @@ const EXPENSE_CATEGORIES = [
   { key: 'professionalFees', category: 'Professional Fees', description: 'Fees for accountants, letting agents, legal advice, or other professional services.' },
   { key: 'costOfServices', category: 'Cost of Services', description: 'Expenses for services such as cleaning, gardening, or staff wages related to the property.' },
   { key: 'other', category: 'Other Expenses', description: 'Any other allowable property expenses incurred wholly for your rental business.' },
-  { key: 'residentialFinancialCost', category: 'Residential Finance Cost', description: 'Tax relief on finance costs (restricted amount deductible from rental income).' },
+  { key: 'residentialFinancialCost', category: 'Residential Finance Costs', description: 'Tax relief on finance costs (restricted amount deductible from rental income).' },
   { key: 'travelCosts', category: 'Travel Costs', description: 'Car, van, or travel expenses incurred for managing or maintaining the property.' },
   { key: 'residentialFinancialCostsCarriedForward', category: 'Residential Finance Costs Carried Forward', description: 'Unrelieved residential finance costs brought forward to future years.' },
   { key: 'rentARoom.amountClaimed', category: 'Rent-a-Room Deduction', description: 'Amount claimed under the Rent-a-Room scheme (if eligible).' },
