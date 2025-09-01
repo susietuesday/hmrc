@@ -98,12 +98,14 @@ const callApi = async ({
     }
 
     log.info('✅ Success:', response.data);
-    // x-correlationid
-    //log.info('API response headers:', response.headers);
+
+    // Get x-correlationid
+    const xCorrelationId = response.headers?.['x-correlationid'] || null;
 
     return {
       status: response.status,
-      headers: response.headers,
+      xCorrelationId,
+      //headers: response.headers,
       body: response.data
     };
 
