@@ -56,7 +56,8 @@ function getTableHtml(ukProperty) {
     if (!ukProperty[section]) continue; // safety check
 
     for (const key in ukProperty[section]) {
-      html += `<tr><td>${section}.${key}</td><td>£${ukProperty[section][key]}</td></tr>`;
+      const value = ukProperty[section][key];
+      html += `<tr><td>${key}</td><td>£${value.toLocaleString('en-GB', { minimumFractionDigits: 2 })}</td></tr>`;
     }
   }
 
