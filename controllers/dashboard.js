@@ -67,11 +67,11 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   req.session.user.ukPropertyBusinessId = businessId;
 
   // Set default dates
-  req.session.user.summary.fromDate = utils.getCurrentTaxYearStart();
-  req.session.user.summary.toDate = utils.getTodayDate();
+  //req.session.user.summary.fromDate = utils.getCurrentTaxYearStart();
+  //req.session.user.summary.toDate = utils.getTodayDate();
 
-  const summary = req.session.user.summary;
-  const defaultToDate = utils.addDays(summary.toDate, 10);
+  //const summary = req.session.user.summary;
+  //const defaultToDate = utils.addDays(summary.toDate, 10);
 
   res.render('dashboard', {
     obligationsData: obligationsData.body,
@@ -79,10 +79,10 @@ const showDashboardPage = asyncHandler(async(req, res) => {
     getIncomeCategory: schema.getIncomeCategory,
     getIncomeDescription: schema.getIncomeDescription,
     getExpensesCategory: schema.getExpenseCategory,
-    getExpensesDescription: schema.getExpenseDescription,
-    fromDate: summary.fromDate,
-    toDate: summary.toDate,
-    defaultToDate: defaultToDate
+    getExpensesDescription: schema.getExpenseDescription//,
+    //fromDate: summary.fromDate,
+    //toDate: summary.toDate,
+    //defaultToDate: defaultToDate
   });
 });
 
