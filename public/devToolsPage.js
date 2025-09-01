@@ -55,6 +55,10 @@ function getTableHtml(ukProperty) {
   for (const section of ['income', 'expenses']) {
     if (!ukProperty[section]) continue; // safety check
 
+    // Add section header row
+    const sectionTitle = section.charAt(0).toUpperCase() + section.slice(1); // Capitalize
+    html += `<tr><th colspan="2" style="background:#f8f9fa;text-align:left;">${sectionTitle}</th></tr>`;
+
     for (const key in ukProperty[section]) {
       const value = ukProperty[section][key];
       html += `<tr><td>${key}</td><td>£${value.toLocaleString('en-GB', { minimumFractionDigits: 2 })}</td></tr>`;
@@ -64,3 +68,4 @@ function getTableHtml(ukProperty) {
   html += '</tbody></table>';
   return html;
 }
+
