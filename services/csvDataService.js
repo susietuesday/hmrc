@@ -1,8 +1,80 @@
+const streamifier = require('streamifier');
+const csv = require('csv-parser');
 const { 
   parseCsvBuffer
 } = require('../utils/dataUtils.js');
 
 const utils = require('../utils/utils.js');
+const { INCOME_CATEGORIES, EXPENSE_CATEGORIES} = require('../config/schemaMappings.js')
+
+async function extractTotalsFromBuffer(buffer) {
+  const totals = { income: {}, expenses: {} };
+  let section = null;
+
+  const stream = streamifier.createReadStream(buffer).pipe(csv({ headers: false, skipEmptyLines: true }));
+
+  for await (const row of stream) {
+    const [first, second] = Object.values(row);
+
+    // Detect section
+  if (first === 'Income') {
+      section = 'income';
+      continue;
+    } else if (first === 'Expenses') {
+      section = 'expenses';
+      continue;
+    }
+
+    // Parse item rows
+    const item = first;
+    const amount = parseFloat(second);
+    if (section && item && !isNaN(amount)) {
+      totals[section][item] = amount;
+    }
+  }
+
+  const ukProperty = mapCsvTotalsToUkProperty(totals);
+
+  return {
+    ukProperty
+  };
+};
+
+function mapCsvTotalsToUkProperty(totals) {
+  const ukProperty = {
+    income: {},
+    expenses: {},
+    rentARoom: { rentsReceived: 0, amountClaimed: 0 }
+  };
+
+  // Map income
+  for (const { key, category } of INCOME_CATEGORIES) {
+    const value = totals.income?.[category];
+    if (value == null) continue; // skip if missing
+
+    if (key.startsWith('rentARoom.')) {
+      const subKey = key.split('.')[1];
+      ukProperty.rentARoom[subKey] = parseFloat(value.toFixed(2));
+    } else {
+      ukProperty.income[key] = parseFloat(value.toFixed(2));
+    }
+  }
+
+  // Map expenses
+  for (const { key, category } of EXPENSE_CATEGORIES) {
+    const value = totals.expenses?.[category];
+    if (value == null) continue;
+
+    if (key.startsWith('rentARoom.')) {
+      const subKey = key.split('.')[1];
+      ukProperty.rentARoom[subKey] = parseFloat(value.toFixed(2));
+    } else {
+      ukProperty.expenses[key] = parseFloat(value.toFixed(2));
+    }
+  }
+
+  return ukProperty;
+}
 
 async function processCsvIncomeFile(fileBuffer) {
 
@@ -142,5 +214,6 @@ function sumCsvByCategory(results) {
 
 module.exports = {
   processCsvIncomeFile,
-  processCsvExpensesFile
+  processCsvExpensesFile,
+  extractTotalsFromBuffer
 };
