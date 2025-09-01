@@ -40,7 +40,7 @@ function uploadIncome() {
       // Display the transaction rows
       const previewDiv = document.getElementById('csvPreview');
       //previewDiv.innerHTML = `<pre>${JSON.stringify(json.data.ukProperty, null, 2)}</pre>`;
-      previewDiv.innerHTML = getTableHtml(json.data.ukProperty);
+      previewDiv.innerHTML = getTableHtml(json.data.mappedUkProperty);
 
     } catch (err) {
       document.getElementById('uploadStatus').textContent = 'Error uploading file';
@@ -53,14 +53,10 @@ function getTableHtml(ukProperty) {
   let html = '<table class="table table-bordered"><thead><tr><th>Category</th><th>Amount</th></tr></thead><tbody>';
 
   for (const section of ['income', 'expenses']) {
+    if (!ukProperty[section]) continue; // safety check
+
     for (const key in ukProperty[section]) {
-      if (key === 'rentARoom') {
-        for (const subKey in ukProperty[section].rentARoom) {
-          html += `<tr><td>${section}.rentARoom.${subKey}</td><td>£${ukProperty[section].rentARoom[subKey]}</td></tr>`;
-        }
-      } else {
-        html += `<tr><td>${section}.${key}</td><td>£${ukProperty[section][key]}</td></tr>`;
-      }
+      html += `<tr><td>${section}.${key}</td><td>£${ukProperty[section][key]}</td></tr>`;
     }
   }
 
