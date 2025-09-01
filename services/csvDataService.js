@@ -43,8 +43,7 @@ async function extractTotalsFromBuffer(buffer) {
 function mapCsvTotalsToUkProperty(totals) {
   const ukProperty = {
     income: {},
-    expenses: {},
-    rentARoom: { rentsReceived: 0, amountClaimed: 0 }
+    expenses: {}
   };
 
   // Map income
@@ -52,11 +51,16 @@ function mapCsvTotalsToUkProperty(totals) {
     const value = totals.income?.[category];
     if (value == null) continue; // skip if missing
 
+    const parsedValue = parseFloat(value.toFixed(2));
+
     if (key.startsWith('rentARoom.')) {
       const subKey = key.split('.')[1];
-      ukProperty.rentARoom[subKey] = parseFloat(value.toFixed(2));
+      if (!ukProperty.income.rentARoom) {
+        ukProperty.income.rentARoom = {};
+      }
+      ukProperty.income.rentARoom[subKey] = parsedValue;
     } else {
-      ukProperty.income[key] = parseFloat(value.toFixed(2));
+      ukProperty.income[key] = parsedValue;
     }
   }
 
@@ -65,11 +69,16 @@ function mapCsvTotalsToUkProperty(totals) {
     const value = totals.expenses?.[category];
     if (value == null) continue;
 
+    const parsedValue = parseFloat(value.toFixed(2));
+
     if (key.startsWith('rentARoom.')) {
       const subKey = key.split('.')[1];
-      ukProperty.rentARoom[subKey] = parseFloat(value.toFixed(2));
+      if (!ukProperty.expenses.rentARoom) {
+        ukProperty.expenses.rentARoom = {};
+      }
+      ukProperty.expenses.rentARoom[subKey] = parsedValue;
     } else {
-      ukProperty.expenses[key] = parseFloat(value.toFixed(2));
+      ukProperty.expenses[key] = parsedValue;
     }
   }
 
