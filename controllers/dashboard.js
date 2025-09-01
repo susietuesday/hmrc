@@ -17,7 +17,7 @@ const MESSAGES = {
     NOT_FOUND: `We couldn't find any UK property details registered for your account.\n\nIf you believe this is an error, please check your HMRC account or contact HMRC support.`
   },
   cumulativeSummary:{
-    MATCHING_RESOURCE_NOT_FOUND: `We could't find any existing cumulative summary data.`
+    MATCHING_RESOURCE_NOT_FOUND: `We could't find any existing cumulative summary data.`,
   }
 };
 
