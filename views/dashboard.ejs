@@ -2,7 +2,7 @@
   <div class="col-lg-8">
     <h2 class="mb-4">Your HMRC Property Income Obligations</h2>
 
-    <!-- Table -->
+    <!-- Obligations -->
     <table class="table table-bordered table-striped">
       <thead class="table-dark">
         <tr>
@@ -59,10 +59,51 @@
         <div id="uploadStatus" class="mt-3"></div>
         <div id="csvPreview" class="mt-3"></div>
         </div>
+          <div class="col-lg-8">
+    <div class="alert alert-info mt-3" role="alert">
+      <h5 class="alert-heading mb-2">Submit an interim update</h5>
+      <p class="mb-2">
+        You can submit an interim update for this obligation period.
+      </p>
+      <p class="mb-2">
+        Choose an <strong>Update to</strong> date; your totals should include all transactions up to that date.
+      </p>
+      <p class="mb-0">
+        You can submit again later, up to the obligation end date, with updated figures.
+      </p>
+    </div>
+  
+
+  <label for="toDate" class="form-label">Update to (inclusive)</label>
+  <input
+    type="date"
+    id="toDate"
+    name="toDate"
+    class="form-control"
+    min="<%= fromDate %>"
+    max="<%= defaultToDate %>"
+    value="<%= new Date().toISOString().split('T')[0] %>" />
+  <p class="text-secondary mt-1">
+    Your update will cover <strong><%= fromDate %></strong> to
+    <strong id="toDateLabel"><%= toDate %></strong>.
+  </p>
+
+  <form action="/summary" method="POST" class="mt-3">
+    <button type="submit" class="btn btn-primary btn-lg w-100">
+      Submit summary
+    </button>
+  </form>
+  </div>
     </div>
 
     <a href="/income" class="btn btn-primary btn-lg w-100">Continue</a>
   </div>
 </div>
+
+<script>
+  const toDateInput = document.getElementById('toDate');
+  const lbl = document.getElementById('toDateLabel');
+  toDateInput.addEventListener('input', () => lbl.textContent = toDateInput.value);
+</script>
 
 <script type="module" src="dashboardPage.js"></script>
