@@ -1,5 +1,24 @@
 const asyncHandler = require('express-async-handler');
-const { processCsvIncomeFile, processCsvExpensesFile } = require('../services/csvDataService');
+const { processCsvIncomeFile, processCsvExpensesFile, extractTotalsFromBuffer } = require('../services/csvDataService');
+
+const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
+  // Check if file is provided
+  if (!req.file) {
+    return res.status(400).json({ message: 'No file uploaded' });
+  }
+
+  const { ukProperty } = await extractTotalsFromBuffer(req.file.buffer);
+
+  // Save cumulative totals to session
+  req.session.user.summary.ukProperty = ukProperty;
+
+  res.json({
+    message: 'CSV parsed successfully',
+    data: {
+      ukProperty
+    }
+  });
+});
 
 const uploadCsvIncomeFile = asyncHandler(async (req, res) => {
   // Check if file is provided
@@ -41,5 +60,6 @@ const uploadCsvExpensesFile = asyncHandler(async (req, res) => {
 
 module.exports = {
   uploadCsvIncomeFile,
-  uploadCsvExpensesFile
+  uploadCsvExpensesFile,
+  uploadCsvSummaryFile
 };
