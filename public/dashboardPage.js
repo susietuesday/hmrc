@@ -1,3 +1,5 @@
+import { uploadSummary } from './summary.js';
+
 const fetchBtn = document.getElementById('fetchCumulativeSummaryBtn');
 const messageDiv = document.getElementById('cumulativeSummaryMessage');
 const summaryDiv = document.getElementById('cumulativeSummaryContainer');
@@ -8,6 +10,7 @@ const summaryDates = document.getElementById('summaryDates');
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
   renderObligations();
+  uploadSummary();
 
   fetchBtn.addEventListener('click', async () => {
     // Reset UI
