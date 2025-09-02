@@ -61,4 +61,14 @@
   </div>
 </div>
 
+<script>
+  // Embed server-side data into a client-side variable
+  const incomeCategories = <%- JSON.stringify(incomeCategories) %>;
+  const expensesCategories = <%- JSON.stringify(expensesCategories) %>;
+  const getIncomeCategory = <%- getIncomeCategory.toString() %>;
+  const getIncomeDescription = <%- getIncomeDescription.toString() %>;
+  const getExpensesCategory = <%- getExpensesCategory.toString() %>;
+  const getExpensesDescription = <%- getExpensesDescription.toString() %>;
+</script>
+
 <script type="module" src="dashboardPage.js"></script>
