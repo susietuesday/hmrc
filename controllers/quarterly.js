@@ -15,14 +15,14 @@ const showSummaryPage = asyncHandler(async(req, res) => {
   req.session.user.summary.toDate = utils.getTodayDate();
 
   const summary = req.session.user.summary;
-  const defaultToDate = utils.addDays(summary.toDate, 10);
+  const maxToDate = utils.addDays(summary.toDate, 10);
 
   res.render("quarterly", {
     income: summary.ukProperty.income,
     expenses: summary.ukProperty.expenses,
     fromDate: summary.fromDate,
     toDate: summary.toDate,
-    defaultToDate: defaultToDate,
+    maxToDate: maxToDate,
     incomeCategories: schemaMappings.INCOME_CATEGORIES,
     getIncomeCategory: schema.getIncomeCategory,
     getIncomeDescription: schema.getIncomeDescription,
@@ -47,13 +47,13 @@ const submitSummary = asyncHandler(async(req, res) => {
   // Check for error
   if (apiResponse.status !== 200) {
     req.session.error = MESSAGES.RULE_BOTH_EXPENSES_SUPPLIED;
-    return;
+    return res.redirect('/quarterly');
   }
 
   // Set x-correlationid
   req.session.user.summary.correlationId = apiResponse.xCorrelationId;
 
-  return res.redirect('/quarterly');
+  return res.redirect('/confirmation');
 });
 
 module.exports = { 
