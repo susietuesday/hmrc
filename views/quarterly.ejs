@@ -63,4 +63,14 @@
   toDateInput.addEventListener('input', () => lbl.textContent = toDateInput.value);
 </script>
 
+<script>
+  <% if (typeof error !== 'undefined' && error) { %>
+    document.addEventListener('DOMContentLoaded', function() {
+      var hiddenSection = document.getElementById('hiddenSection');
+      if (hiddenSection) hiddenSection.style.display = 'block';
+    });
+  <% } %>
+</script>
+
+
 <script type="module" src="quarterlyPage.js"></script>
