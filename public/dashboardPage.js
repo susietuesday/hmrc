@@ -32,31 +32,31 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!response.ok) throw new Error(`Error fetching summary: ${response.status}`);
 
       // Populate summary dates
-      summaryDates.textContent = `From: ${data.fromDate} | To: ${data.toDate} | Submitted: ${data.submittedOn}`;
+      summaryDates.textContent = `From: ${body.fromDate} | To: ${body.toDate} | Submitted: ${body.submittedOn}`;
 
       // Populate income
       const income = ukProperty.income || {};
-      for (const key in incomeCategories) {
-        const value = key.split('.').reduce((obj, k) => obj?.[k], income);
+      incomeCategories.forEach(cat => {
+        const value = cat.key.split('.').reduce((obj, k) => obj?.[k], income);
         if (value != null) {
           const li = document.createElement('li');
           li.className = 'list-group-item d-flex justify-content-between';
-          li.innerHTML = `<span>${incomeCategories[key]}</span><span>£${value}</span>`;
+          li.innerHTML = `<span>${cat.category}</span><span>£${value}</span>`;
           incomeList.appendChild(li);
         }
-      }
+      });
 
       // Populate expenses
       const expenses = ukProperty.expenses || {};
-      for (const key in expensesCategories) {
-        const value = key.split('.').reduce((obj, k) => obj?.[k], expenses);
+      expensesCategories.forEach(cat => {
+        const value = cat.key.split('.').reduce((obj, k) => obj?.[k], expenses);
         if (value != null) {
           const li = document.createElement('li');
           li.className = 'list-group-item d-flex justify-content-between';
-          li.innerHTML = `<span>${expensesCategories[key]}</span><span>£${value}</span>`;
+          li.innerHTML = `<span>${cat.category}</span><span>£${value}</span>`;
           expensesList.appendChild(li);
         }
-      }
+      });
 
       summaryDiv.classList.remove('d-none');
 
