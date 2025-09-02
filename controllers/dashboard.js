@@ -69,6 +69,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   res.render('dashboard', {
     obligationsData: obligationsData.body,
     incomeCategories: schemaMappings.INCOME_CATEGORIES,
+    expensesCategories: schemaMappings.EXPENSE_CATEGORIES,
     getIncomeCategory: schema.getIncomeCategory,
     getIncomeDescription: schema.getIncomeDescription,
     getExpensesCategory: schema.getExpenseCategory,
