@@ -37,6 +37,9 @@ export function uploadSummary() {
       //previewDiv.innerHTML = `<pre>${JSON.stringify(json.data.ukProperty, null, 2)}</pre>`;
       previewDiv.innerHTML = getTableHtml(json.data.mappedUkProperty);
 
+      // Enable the submission controls after successful CSV upload
+      document.getElementById('hiddenSection').style.display = 'block';
+
     } catch (err) {
       document.getElementById('uploadStatus').textContent = 'Error uploading file';
       console.error(err);
