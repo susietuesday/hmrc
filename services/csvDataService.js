@@ -28,7 +28,7 @@ async function extractTotalsFromBuffer(buffer) {
     // Parse item rows
     const item = first;
     const amount = parseFloat(second);
-    if (section && item && !isNaN(amount)) {
+    if (section && item && !isNaN(amount) && amount !== 0) {
       totals[section][item] = amount;
     }
   }
