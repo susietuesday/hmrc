@@ -20,6 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const response = await fetch('/cumulative-summary'); // Adjust endpoint
       const data = await response.json(); // parse JSON payload
+
+      const body = data.body || {};          // safely get body
+      const ukProperty = body.ukProperty || {}; // safely get ukProperty
+
       if (data.hmrcStatus === 404) {
         messageDiv.textContent = data.message
         messageDiv.classList.remove('d-none');
@@ -31,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
       summaryDates.textContent = `From: ${data.fromDate} | To: ${data.toDate} | Submitted: ${data.submittedOn}`;
 
       // Populate income
-      const income = data.ukProperty.income || {};
+      const income = ukProperty.income || {};
       for (const key in incomeCategories) {
         const value = key.split('.').reduce((obj, k) => obj?.[k], income);
         if (value != null) {
@@ -43,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       // Populate expenses
-      const expenses = data.ukProperty.expenses || {};
+      const expenses = ukProperty.expenses || {};
       for (const key in expensesCategories) {
         const value = key.split('.').reduce((obj, k) => obj?.[k], expenses);
         if (value != null) {
