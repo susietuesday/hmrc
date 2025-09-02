@@ -1,8 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const utils = require('../utils/utils.js');
 const propertyBusinessService = require('../services/propertyBusinessService.js');
-const schemaMappings = require('../config/schemaMappings.js');
-const schema = require('../shared/schema.js');
 
 const MESSAGES = {
   RULE_BOTH_EXPENSES_SUPPLIED: `You can't include both consolidated expenses and individual expense categories in the same update. Please choose either consolidated expenses or break down your expenses into individual categories, not both.`
@@ -22,12 +20,7 @@ const showSummaryPage = asyncHandler(async(req, res) => {
     expenses: summary.ukProperty.expenses,
     fromDate: summary.fromDate,
     toDate: summary.toDate,
-    maxToDate: maxToDate,
-    incomeCategories: schemaMappings.INCOME_CATEGORIES,
-    getIncomeCategory: schema.getIncomeCategory,
-    getIncomeDescription: schema.getIncomeDescription,
-    getExpensesCategory: schema.getExpenseCategory,
-    getExpensesDescription: schema.getExpenseDescription
+    maxToDate: maxToDate
   });
 });
 
@@ -45,9 +38,26 @@ const submitSummary = asyncHandler(async(req, res) => {
   });
 
   // Check for error
-  if (apiResponse.status !== 200) {
-    req.session.error = MESSAGES.RULE_BOTH_EXPENSES_SUPPLIED;
-    return res.redirect('/quarterly');
+  if (apiResponse.status < 200 || apiResponse.status >= 300) {
+    // Get error code
+    const code = apiResponse.body.code;
+    let error;
+    if (code === 'RULE_BOTH_EXPENSES_SUPPLIED') {
+      error = MESSAGES.RULE_BOTH_EXPENSES_SUPPLIED;
+    } else {
+      error = apiResponse.body.message;
+    };
+    const summary = req.session.user.summary;
+    const fromDate = summary.fromDate;
+    const toDate = summary.toDate;
+    const maxToDate = utils.addDays(toDate, 10);
+
+    return res.render('quarterly', { 
+      error,
+      fromDate,
+      toDate,
+      maxToDate
+     });
   }
 
   // Set x-correlationid
