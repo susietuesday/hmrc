@@ -58,6 +58,25 @@
         <ul id="expensesList" class="list-group"></ul>
       </div>
     </div>
+
+    <h2 class="mb-4">Your UK property annual update</h2>
+
+    <button id="fetchAnnualBtn" class="btn btn-primary mb-3">
+      Fetch Annual Update
+    </button>
+
+    <button id="sendAnnualBtn" class="btn btn-primary mb-3">
+      Send Annual Update
+    </button>
+
+    <script>
+      const sendAnnualBtn = document.getElementById('sendAnnualBtn');
+
+      sendAnnualBtn.addEventListener('click', () => {
+        // Navigate to /quarterly
+        window.location.href = '/annual';
+      });
+    </script>
   </div>
 </div>
 
