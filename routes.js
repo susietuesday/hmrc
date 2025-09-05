@@ -44,6 +44,7 @@ router.get('/obligations', requireUser, getObligations);
 router.post('/property-income', upload.single('csv'), csvData.uploadCsvIncomeFile);
 router.post('/property-expenses', upload.single('csv'), csvData.uploadCsvExpensesFile);
 router.post('/property-summary', upload.single('csv'), csvData.uploadCsvSummaryFile);
+router.post('/property-annual', upload.single('csv'), csvData.uploadCsvAnnualFile);
 router.get('/cumulative-summary', requireUser, getUkPropertyCumulativeSummary);
 router.get('/income', income.showIncomePage);
 router.get('/expenses', expenses.showExpensesPage);
