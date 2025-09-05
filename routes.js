@@ -21,6 +21,7 @@ const { getUkPropertyCumulativeSummary } = require('./controllers/propertyBusine
 const income = require('./controllers/income.js');
 const expenses = require('./controllers/expenses.js');
 const summary = require('./controllers/quarterly.js');
+const annual = require('./controllers/annual.js');
 const confirmation = require('./controllers/confirmation.js');
 
 // Dev tools routes
@@ -46,7 +47,8 @@ router.post('/property-summary', upload.single('csv'), csvData.uploadCsvSummaryF
 router.get('/cumulative-summary', requireUser, getUkPropertyCumulativeSummary);
 router.get('/income', income.showIncomePage);
 router.get('/expenses', expenses.showExpensesPage);
-router.get('/quarterly', summary.showSummaryPage)
+router.get('/quarterly', summary.showSummaryPage);
+router.get('/annual', annual.showAnnualPage);
 router.get('/summary', summary.showSummaryPage);
 router.post('/summary', requireUser, attachContext, summary.submitSummary);
 router.get('/confirmation', confirmation.showConfirmationPage);
