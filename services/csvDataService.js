@@ -1,11 +1,42 @@
 const streamifier = require('streamifier');
 const csv = require('csv-parser');
+const { Readable } = require('stream');
 const { 
   parseCsvBuffer
 } = require('../utils/dataUtils.js');
 
 const utils = require('../utils/utils.js');
 const { INCOME_CATEGORIES, EXPENSE_CATEGORIES} = require('../config/schemaMappings.js')
+
+// Returns row and column indexes for specified spreadsheet cell
+function getCell(data, ref) {
+  const col = ref.match(/[A-Z]+/)[0];
+  const row = parseInt(ref.match(/\d+/)[0]) - 1;
+  const colIndex = col.split('').reduce((acc, char) => acc * 26 + (char.charCodeAt(0) - 64), 0) - 1;
+  return data[row][colIndex];
+}
+
+async function extractCsvAnnualData(buffer) {
+  const results = [];
+
+  return new Promise((resolve, reject) => {
+    const readable = Readable.from(buffer.toString());
+
+    readable
+      .pipe(csv({ headers: false }))
+      .on('data', (row) => results.push(row))
+      .on('end', () => {
+        // Example extraction
+        const data = {
+          balancingCharge: getCell(results, 'B5'),
+          privateUseAdjustment: getCell(results, 'C10')
+          // Add other fields as needed
+        };
+        resolve(data);
+      })
+      .on('error', reject);
+  });
+}
 
 async function extractTotalsFromBuffer(buffer) {
   const totals = { income: {}, expenses: {} };
@@ -224,5 +255,6 @@ function sumCsvByCategory(results) {
 module.exports = {
   processCsvIncomeFile,
   processCsvExpensesFile,
-  extractTotalsFromBuffer
+  extractTotalsFromBuffer,
+  extractCsvAnnualData
 };
