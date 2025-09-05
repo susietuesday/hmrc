@@ -1,0 +1,48 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">    
+
+    <!-- Annual Update Panel -->
+    <div class="card mt-4">
+      <div class="card-header bg-dark text-white">Upload UK Property Annual Update</div>
+      <div class="card-body">
+        <div class="mb-3">
+            <!-- File select -->
+            <input class="form-control" type="file" id="csvFile" accept=".csv">
+            <div id="errorMessages" style="color: red;"></div>
+        </div>
+
+        <!-- Upload csv file button -->
+        <button id="uploadBtn" class="btn btn-primary" disabled>Upload CSV</button>
+
+        <div id="uploadStatus" class="mt-3"></div>  <!-- Upload csv file button -->
+        <div id="csvPreview" class="mt-3"></div>    <!-- Csv file preview panel -->
+
+        <div id="hiddenSection" style="display: none; margin-top: 20px;">
+
+          <!-- Validation message -->
+          <% if (typeof error !== 'undefined') { %>
+            <div class="alert alert-danger error-message"><%= error %></div>
+          <% } %>
+
+          <!-- Submit button -->
+          <form action="/annual" method="POST" class="mt-3">
+            <button type="submit" class="btn btn-primary btn-lg w-100">
+              Send annual update
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  <% if (typeof error !== 'undefined' && error) { %>
+    document.addEventListener('DOMContentLoaded', function() {
+      var hiddenSection = document.getElementById('hiddenSection');
+      if (hiddenSection) hiddenSection.style.display = 'block';
+    });
+  <% } %>
+</script>
+
+<script type="module" src="annualPage.js"></script>
