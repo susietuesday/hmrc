@@ -2,10 +2,11 @@ import { enableUploadButton, uploadCsv } from './utils/csvData.js';
 
 // Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
-  // --- Upload button handler ---
+  // --- File upload controls ---
   const fileInput = document.getElementById('csvFile');
   const uploadBtn = document.getElementById('uploadBtn');
   
+  // Enable upload button after file has been selected
   enableUploadButton(fileInput, uploadBtn);
 
   // Wait for upload button to be cicked
