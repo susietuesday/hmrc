@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { processCsvIncomeFile, processCsvExpensesFile, extractTotalsFromBuffer } = require('../services/csvDataService');
+const { processCsvIncomeFile, processCsvExpensesFile, extractTotalsFromBuffer, extractCsvAnnualData } = require('../services/csvDataService');
 const { INCOME_CATEGORIES, EXPENSE_CATEGORIES} = require('../config/schemaMappings.js')
 
 const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
@@ -23,6 +23,17 @@ const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
       mappedUkProperty
     }
   });
+});
+
+// Upload the annual update csv file
+const uploadCsvAnnualFile = asyncHandler(async (req, res) => {
+  try {
+    const buffer = req.file.buffer;
+    const result = await extractCsvAnnualData(buffer);
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 function convertKeysToCategories(data) {
@@ -96,5 +107,6 @@ const uploadCsvExpensesFile = asyncHandler(async (req, res) => {
 module.exports = {
   uploadCsvIncomeFile,
   uploadCsvExpensesFile,
-  uploadCsvSummaryFile
+  uploadCsvSummaryFile,
+  uploadCsvAnnualFile
 };
