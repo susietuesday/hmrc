@@ -19,24 +19,58 @@ function getCell(data, ref) {
 async function extractCsvAnnualData(buffer) {
   const results = [];
 
-  return new Promise((resolve, reject) => {
-    const readable = Readable.from(buffer.toString());
+  const stream = Readable.from(buffer.toString()).pipe(csv({ headers: false }));
 
-    readable
-      .pipe(csv({ headers: false }))
-      .on('data', (row) => results.push(row))
-      .on('end', () => {
-        // Example extraction
-        const data = {
-          balancingCharge: getCell(results, 'B5'),
-          privateUseAdjustment: getCell(results, 'C10')
-          // Add other fields as needed
-        };
-        resolve(data);
-      })
-      .on('error', reject);
-  });
+  for await (const row of stream) {
+    results.push(row);
+  }
+
+  // After the stream ends, build your data object
+  return {
+    adjustments: {
+      balancingCharge: getCell(results, 'D10'),
+      privateUseAdjustment: getCell(results, 'D12'),
+      businessPremisesRenovationAllowanceBalancingCharges: getCell(results, 'D26'),
+      nonResidentLandlord: getCell(results, 'D14'),
+      rentARoom: {
+        jointlyLet: getCell(results, 'D16')
+      }
+    },
+    allowances: {
+      annualInvestmentAllowance: getCell(results, 'D18'),
+      businessPremisesRenovationAllowance: getCell(results, 'D24'),
+      otherCapitalAllowance: getCell(results, 'D20'),
+      costOfReplacingDomesticItems: getCell(results, 'D6'),
+      zeroEmissionsCarAllowance: getCell(results, 'D22'),
+      propertyIncomeAllowance: getCell(results, 'D8'),
+      structuredBuildingAllowance: {
+        amount: getCell(results, 'D30'),
+        firstYear: {
+          qualifyingDate: getCell(results, 'D32'),
+          qualifyingAmountExpenditure: getCell(results, 'D34')
+        },
+        building: {
+          name: getCell(results, 'D36'),
+          number: getCell(results, 'D38'),
+          postcode: getCell(results, 'D40')
+        }
+      },
+      enhancedStructuredBuildingAllowance: {
+        amount: getCell(results, 'D44'),
+        firstYear: {
+          qualifyingDate: getCell(results, 'D46'),
+          qualifyingAmountExpenditure: getCell(results, 'D48')
+        },
+        building: {
+          name: getCell(results, 'D50'),
+          number: getCell(results, 'D52'),
+          postcode: getCell(results, 'D54')
+        } 
+      }
+    }
+  };
 }
+
 
 async function extractTotalsFromBuffer(buffer) {
   const totals = { income: {}, expenses: {} };
