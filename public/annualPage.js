@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!res.ok) throw new Error('Upload failed');
 
     const json = await res.json();
+    console.log('Response JSON:', JSON.stringify(json, null, 2));
 
     document.getElementById('uploadStatus').textContent = 'Upload successful!';
 
