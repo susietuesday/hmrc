@@ -30,7 +30,11 @@ const uploadCsvAnnualFile = asyncHandler(async (req, res) => {
   try {
     const buffer = req.file.buffer;
     const result = await extractCsvAnnualData(buffer);
+
+    console.log('Extracted CSV Data:\n', JSON.stringify(result, null, 2));
+
     res.json(result);
+
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
