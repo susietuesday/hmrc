@@ -29,11 +29,14 @@ const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
 const uploadCsvAnnualFile = asyncHandler(async (req, res) => {
   try {
     const buffer = req.file.buffer;
-    const result = await extractCsvAnnualData(buffer);
+    const ukProperty = await extractCsvAnnualData(buffer);
 
-    console.log('Extracted CSV Data:\n', JSON.stringify(result, null, 2));
+    console.log('Extracted CSV Data:\n', JSON.stringify(ukProperty, null, 2));
 
-    res.json(result);
+    // Save to session
+    req.session.user.annual.ukProperty = ukProperty;
+
+    res.json(ukProperty);
 
   } catch (error) {
     res.status(500).json({ error: error.message });
