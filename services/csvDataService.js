@@ -16,6 +16,31 @@ function getCell(data, ref) {
   return data[row][colIndex];
 }
 
+// Helper: only add the key if value is not null/empty
+function addValue(obj, key, value) {
+  // Convert value to string only if it exists
+  const strValue = (typeof value === 'string') ? value.toUpperCase() : '';
+
+  if (
+    value !== undefined &&
+    value !== null &&
+    value !== '' &&
+    strValue !== 'NOT APPLICABLE'
+  ) {
+    const keys = key.split('.');
+    let current = obj;
+
+    for (let i = 0; i < keys.length - 1; i++) {
+      if (!current[keys[i]]) {
+        current[keys[i]] = {}; // Create nested object if missing
+      }
+      current = current[keys[i]];
+    }
+
+    current[keys[keys.length - 1]] = value;
+  }
+}
+
 async function extractCsvAnnualData(buffer) {
   const results = [];
 
@@ -25,52 +50,41 @@ async function extractCsvAnnualData(buffer) {
     results.push(row);
   }
 
-  // After the stream ends, build your data object
-  return {
-    adjustments: {
-      balancingCharge: getCell(results, 'D10'),
-      privateUseAdjustment: getCell(results, 'D12'),
-      businessPremisesRenovationAllowanceBalancingCharges: getCell(results, 'D26'),
-      nonResidentLandlord: getCell(results, 'D14'),
-      rentARoom: {
-        jointlyLet: getCell(results, 'D16')
-      }
-    },
-    allowances: {
-      annualInvestmentAllowance: getCell(results, 'D18'),
-      businessPremisesRenovationAllowance: getCell(results, 'D24'),
-      otherCapitalAllowance: getCell(results, 'D20'),
-      costOfReplacingDomesticItems: getCell(results, 'D6'),
-      zeroEmissionsCarAllowance: getCell(results, 'D22'),
-      propertyIncomeAllowance: getCell(results, 'D8'),
-      structuredBuildingAllowance: {
-        amount: getCell(results, 'D30'),
-        firstYear: {
-          qualifyingDate: getCell(results, 'D32'),
-          qualifyingAmountExpenditure: getCell(results, 'D34')
-        },
-        building: {
-          name: getCell(results, 'D36'),
-          number: getCell(results, 'D38'),
-          postcode: getCell(results, 'D40')
-        }
-      },
-      enhancedStructuredBuildingAllowance: {
-        amount: getCell(results, 'D44'),
-        firstYear: {
-          qualifyingDate: getCell(results, 'D46'),
-          qualifyingAmountExpenditure: getCell(results, 'D48')
-        },
-        building: {
-          name: getCell(results, 'D50'),
-          number: getCell(results, 'D52'),
-          postcode: getCell(results, 'D54')
-        } 
-      }
-    }
-  };
-}
+  const ukProperty = { adjustments: {}, allowances: {} };
 
+  // Adjustments
+  addValue(ukProperty.adjustments, 'balancingCharge', getCell(results, 'D10'));
+  addValue(ukProperty.adjustments, 'privateUseAdjustment', getCell(results, 'D12'));
+  addValue(ukProperty.adjustments, 'businessPremisesRenovationAllowanceBalancingCharges', getCell(results, 'D26'));
+  addValue(ukProperty.adjustments, 'nonResidentLandlord', getCell(results, 'D14'));
+  addValue(ukProperty.adjustments, 'rentARoom.jointlyLet', getCell(results, 'D16'));
+
+  // Allowances
+  addValue(ukProperty.allowances, 'annualInvestmentAllowance', getCell(results, 'D18'));
+  addValue(ukProperty.allowances, 'businessPremisesRenovationAllowance', getCell(results, 'D24'));
+  addValue(ukProperty.allowances, 'otherCapitalAllowance', getCell(results, 'D20'));
+  addValue(ukProperty.allowances, 'costOfReplacingDomesticItems', getCell(results, 'D6'));
+  addValue(ukProperty.allowances, 'zeroEmissionsCarAllowance', getCell(results, 'D22'));
+  addValue(ukProperty.allowances, 'propertyIncomeAllowance', getCell(results, 'D8'));
+
+  // Structures and Buildings Allowance
+  addValue(ukProperty.allowances, 'structuredBuildingAllowance.amount', getCell(results, 'D30'));
+  addValue(ukProperty.allowances, 'structuredBuildingAllowance.firstYear.qualifyingDate', getCell(results, 'D32'));
+  addValue(ukProperty.allowances, 'structuredBuildingAllowance.firstYear.qualifyingAmountExpenditure', getCell(results, 'D34'));
+  addValue(ukProperty.allowances, 'structuredBuildingAllowance.building.name', getCell(results, 'D36'));
+  addValue(ukProperty.allowances, 'structuredBuildingAllowance.building.number', getCell(results, 'D38'));
+  addValue(ukProperty.allowances, 'structuredBuildingAllowance.building.postcode', getCell(results, 'D40'));
+
+  // Enhanced Structures and Buidlings Allowance
+  addValue(ukProperty.allowances, 'enhancedStructuredBuildingAllowance.amount', getCell(results, 'D44'));
+  addValue(ukProperty.allowances, 'enhancedStructuredBuildingAllowance.firstYear.qualifyingDate', getCell(results, 'D46'));
+  addValue(ukProperty.allowances, 'enhancedStructuredBuildingAllowance.firstYear.qualifyingAmountExpenditure', getCell(results, 'D48'));
+  addValue(ukProperty.allowances, 'enhancedStructuredBuildingAllowance.building.name', getCell(results, 'D50'));
+  addValue(ukProperty.allowances, 'enhancedStructuredBuildingAllowance.building.number', getCell(results, 'D52'));
+  addValue(ukProperty.allowances, 'enhancedStructuredBuildingAllowance.building.postcode', getCell(results, 'D54'));
+
+  return ukProperty;
+};
 
 async function extractTotalsFromBuffer(buffer) {
   const totals = { income: {}, expenses: {} };
