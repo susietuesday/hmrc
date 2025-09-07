@@ -22,6 +22,7 @@ function initSessionUser(req, res, next) {
     req.session.user.summary.ukProperty = {};
     req.session.user.summary.ukProperty.income = {};
     req.session.user.summary.ukProperty.expenses = {};
+    req.session.user.annual.ukProperty = {};
   }
   
   next();
