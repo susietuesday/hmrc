@@ -21,7 +21,38 @@ const EXPENSE_CATEGORIES = [
   { key: 'consolidatedExpenses', category: 'Consolidated Expenses', description: 'A single total figure for all allowable expenses for the period (if using simplified reporting).' }
 ];
 
+const ADJUSTMENTS = [
+  { key: 'balancingCharge', category: 'Balancing Charge' },
+  { key: 'privateUseAdjustment', category: 'Private Use Adjustment' },
+  { key: 'businessPremisesRenovationAllowanceBalancingCharges', category: 'Business Premises Renovation Balancing' },
+  { key: 'nonResidentLandlord', category: 'Non-UK Resident Landlord' },
+  { key: 'rentARoom.jointlyLet', category: 'Rent-a-Room: Jointly Let' }
+];
+
+const ALLOWANCES = [
+  { key: 'annualInvestmentAllowance', category: 'Annual Investment Allowance' },
+  { key: 'businessPremisesRenovationAllowance', category: 'Business Premises Renovation Allowance' },
+  { key: 'otherCapitalAllowance', category: 'Other Capital Allowance' },
+  { key: 'costOfReplacingDomesticItems', category: 'Cost of Replacing Domestic Items' },
+  { key: 'zeroEmissionsCarAllowance', category: 'Zero Emissions Car Allowance' },
+  { key: 'propertyIncomeAllowance', category: 'Property Income Allowance' },
+  { key: 'structuredBuildingAllowance.amount', category: 'Structures and Buildings Allowance' },
+  { key: 'structuredBuildingAllowance.firstYear.qualifyingDate', category: 'Qualifying Date' },
+  { key: 'structuredBuildingAllowance.firstYear.qualifyingAmountExpenditure', category: 'Qualifying Expenditure Amount' },
+  { key: 'structuredBuildingAllowance.building.name', category: 'Building Name' },
+  { key: 'structuredBuildingAllowance.building.number', category: 'Building Number' },
+  { key: 'structuredBuildingAllowance.building.postcode', category: 'Postcode' },
+  { key: 'enhancedStructuredBuildingAllowance.amount', category: 'Enhanced Structures and Buildings Allowance' },
+  { key: 'enhancedStructuredBuildingAllowance.firstYear.qualifyingDate', category: 'Qualifying Date' },
+  { key: 'enhancedStructuredBuildingAllowance.firstYear.qualifyingAmountExpenditure', category: 'Qualifying Expenditure Amount' },
+  { key: 'enhancedStructuredBuildingAllowance.building.name', category: 'Building Name' },
+  { key: 'enhancedStructuredBuildingAllowance.building.number', category: 'Building Number' },
+  { key: 'enhancedStructuredBuildingAllowance.building.postcode', category: 'Postcode' }
+]
+
 module.exports = {
     INCOME_CATEGORIES,
-    EXPENSE_CATEGORIES
+    EXPENSE_CATEGORIES,
+    ADJUSTMENTS,
+    ALLOWANCES
 }
