@@ -1,17 +1,17 @@
 <!-- Hero Section -->
 <section class="bg-light py-5">
   <div class="container d-flex justify-content-center">
-    <div class="card shadow-sm p-4 p-md-5 text-center" style="max-width: 600px; width: 100%;">
+    <div class="card shadow-sm p-4 p-md-5 text-center" style="max-width: 1000px; width: 100%;">
       <h1 class="display-4 fw-bold mb-3">Making Tax Digital, for Landlords</h1>
       <p class="lead mb-2">
-        Keep using your spreadsheets while staying fully compliant with HMRC.
+        Keep control of your accounts using spreadsheets while staying fully compliant with HMRC.
       </p>
       <p class="lead mb-4">
-        Automatically submit rental income and expenses directly to HMRC: securely, accurately, and effortlessly.
+        Send your UK property quarterly updates directly to HMRC: securely, accurately, and effortlessly.
       </p>
 
       <!-- Template Download Section -->
-      <p class="mb-2"><strong>Step 1:</strong> Download your free Google Sheets template.</p>
+      <p class="mb-2"><strong>Step 1:</strong> Download your free Google Sheets template and start tracking your property income and expenses.</p>
       <a href="https://docs.google.com/spreadsheets/d/1HjKBLZndbdkQPqtxTSDBCrQAUtp9uL1cJDvFUwVGvjg/copy" target="_blank">
         <button class="btn btn-success btn-lg mb-1">
           📥 Download Free Google Sheets Template
@@ -25,6 +25,7 @@
       <% } %>
 
       <!-- Continue form -->
+      <p class="mb-2"><strong>Step 2:</strong> Log in securely via HMRC to view your tax obligations and send your quarterly updates.</p>
       <form action="/nino" method="POST" class="d-flex justify-content-center gap-2 flex-wrap">
       <input 
         type="text" 
@@ -42,6 +43,43 @@
         After you click "Continue", you'll be redirected to HMRC to log in and grant permission. <br>
         We do not store any personal information or HMRC login details, and your data remains secure.
       </p>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-white">
+  <div class="container text-center">
+    <h2 class="fw-bold mb-4">How It Works</h2>
+    <p class="text-muted mb-5">Send your quarterly updates for UK property income in 3 simple steps.</p>
+    
+    <div class="row g-4">
+      <!-- Step 1 -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm p-4">
+          <div class="display-4 text-primary mb-3">1</div>
+          <h4 class="fw-bold">Download the Template</h4>
+          <p class="text-muted">Use our free Google Sheets template to track your income and expenses easily.</p>
+        </div>
+      </div>
+      
+      <!-- Step 2 -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm p-4">
+          <div class="display-4 text-primary mb-3">2</div>
+          <h4 class="fw-bold">Connect to HMRC</h4>
+          <p class="text-muted">Sign in securely with your HMRC credentials. We never store your login details.</p>
+        </div>
+      </div>
+      
+      <!-- Step 3 -->
+      <div class="col-md-4">
+        <div class="card h-100 shadow-sm p-4">
+          <div class="display-4 text-primary mb-3">3</div>
+          <h4 class="fw-bold">Send Your Quarterly Update</h4>
+          <p class="text-muted">Upload your spreadsheet, review your data, and send directly to HMRC in minutes.</p>
+        </div>
+      </div>
     </div>
   </div>
 </section>
