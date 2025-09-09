@@ -55,7 +55,7 @@ const showDashboardPage = asyncHandler(async(req, res) => {
   const businessId = await businessDetails.getUkPropertyBusinessId({nino, context});
 
   if (!businessId) {
-    req.session.error = MESSAGES.propertyBusiness.NOT_FOUND
+    req.session.error = MESSAGES.propertyDetails.NOT_FOUND
     return res.redirect('/');
   }
 
