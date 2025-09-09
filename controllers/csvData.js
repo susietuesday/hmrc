@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { processCsvIncomeFile, processCsvExpensesFile, extractTotalsFromBuffer, extractCsvAnnualData } = require('../services/csvDataService');
+const { processCsvIncomeFile, processCsvExpensesFile, extractTotalsFromBuffer, extractCsvAnnualData, extractCsvQuarterlyData } = require('../services/csvDataService');
 const { INCOME_CATEGORIES, EXPENSE_CATEGORIES} = require('../config/schemaMappings.js')
 
 const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
@@ -8,7 +8,7 @@ const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
-  const { ukProperty } = await extractTotalsFromBuffer(req.file.buffer);
+  const ukProperty = await extractCsvQuarterlyData(req.file.buffer);
   console.log(JSON.stringify(ukProperty, null, 2));
 
   // Save cumulative totals to session
