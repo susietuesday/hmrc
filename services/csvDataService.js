@@ -10,6 +10,35 @@ const {
 const utils = require('../utils/utils.js');
 const { INCOME_CATEGORIES, EXPENSE_CATEGORIES} = require('../config/schemaMappings.js')
 
+async function extractCsvQuarterlyData(buffer) {
+  const results = await readBuffer(buffer);
+
+  const ukProperty = { income: {}, expenses: {} };
+
+  // Income
+  addValue(ukProperty.income, 'periodAmount', getCell(results, 'C6'));
+  addValue(ukProperty.income, 'premiumsOfLeaseGrant', getCell(results, 'C8'));
+  addValue(ukProperty.income, 'reversePremiums', getCell(results, 'C10'));
+  addValue(ukProperty.income, 'otherIncome', getCell(results, 'C12'));
+  addValue(ukProperty.income, 'taxDeducted', getCell(results, 'C14'));
+  addValue(ukProperty.income, 'rentARoom.rentsReceived', getCell(results, 'C16'));
+
+  // Expenses
+  addValue(ukProperty.expenses, 'consolidatedExpenses', getCell(results, 'C20'));
+  addValue(ukProperty.expenses, 'premisesRunningCosts', getCell(results, 'C22'));
+  addValue(ukProperty.expenses, 'repairsAndMaintenance', getCell(results, 'C24'));
+  addValue(ukProperty.expenses, 'financialCosts', getCell(results, 'C26'));
+  addValue(ukProperty.expenses, 'professionalFees', getCell(results, 'C28'));
+  addValue(ukProperty.expenses, 'costOfServices', getCell(results, 'C30'));
+  addValue(ukProperty.expenses, 'other', getCell(results, 'C32'));
+  addValue(ukProperty.expenses, 'residentialFinancialCost', getCell(results, 'C34'), true);
+  addValue(ukProperty.expenses, 'residentialFinancialCostsCarriedForward', getCell(results, 'C36'), true);
+  addValue(ukProperty.expenses, 'travelCosts', getCell(results, 'C38'));
+  addValue(ukProperty.expenses, 'rentARoom.amountClaimed', getCell(results, 'C40'), true);
+
+  return ukProperty;
+};
+
 async function extractCsvAnnualData(buffer) {
   const results = await readBuffer(buffer);
 
@@ -267,5 +296,6 @@ module.exports = {
   processCsvIncomeFile,
   processCsvExpensesFile,
   extractTotalsFromBuffer,
+  extractCsvQuarterlyData,
   extractCsvAnnualData
 };
