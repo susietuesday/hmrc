@@ -52,6 +52,4 @@ router.get('/summary', summary.showSummaryPage);
 router.post('/summary', requireUser, attachContext, summary.submitSummary);
 router.get('/confirmation', confirmation.showConfirmationPage);
 
-router.post('/upload', upload.single('csvFile'), csvData.uploadCsvIncomeFile);
-
 module.exports = router;
