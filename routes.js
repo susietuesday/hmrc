@@ -48,4 +48,14 @@ router.get('/summary', summary.showSummaryPage);
 router.post('/summary', requireUser, attachContext, summary.submitSummary);
 router.get('/confirmation', confirmation.showConfirmationPage);
 
+// Route for privacy policy
+router.get('/privacy', (req, res) => {
+  res.render('privacy');
+});
+
+router.get('/terms', (req, res) => {
+  res.render('terms'); // renders views/terms.ejs
+});
+
+
 module.exports = router;
