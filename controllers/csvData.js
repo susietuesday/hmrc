@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const { processCsvIncomeFile, processCsvExpensesFile, extractTotalsFromBuffer, extractCsvAnnualData, extractCsvQuarterlyData } = require('../services/csvDataService');
+const { processCsvIncomeFile, processCsvExpensesFile, extractCsvAnnualData, extractCsvQuarterlyData } = require('../services/csvDataService');
 const { INCOME_CATEGORIES, EXPENSE_CATEGORIES} = require('../config/schemaMappings.js')
 
 const uploadCsvSummaryFile = asyncHandler(async (req, res) => {
