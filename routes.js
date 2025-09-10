@@ -41,8 +41,6 @@ router.get('/itsa-status', requireUser, getItsaStatus);
 router.get('/dashboard', requireUser, showDashboardPage);
 router.get('/business-sources', requireUser, getBusinessList);
 router.get('/obligations', requireUser, getObligations);
-router.post('/property-income', upload.single('csv'), csvData.uploadCsvIncomeFile);
-router.post('/property-expenses', upload.single('csv'), csvData.uploadCsvExpensesFile);
 router.post('/property-summary', upload.single('csv'), csvData.uploadCsvSummaryFile);
 router.post('/property-annual', upload.single('csv'), csvData.uploadCsvAnnualFile);
 router.get('/cumulative-summary', requireUser, getUkPropertyCumulativeSummary);
