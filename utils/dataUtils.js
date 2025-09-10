@@ -45,16 +45,27 @@ function getCell(data, ref) {
   return data[row][colIndex];
 }
 
-// Helper: only add the key if value is not null/empty
+// Helper: only add the key if value is not null/empty and not 0/-0
 function addValue(obj, key, value) {
-  // Convert value to string only if it exists
+  // Normalize strings: remove commas and trim spaces
+  if (typeof value === 'string') {
+    value = value.replace(/,/g, '').trim();
+  }
+
+  // Convert numeric-looking strings to numbers
+  if (!isNaN(value) && value !== '' && value !== null) {
+    value = parseFloat(value);
+  }
+
+  // Handle string case for "NOT APPLICABLE"
   const strValue = (typeof value === 'string') ? value.toUpperCase() : '';
 
   if (
     value !== undefined &&
     value !== null &&
     value !== '' &&
-    strValue !== 'NOT APPLICABLE'
+    strValue !== 'NOT APPLICABLE' &&
+    !(typeof value === 'number' && (value === 0 || Object.is(value, -0))) // skip 0 and -0
   ) {
     const keys = key.split('.');
     let current = obj;
