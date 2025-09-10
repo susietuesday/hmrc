@@ -12,7 +12,7 @@
 
       <!-- Template Download Section -->
       <p class="mb-2"><strong>Step 1:</strong> Download your free Google Sheets template and start tracking your property income and expenses.</p>
-      <a href="https://docs.google.com/spreadsheets/d/1HjKBLZndbdkQPqtxTSDBCrQAUtp9uL1cJDvFUwVGvjg/copy" target="_blank">
+      <a href="<%= process.env.GOOGLE_SHEETS_TEMPLATE_URL %>" target="_blank">
         <button class="btn btn-success btn-lg mb-1">
           📥 Download Free Google Sheets Template
         </button>
@@ -51,8 +51,9 @@
 <section class="py-5 bg-white">
   <div class="container text-center">
     <h2 class="fw-bold mb-4">How It Works</h2>
-    <p class="text-muted mb-5">Send your quarterly updates for UK property income in 3 simple steps.</p>
-    
+    <h4 class="text-muted mb-5">
+      Send your quarterly updates for UK property income in 3 simple steps.
+    </h4>    
     <div class="row g-4">
       <!-- Step 1 -->
       <div class="col-md-4">
