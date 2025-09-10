@@ -16,25 +16,25 @@ async function extractCsvQuarterlyData(buffer) {
   const ukProperty = { income: {}, expenses: {} };
 
   // Income
-  addValue(ukProperty.income, 'periodAmount', getCell(results, 'C6'));
-  addValue(ukProperty.income, 'premiumsOfLeaseGrant', getCell(results, 'C8'));
-  addValue(ukProperty.income, 'reversePremiums', getCell(results, 'C10'));
-  addValue(ukProperty.income, 'otherIncome', getCell(results, 'C12'));
-  addValue(ukProperty.income, 'taxDeducted', getCell(results, 'C14'));
-  addValue(ukProperty.income, 'rentARoom.rentsReceived', getCell(results, 'C16'));
+  addValue(ukProperty.income, 'periodAmount', getCell(results, 'D6'));
+  addValue(ukProperty.income, 'premiumsOfLeaseGrant', getCell(results, 'D8'));
+  addValue(ukProperty.income, 'reversePremiums', getCell(results, 'D10'));
+  addValue(ukProperty.income, 'otherIncome', getCell(results, 'D12'));
+  addValue(ukProperty.income, 'taxDeducted', getCell(results, 'D14'));
+  addValue(ukProperty.income, 'rentARoom.rentsReceived', getCell(results, 'D16'));
 
   // Expenses
-  addValue(ukProperty.expenses, 'consolidatedExpenses', getCell(results, 'C20'));
-  addValue(ukProperty.expenses, 'premisesRunningCosts', getCell(results, 'C22'));
-  addValue(ukProperty.expenses, 'repairsAndMaintenance', getCell(results, 'C24'));
-  addValue(ukProperty.expenses, 'financialCosts', getCell(results, 'C26'));
-  addValue(ukProperty.expenses, 'professionalFees', getCell(results, 'C28'));
-  addValue(ukProperty.expenses, 'costOfServices', getCell(results, 'C30'));
-  addValue(ukProperty.expenses, 'other', getCell(results, 'C32'));
-  addValue(ukProperty.expenses, 'residentialFinancialCost', getCell(results, 'C34'), true);
-  addValue(ukProperty.expenses, 'residentialFinancialCostsCarriedForward', getCell(results, 'C36'), true);
-  addValue(ukProperty.expenses, 'travelCosts', getCell(results, 'C38'));
-  addValue(ukProperty.expenses, 'rentARoom.amountClaimed', getCell(results, 'C40'), true);
+  addValue(ukProperty.expenses, 'consolidatedExpenses', getCell(results, 'D20'));
+  addValue(ukProperty.expenses, 'premisesRunningCosts', getCell(results, 'D22'));
+  addValue(ukProperty.expenses, 'repairsAndMaintenance', getCell(results, 'D24'));
+  addValue(ukProperty.expenses, 'financialCosts', getCell(results, 'D26'));
+  addValue(ukProperty.expenses, 'professionalFees', getCell(results, 'D28'));
+  addValue(ukProperty.expenses, 'costOfServices', getCell(results, 'D30'));
+  addValue(ukProperty.expenses, 'other', getCell(results, 'D32'));
+  addValue(ukProperty.expenses, 'residentialFinancialCost', getCell(results, 'D34'), true);
+  addValue(ukProperty.expenses, 'residentialFinancialCostsCarriedForward', getCell(results, 'D36'), true);
+  addValue(ukProperty.expenses, 'travelCosts', getCell(results, 'D38'));
+  addValue(ukProperty.expenses, 'rentARoom.amountClaimed', getCell(results, 'D40'), true);
 
   return ukProperty;
 };
@@ -77,84 +77,6 @@ async function extractCsvAnnualData(buffer) {
 
   return ukProperty;
 };
-
-async function extractTotalsFromBuffer(buffer) {
-  const totals = { income: {}, expenses: {} };
-  let section = null;
-
-  const stream = streamifier.createReadStream(buffer).pipe(csv({ headers: false, skipEmptyLines: true }));
-
-  for await (const row of stream) {
-    const [first, second] = Object.values(row);
-
-    // Detect section
-  if (first === 'Income') {
-      section = 'income';
-      continue;
-    } else if (first === 'Expenses') {
-      section = 'expenses';
-      continue;
-    }
-
-    // Parse item rows
-    const item = first;
-    const amount = parseFloat(second);
-    if (section && item && !isNaN(amount) && amount !== 0) {
-      totals[section][item] = amount;
-    }
-  }
-
-  const ukProperty = mapCsvTotalsToUkProperty(totals);
-
-  return {
-    ukProperty
-  };
-};
-
-function mapCsvTotalsToUkProperty(totals) {
-  const ukProperty = {
-    income: {},
-    expenses: {}
-  };
-
-  // Map income
-  for (const { key, category } of INCOME_CATEGORIES) {
-    const value = totals.income?.[category];
-    if (value == null) continue; // skip if missing
-
-    const parsedValue = parseFloat(value.toFixed(2));
-
-    if (key.startsWith('rentARoom.')) {
-      const subKey = key.split('.')[1];
-      if (!ukProperty.income.rentARoom) {
-        ukProperty.income.rentARoom = {};
-      }
-      ukProperty.income.rentARoom[subKey] = parsedValue;
-    } else {
-      ukProperty.income[key] = parsedValue;
-    }
-  }
-
-  // Map expenses
-  for (const { key, category } of EXPENSE_CATEGORIES) {
-    const value = totals.expenses?.[category];
-    if (value == null) continue;
-
-    const parsedValue = parseFloat(value.toFixed(2));
-
-    if (key.startsWith('rentARoom.')) {
-      const subKey = key.split('.')[1];
-      if (!ukProperty.expenses.rentARoom) {
-        ukProperty.expenses.rentARoom = {};
-      }
-      ukProperty.expenses.rentARoom[subKey] = parsedValue;
-    } else {
-      ukProperty.expenses[key] = parsedValue;
-    }
-  }
-
-  return ukProperty;
-}
 
 async function processCsvIncomeFile(fileBuffer) {
 
@@ -295,7 +217,6 @@ function sumCsvByCategory(results) {
 module.exports = {
   processCsvIncomeFile,
   processCsvExpensesFile,
-  extractTotalsFromBuffer,
   extractCsvQuarterlyData,
   extractCsvAnnualData
 };
