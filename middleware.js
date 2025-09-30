@@ -18,10 +18,14 @@ function initSessionUser(req, res, next) {
   // Initialize session user object if it doesn't exist
   if (!req.session.user) {
     req.session.user = {};
+
     req.session.user.summary = {};
-    req.session.user.summary.ukProperty = {};
-    req.session.user.summary.ukProperty.income = {};
-    req.session.user.summary.ukProperty.expenses = {};
+    req.session.user.summary.ukProperty = {
+      income: {},
+      expenses: {}
+    };
+
+    req.session.user.annual = {};
     req.session.user.annual.ukProperty = {};
   }
   
