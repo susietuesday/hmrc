@@ -42,14 +42,14 @@ function buildUkPropertySummaryBody(data) {
   return body;
 };
 
-async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, body, context }) {
-  const data = buildUkPropertySummaryBody(body);
+async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, data, context }) {
+  const body = buildUkPropertySummaryBody(data);
 
   const response = await propertyBusinessRepo.createUkPropertyCumulativeSummary({
     nino,
     businessId,
     taxYear,
-    body: data,
+    body,
     context
   });
   

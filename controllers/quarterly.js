@@ -33,7 +33,7 @@ const submitSummary = asyncHandler(async(req, res) => {
     nino,
     businessId,
     taxYear,
-    body: req.session.user.summary,
+    data: req.session.user.summary,
     context: req.context
   });
 
