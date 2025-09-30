@@ -1,13 +1,13 @@
 const dataUtils = require('../utils/dataUtils.js');
 const propertyBusinessRepo = require('../repositories/propertyBusinessRepo.js');
 
-async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, body, context }) {
-  const income = body.ukProperty.income;
-  const expenses = body.ukProperty.expenses;
+function buildUkPropertySummaryBody(data) {
+  const income = data.ukProperty.income;
+  const expenses = data.ukProperty.expenses;
 
-  const data = {
-    fromDate: body.fromDate,
-    toDate: body.toDate,
+  const body = {
+    fromDate: data.fromDate,
+    toDate: data.toDate,
     ukProperty: {
       income: {
         ...dataUtils.optionalProp(income.premiumsOfLeaseGrant, 'premiumsOfLeaseGrant'),
@@ -38,6 +38,12 @@ async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, bo
       }
     }
   };
+
+  return body;
+};
+
+async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, body, context }) {
+  const data = buildUkPropertySummaryBody(body);
 
   const response = await propertyBusinessRepo.createUkPropertyCumulativeSummary({
     nino,
