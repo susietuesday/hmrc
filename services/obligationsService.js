@@ -1,4 +1,4 @@
-const obligationsRepo = require('../repositories/obligationsRepo');
+const obligationsClient = require('../clients/obligationsClient.js');
 
 async function getObligations({nino, context}) {
 
@@ -12,7 +12,7 @@ async function getObligations({nino, context}) {
     //status: ''
   }
 
-  const response = await obligationsRepo.fetchObligations({
+  const response = await obligationsClient.fetchObligations({
     nino, 
     params, 
     context
