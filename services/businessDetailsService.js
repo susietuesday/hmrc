@@ -1,7 +1,7 @@
-const businessDetailsRepo = require('../repositories/businessDetailsRepo.js');
+const businessDetailsClient = require('../clients/businessDetailsClient.js');
 
 async function getBusinessList({ nino, context }) {
-  const response = businessDetailsRepo.fetchBusinessDetailsList({ nino, context });
+  const response = businessDetailsClient.fetchBusinessDetailsList({ nino, context });
   return response;
 }
 
