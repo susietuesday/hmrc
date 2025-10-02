@@ -1,4 +1,4 @@
-const saIndividualDetailsRepo = require('../repositories/saIndividualDetailsRepo');
+const saIndividualDetailsClient = require('../clients/saIndividualDetailsClient.js');
 
 /*
 Statuses
@@ -29,7 +29,7 @@ Digitally Exempt
 */
 
 async function getItsaStatus({nino, taxYear, context}) {
-  const response = await saIndividualDetailsRepo.fetchItsaStatus({nino, taxYear, context});
+  const response = await saIndividualDetailsClient.fetchItsaStatus({nino, taxYear, context});
 
   return response;
 }
