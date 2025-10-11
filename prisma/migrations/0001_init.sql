@@ -1,8 +1,8 @@
--- Table: public.uk_property_period_submissions
+-- Table: public.property_submissions
 
--- DROP TABLE IF EXISTS public.uk_property_period_submissions;
+-- DROP TABLE IF EXISTS public.property_submissions;
 
-CREATE TABLE IF NOT EXISTS public.uk_property_period_submissions
+CREATE TABLE IF NOT EXISTS public.property_submissions
 (
     id bigint NOT NULL,
     request_body jsonb NOT NULL,
@@ -18,6 +18,6 @@ CREATE TABLE IF NOT EXISTS public.uk_property_period_submissions
 )
 
 TABLESPACE pg_default;
-
---ALTER TABLE IF EXISTS public.uk_property_period_submissions
+    
+--ALTER TABLE IF EXISTS public.property_submissions
 --    OWNER to postgres;
