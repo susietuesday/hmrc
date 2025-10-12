@@ -1,5 +1,6 @@
 const dataUtils = require('../utils/dataUtils.js');
 const propertyBusinessClient = require('../clients/propertyBusinessClient.js');
+const propertyBusinessRepo = require('../repositories/propertyBusinessRepo.js');
 
 function buildUkPropertySummaryBody(data) {
   const income = data.ukProperty.income;
@@ -53,6 +54,8 @@ async function createUkPropertyCumulativeSummary({ nino, businessId, taxYear, da
     context
   });
   
+  propertyBusinessRepo.createPropertySubmission(nino, businessId, taxYear, body, response);
+
   return response;
 };
 
