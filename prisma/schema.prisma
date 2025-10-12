@@ -8,12 +8,14 @@ datasource db {
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
-model uk_property_period_submissions {
-  id            BigInt @id(map: "submissions_pkey") @default(autoincrement())
+model PropertySubmission {
+  id            BigInt   @id(map: "property_submissions_pkey") @default(autoincrement())
   request_body  Json
   response_code Int?
   response_body Json?
-  nino          String @db.VarChar(9)
-  business_id   String @db.VarChar(20)
-  tax_year      String @db.VarChar(7)
+  nino          String   @db.VarChar(9)
+  business_id   String   @db.VarChar(20)
+  tax_year      String   @db.VarChar(7)
+
+  @@map("property_submissions") // maps to the actual table in Postgres
 }
