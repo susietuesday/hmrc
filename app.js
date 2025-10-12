@@ -163,7 +163,4 @@ app.use((req, res) => {
 // Global error handler
 app.use(errorHandler);
 
-// Start the server
-app.listen(8080, () => {
-  log.info('🚀 Server started at http://localhost:8080');
-});
+module.exports = app;
