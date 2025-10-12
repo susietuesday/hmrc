@@ -8,6 +8,6 @@ CREATE TABLE "property_submissions" (
     "business_id" VARCHAR(20) NOT NULL,
     "tax_year" VARCHAR(7) NOT NULL,
 
-    CONSTRAINT "property_submissions_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "prop_subs_pkey" PRIMARY KEY ("id")
 );
 
