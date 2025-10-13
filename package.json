@@ -28,6 +28,10 @@
     "winston": "^3.7.2"
   },
   "devDependencies": {
-    "prisma": "^6.16.3"
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.2",
+    "prisma": "^6.16.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
