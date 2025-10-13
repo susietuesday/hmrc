@@ -1,4 +1,4 @@
-const prisma = require('../lib/prismaClient');
+const { prisma } = require('../lib/prismaClient');
 
 async function createPropertySubmission(nino, businessId, taxYear, body, response) {
   const submission = await prisma.propertySubmission.create({
