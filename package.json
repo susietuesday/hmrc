@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node app.js"
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev": "npx ts-node src/server.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",
