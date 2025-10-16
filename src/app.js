@@ -33,7 +33,7 @@ app.set('trust proxy', true); // Enabled to get Client IP for fraud prevention h
 app.use(express.urlencoded({ extended: true }));
 
 // Set up layout
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
 app.set('layout', 'layout'); // default layout file name without .ejs
 
