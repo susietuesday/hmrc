@@ -26,16 +26,6 @@ const {
   oauthConfig
 } = require('./config/config.js');
 
-// Create Redis client and session store
-const RedisStore = connectRedis(session);
-
-// Get Redis url from environment variable
-const redisClient = new Redis(REDIS_URL);  // auto-connect
-
-redisClient.on('error', (err) => {
-  console.error('Redis Client Error', err);
-});
-
 // Initialize Express app
 const app = express();
 app.set('view engine', 'ejs');
@@ -48,6 +38,16 @@ app.use(expressLayouts);
 app.set('layout', 'layout'); // default layout file name without .ejs
 
 app.use(express.static(path.join(__dirname, 'public'))); // for css/js/img
+
+// Get Redis url from environment variable
+const redisClient = new Redis(REDIS_URL);  // auto-connect
+
+// Log connection events
+redisClient.on('connect', () => log.info('✅ Redis connected'));
+redisClient.on('error', (err) => log.info('❌ Redis error', err));
+
+// Create Redis client and session store
+const RedisStore = connectRedis(session);
 
 // Session middleware (must come before any req.session usage)
 app.use(session({
