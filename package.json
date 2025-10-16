@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "tsc && cp -R views dist/",
+    "build": "npx prisma generate && tsc && cp -R views dist/",
     "start": "node dist/server.js",
     "dev": "npx ts-node src/server.js"
   },
