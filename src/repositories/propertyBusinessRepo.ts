@@ -1,6 +1,13 @@
 const { prisma } = require('../lib/prismaClient');
+import type { UKPropertyCumulativePeriodSummaryRequest } from '../types/propertyBusinessTypes';
 
-async function createPropertySubmission(nino, businessId, taxYear, body, response) {
+async function createPropertySubmission(
+  nino: string, 
+  businessId: string, 
+  taxYear: string, 
+  body: UKPropertyCumulativePeriodSummaryRequest, 
+  response: any) {
+
   const submission = await prisma.propertySubmission.create({
     data: {
       request_body: body,                // store body JSON directly
