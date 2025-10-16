@@ -37,7 +37,7 @@ app.set('views', path.join(__dirname, '../views'));
 app.use(expressLayouts);
 app.set('layout', 'layout'); // default layout file name without .ejs
 
-app.use(express.static(path.join(__dirname, 'public'))); // for css/js/img
+app.use(express.static(path.join(__dirname, '../public'))); // for css/js/img
 
 // Get Redis url from environment variable
 const redisClient = new Redis(REDIS_URL);  // auto-connect
@@ -79,7 +79,7 @@ const client = new AuthorizationCode(oauthConfig);
 app.get('/', (req, res) => {
   console.log('🏁 Home route hit');   // plain console.log
   log.info('🏁 Home route hit');      // Winston
-  
+
   const userToken = req.session.oauth2Token;
 
   const userInfo = userToken ? {
