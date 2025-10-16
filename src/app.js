@@ -77,6 +77,9 @@ const client = new AuthorizationCode(oauthConfig);
 
 // Home page route
 app.get('/', (req, res) => {
+  console.log('🏁 Home route hit');   // plain console.log
+  log.info('🏁 Home route hit');      // Winston
+  
   const userToken = req.session.oauth2Token;
 
   const userInfo = userToken ? {
