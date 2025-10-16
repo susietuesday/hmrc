@@ -1,6 +1,6 @@
-const dataUtils = require('../utils/dataUtils.js');
-const propertyBusinessClient = require('../clients/propertyBusinessClient.js');
-const propertyBusinessRepo = require('../repositories/propertyBusinessRepo.js');
+const dataUtils = require('../utils/dataUtils');
+const propertyBusinessClient = require('../clients/propertyBusinessClient');
+const propertyBusinessRepo = require('../repositories/propertyBusinessRepo');
 
 function buildUkPropertySummaryBody(data) {
   const income = data.ukProperty.income;
