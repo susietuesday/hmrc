@@ -30,7 +30,9 @@
     "winston": "^3.7.2"
   },
   "devDependencies": {
+    "@types/connect-redis": "^0.0.23",
     "@types/express": "^5.0.3",
+    "@types/express-session": "^1.18.2",
     "@types/node": "^24.7.2",
     "prisma": "^6.16.3",
     "ts-node": "^10.9.2",
