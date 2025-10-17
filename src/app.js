@@ -55,7 +55,7 @@ const FOUR_HOURS = 4 * 60 * 60; // in seconds
 app.use(session({
   store: new RedisStore({ 
     client: redisClient, 
-    ttl: FOUR_HOURS           // Time To Live in seconds
+    ttl: FOUR_HOURS             // Time To Live in seconds
   }),
   secret: process.env.SESSION_SECRET,
   resave: false,
