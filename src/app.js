@@ -49,13 +49,21 @@ redisClient.on('error', (err) => log.info('❌ Redis error', err));
 // Create Redis client and session store
 const RedisStore = connectRedis(session);
 
+const FOUR_HOURS = 4 * 60 * 60; // in seconds
+
 // Session middleware (must come before any req.session usage)
 app.use(session({
-  store: new RedisStore({ client: redisClient }),
+  store: new RedisStore({ 
+    client: redisClient, 
+    ttl: FOUR_HOURS           // Time To Live in seconds
+  }),
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }  // set to true if using HTTPS
+  cookie: { 
+    secure: false,              // set to true if using HTTPS
+    maxAge: FOUR_HOURS * 1000   // in milliseconds
+  }  
 }));
 
 // Set up route handling
@@ -77,9 +85,6 @@ const client = new AuthorizationCode(oauthConfig);
 
 // Home page route
 app.get('/', (req, res) => {
-  console.log('🏁 Home route hit');   // plain console.log
-  log.info('🏁 Home route hit');      // Winston
-
   const userToken = req.session.oauth2Token;
 
   const userInfo = userToken ? {
