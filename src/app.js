@@ -1,8 +1,7 @@
 // Core and third-party imports
 const express = require('express');
-const session = require('express-session');
-const Redis = require('ioredis');
-const connectRedis = require('connect-redis');
+import { setupSession } from './middleware/session.ts';
+
 const { AuthorizationCode } = require('simple-oauth2');
 
 const expressLayouts = require('express-ejs-layouts');
@@ -22,9 +21,8 @@ const {
   CLIENT_ID,
   CLIENT_SECRET,
   REDIRECT_URI,
-  REDIS_URL,
   oauthConfig
-} = require('./config/config.js');
+} = require('./config/config');
 
 // Initialize Express app
 const app = express();
@@ -39,33 +37,8 @@ app.set('layout', 'layout'); // default layout file name without .ejs
 
 app.use(express.static(path.join(__dirname, '../public'))); // for css/js/img
 
-// Get Redis url from environment variable
-const redisClient = new Redis(REDIS_URL);  // auto-connect
-
-// Log connection events
-redisClient.on('connect', () => log.info('✅ Redis connected'));
-redisClient.on('error', (err) => log.info('❌ Redis error', err));
-
-// Create Redis client and session store
-const RedisStore = connectRedis(session);
-
-const isDev = config.ENV === 'development';
-const FOUR_HOURS = 4 * 60 * 60; // in seconds
-
-// Session middleware (must come before any req.session usage)
-app.use(session({
-  store: new RedisStore({ 
-    client: redisClient, 
-    ttl: FOUR_HOURS             // Time To Live in seconds
-  }),
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: !isDev,             // false in development, true in staging & production (using HTTPS)
-    maxAge: FOUR_HOURS * 1000   // in milliseconds
-  }  
-}));
+// Set up Redis-backed session
+setupSession(app);
 
 // Set up route handling
 const routes = require('./routes.js');
