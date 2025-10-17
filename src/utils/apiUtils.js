@@ -6,7 +6,7 @@ const { AuthorizationCode, ClientCredentials } = require('simple-oauth2');
 const {
   OAUTH_SCOPE,
   oauthConfig,
-  apiBaseUrl,
+  API_BASE_URL,
   getAcceptHeader,
   GOV_CLIENT_CONNECTION_METHOD,
   DEV_VENDOR_PUBLIC_IP,
@@ -56,7 +56,7 @@ const callApi = async ({
   body = null
 }) => {
   const acceptHeader = getAcceptHeader(serviceVersion);
-  let url = apiBaseUrl + serviceName + routePath;
+  let url = API_BASE_URL + serviceName + routePath;
 
   // Append query params if provided
   if (params && typeof params === 'object') {
