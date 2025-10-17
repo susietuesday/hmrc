@@ -1,4 +1,4 @@
-const { log } = require('./utils/utils');
+const { log } = require('../utils/utils');
 const { AuthorizationCode } = require('simple-oauth2');
 
 const { 
@@ -6,7 +6,7 @@ const {
   REDIRECT_URI, 
   oauthConfig, 
   DEV_CLIENT_PUBLIC_IP 
-} = require('./config/config.js');
+} = require('../config/config.js');
 
 const client = new AuthorizationCode(oauthConfig);
 const authorizationUri = client.authorizeURL({

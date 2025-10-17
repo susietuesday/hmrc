@@ -14,7 +14,7 @@ const {
   captureClientIp, 
   captureClientPort, 
   errorHandler 
-} = require('./middleware.js');
+} = require('./middleware/middleware.js');
 const { log } = require('./utils/utils.js');
 
 // Environment variables
@@ -49,6 +49,7 @@ redisClient.on('error', (err) => log.info('❌ Redis error', err));
 // Create Redis client and session store
 const RedisStore = connectRedis(session);
 
+const isDev = config.ENV === 'development';
 const FOUR_HOURS = 4 * 60 * 60; // in seconds
 
 // Session middleware (must come before any req.session usage)
@@ -61,7 +62,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { 
-    secure: false,              // set to true if using HTTPS
+    secure: !isDev,             // false in development, true in staging & production (using HTTPS)
     maxAge: FOUR_HOURS * 1000   // in milliseconds
   }  
 }));

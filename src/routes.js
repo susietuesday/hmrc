@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 // Middleware and utility functions
-const { requireUser, attachContext } = require('./middleware.js');
+const { requireUser, attachContext } = require('./middleware/middleware.js');
 router.use(attachContext);
 
 const multer = require('multer');
