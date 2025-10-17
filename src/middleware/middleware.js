@@ -6,7 +6,7 @@ const {
   REDIRECT_URI, 
   oauthConfig, 
   DEV_CLIENT_PUBLIC_IP 
-} = require('../config/config.js');
+} = require('../config/config');
 
 const client = new AuthorizationCode(oauthConfig);
 const authorizationUri = client.authorizeURL({
