@@ -1,4 +1,5 @@
 const app = require('./app');
+const config = require('./config/config');
 const { log } = require('./utils/utils');
 const { prisma } = require('./lib/prismaClient');
 
@@ -6,7 +7,7 @@ const PORT = process.env.PORT || 8080;
 
 const server = app.listen(PORT, () => {
   log.info(`🚀 Server running on http://localhost:${PORT}`);
-  log.info('NODE_ENV =', process.env.NODE_ENV);
+  log.info('NODE_ENV =' + config.ENV);
 });
 
 process.on('SIGTERM', async () => {
