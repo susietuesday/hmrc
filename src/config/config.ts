@@ -1,8 +1,10 @@
-// Load environment variables
-require('dotenv').config();
-console.log('process.env.NODE_ENV before reading ENV =', process.env.NODE_ENV);
+import dotenv from 'dotenv';
+
+// Load environment variables from .env at the very top
+dotenv.config();
 
 // Environment variables
+const SESSION_SECRET = process.env.SESSION_SECRET;
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const OAUTH_SCOPE = process.env.SCOPE;
@@ -32,10 +34,11 @@ const oauthConfig = {
   },
 };
 
-const getAcceptHeader = (serviceVersion) =>
+const getAcceptHeader = (serviceVersion: string) =>
   `${ACCEPT_HEADER_PREFIX}${serviceVersion}${ACCEPT_HEADER_SUFFIX}`;
 
-module.exports = {
+export {
+  SESSION_SECRET,
   CLIENT_ID,
   CLIENT_SECRET,
   OAUTH_SCOPE,
