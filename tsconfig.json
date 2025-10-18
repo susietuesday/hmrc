@@ -10,11 +10,9 @@
     "module": "CommonJS",
     "moduleResolution": "node",   // tells TypeScript how to find and interpret imports
     "target": "ES2020",
-    "types": ["node", "express-session"],
-    //"types": ["node", "express", "express-session"],
     // For nodejs:
     // "lib": ["esnext"],
-    // "types": ["node"],
+    "types": ["node", "express", "express-session"],
     // and npm install -D @types/node
 
     // Other Outputs
