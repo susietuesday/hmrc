@@ -8,6 +8,7 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "CommonJS",
+    "moduleResolution": "node",   // tells TypeScript how to find and interpret imports
     "target": "ES2020",
     "types": ["node", "express", "express-session"],
     // For nodejs:
