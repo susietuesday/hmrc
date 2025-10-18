@@ -1,6 +1,6 @@
 // Core and third-party imports
 const express = require('express');
-import { setupSession } from './middleware/session.ts';
+import { setupSession } from './middleware/session';
 
 const { AuthorizationCode } = require('simple-oauth2');
 
