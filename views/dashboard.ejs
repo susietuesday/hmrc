@@ -1,64 +1,74 @@
-<div class="row justify-content-center">
-  <div class="col-lg-8">
-    <h2 class="mb-4">Your property income quarterly update obligations</h2>
+<div class="row justify-content-center">  <!-- Centre-justified row -->
+  <div class="col-lg-8">                  <!-- 8 out of 12 grid columns wide -->
+    <div class="container mt-4">          <!-- Container for padding: mt4 = margin top 4 -->  
+      <div class="card shadow-sm">        <!-- Card with shadow -->
+        <div class="card-body">
+          <h4 class="card-title mb-4">Your property income quarterly update obligations</h4>
 
-    <!-- Obligations -->
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark">
-        <tr>
-          <th>Period Start</th>
-          <th>Period End</th>
-          <th>Due Date</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="obligationsTableBody"></tbody>
-    </table>
+            <!-- Obligations -->
+            <table class="table table-bordered table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>Period Start</th>
+                  <th>Period End</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="obligationsTableBody"></tbody>
+            </table>
 
-    <!-- Embed obligations data from backend -->
-    <script id="obligations-data" type="application/json">
-      <%- JSON.stringify(obligationsData) %>
-    </script>
+            <!-- Embed obligations data from backend -->
+            <script id="obligations-data" type="application/json">
+              <%- JSON.stringify(obligationsData) %>
+            </script>
 
-    <h2 class="mb-4">Your UK property quarterly update summary</h2>
+            <!-- Actions -->
+            <div class="mt-4 mb-4">
+              <h5 class="mb-3">Quarterly Updates</h5>
+              <button id="sendCumulativeSummaryBtn" class="btn btn-primary btn-lg me-2">
+                <i class="bi bi-upload me-1"></i> Upload Summary
+              </button>
+              <button id="fetchCumulativeSummaryBtn" class="btn btn-outline-secondary btn-lg">
+                <i class="bi bi-file-earmark-text me-1"></i> View Current Summary
+              </button>
+            </div>
 
-    <button id="fetchCumulativeSummaryBtn" class="btn btn-primary mb-3">
-      Fetch Quarterly Update
-    </button>
 
-    <button id="sendCumulativeSummaryBtn" class="btn btn-primary mb-3">
-      Send Quarterly Update
-    </button>
+            <!-- Message placeholder -->
+            <div id="cumulativeSummaryMessage" class="alert alert-info d-none"></div>
 
-    <script>
-      const continueBtn = document.getElementById('sendCumulativeSummaryBtn');
+            <!-- Cumulative summary container, hidden initially -->
+            <div id="cumulativeSummaryContainer" class="card mb-3 d-none">
+              <div class="card-header bg-dark text-white">
+                <div class="d-flex flex-column">
+                  <span class="fw-bold">UK Property Summary</span>
+                  <small id="summaryDates" class="text-light opacity-75"></small>
+                </div>
+              </div>
+              <div class="card-body">
+                <h5 class="mb-3">Income</h5>
+                <ul id="incomeList" class="list-group mb-4"></ul>
 
-      continueBtn.addEventListener('click', () => {
-        // Navigate to /quarterly
-        window.location.href = '/quarterly';
-      });
-    </script>
+                <h5 class="mb-3">Expenses</h5>
+                <ul id="expensesList" class="list-group"></ul>
+              </div>
+            </div>
 
-    <!-- Message placeholder -->
-    <div id="cumulativeSummaryMessage" class="alert alert-info d-none"></div>
-
-    <!-- Cumulative summary container, hidden initially -->
-    <div id="cumulativeSummaryContainer" class="card mb-3 d-none">
-      <div class="card-header bg-dark text-white">
-        <div class="d-flex flex-column">
-          <span class="fw-bold">UK Property Summary</span>
-          <small id="summaryDates" class="text-light opacity-75"></small>
+          </div>
         </div>
       </div>
-      <div class="card-body">
-        <h5 class="mb-3">Income</h5>
-        <ul id="incomeList" class="list-group mb-4"></ul>
 
-        <h5 class="mb-3">Expenses</h5>
-        <ul id="expensesList" class="list-group"></ul>
-      </div>
-    </div>
+      <script>
+        const continueBtn = document.getElementById('sendCumulativeSummaryBtn');
 
+        continueBtn.addEventListener('click', () => {
+          // Navigate to /quarterly
+          window.location.href = '/quarterly';
+        });
+      </script>
+
+    <!--
     <h2 class="mb-4">Your UK property annual update</h2>
 
     <button id="fetchAnnualBtn" class="btn btn-primary mb-3">
@@ -77,6 +87,7 @@
         window.location.href = '/annual';
       });
     </script>
+    -->
   </div>
 </div>
 
