@@ -14,7 +14,7 @@
       <p class="mb-2"><strong>Step 1:</strong> Download your free Google Sheets template and start tracking your property income and expenses.</p>
       <a href="<%= process.env.GOOGLE_SHEETS_TEMPLATE_URL %>" target="_blank">
         <button class="btn btn-success btn-lg mb-1">
-          📥 Download Free Google Sheets Template
+          <i class="bi bi-download"></i> <i class="bi bi-google"></i> Download Free Google Sheets Template
         </button>
       </a>
       <p class="text-muted small mb-4">Click the button to create your own copy in Google Sheets.</p>
@@ -35,7 +35,9 @@
         class="form-control" 
         required 
         style="max-width: 250px; border: 2px solid #333; border-radius: 6px;">
-          <button type="submit" class="btn btn-primary btn-lg">Sign in with HMRC</button>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i class="bi bi-box-arrow-in-right"></i> Sign in with HMRC
+          </button>
       </form>
 
       <!-- Login Information / Reassurance -->
@@ -58,7 +60,7 @@
       <!-- Step 1 -->
       <div class="col-md-4">
         <div class="card h-100 shadow-sm p-4">
-          <div class="display-4 text-primary mb-3">1</div>
+          <i class="bi bi-1-circle-fill text-primary mb-3" style="font-size: 2.5rem;"></i>
           <h4 class="fw-bold">Download the Template</h4>
           <p class="text-muted">Use our free Google Sheets template to track your income and expenses easily.</p>
         </div>
@@ -67,7 +69,7 @@
       <!-- Step 2 -->
       <div class="col-md-4">
         <div class="card h-100 shadow-sm p-4">
-          <div class="display-4 text-primary mb-3">2</div>
+          <i class="bi bi-2-circle-fill text-primary mb-3" style="font-size: 2.5rem;"></i>
           <h4 class="fw-bold">Connect to HMRC</h4>
           <p class="text-muted">Sign in securely with your HMRC credentials. We never store your login details.</p>
         </div>
@@ -76,7 +78,7 @@
       <!-- Step 3 -->
       <div class="col-md-4">
         <div class="card h-100 shadow-sm p-4">
-          <div class="display-4 text-primary mb-3">3</div>
+          <i class="bi bi-3-circle-fill text-primary mb-3" style="font-size: 2.5rem;"></i>
           <h4 class="fw-bold">Send Your Quarterly Update</h4>
           <p class="text-muted">Upload your spreadsheet, review your data, and send directly to HMRC in minutes.</p>
         </div>
